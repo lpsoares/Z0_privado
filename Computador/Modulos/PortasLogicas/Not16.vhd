@@ -10,4 +10,4 @@ end entity;
 architecture arch of Not16 is
 begin
 
-end main;
+end architecture;

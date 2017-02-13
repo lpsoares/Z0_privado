@@ -14,4 +14,4 @@ end entity;
 architecture arch of Mux4Way16 is
 begin
 
-end main;
+end architecture;

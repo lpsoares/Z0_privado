@@ -18,4 +18,4 @@ end entity;
 architecture arch of DMux8Way is
 begin
 
-end main;
+end architecture;

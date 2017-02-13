@@ -18,4 +18,4 @@ end entity;
 architecture arch of Mux8Way16 is
 begin
 
-end main;
+end architecture;

@@ -11,4 +11,4 @@ end nand_vhdl;
 architecture main of nand_vhdl is
 begin
    q <= a nand b;
-end main; 
+end architecture; 
