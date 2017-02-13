@@ -18,7 +18,7 @@ component Mux16 is
 			q:   out STD_LOGIC_VECTOR(15 downto 0));
 end component;
 
-   signal  inA, ,inB, outQ : STD_LOGIC_VECTOR(15 downto 0);
+   signal  inA, inB, outQ : STD_LOGIC_VECTOR(15 downto 0);
    signal  inSel : STD_LOGIC;
 
 
