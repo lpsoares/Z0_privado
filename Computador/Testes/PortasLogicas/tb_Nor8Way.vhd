@@ -27,7 +27,7 @@ end component;
 
 begin
 
-  mapping: Or8Way port map(inA, inB, inC, inD, inE, inF, inG, inH, outQ);
+  mapping: Nor8Way port map(inA, inB, inC, inD, inE, inF, inG, inH, outQ);
 
 
   main : process
