@@ -7,3 +7,8 @@ entity Or16 is
 			b:   in  STD_LOGIC_VECTOR(15 downto 0);
 			q:   out STD_LOGIC_VECTOR(15 downto 0));
 end entity;
+
+architecture arch of Or16 is
+begin
+
+end main;

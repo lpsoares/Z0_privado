@@ -10,3 +10,8 @@ entity DMux4Way is
 			q2:  out STD_LOGIC;
 			q3:  out STD_LOGIC);
 end entity;
+
+architecture arch of DMux4Way is
+begin
+
+end main;

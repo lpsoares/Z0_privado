@@ -14,3 +14,8 @@ entity DMux8Way is
 			q6:  out STD_LOGIC;
 			q7:  out STD_LOGIC);
 end entity;
+
+architecture arch of DMux8Way is
+begin
+
+end main;

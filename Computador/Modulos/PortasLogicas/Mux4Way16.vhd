@@ -10,3 +10,8 @@ entity Mux4Way16 is
 			sel: in  STD_LOGIC_VECTOR(1 downto 0);
 			q:   out STD_LOGIC_VECTOR(15 downto 0));
 end entity;
+
+architecture arch of Mux4Way16 is
+begin
+
+end main;

@@ -8,3 +8,8 @@ entity Mux2Way is
 			sel: in  STD_LOGIC;
 			q:   out STD_LOGIC);
 end entity;
+
+architecture arch of Mux2Way is
+begin
+
+end main;

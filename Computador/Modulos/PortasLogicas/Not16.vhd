@@ -6,3 +6,8 @@ entity Not16 is
 			a:   in  STD_LOGIC_VECTOR(15 downto 0);
 			q:   out STD_LOGIC_VECTOR(15 downto 0));
 end entity;
+
+architecture arch of Not16 is
+begin
+
+end main;

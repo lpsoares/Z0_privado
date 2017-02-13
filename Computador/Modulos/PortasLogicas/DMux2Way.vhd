@@ -8,3 +8,8 @@ entity DMux2Way is
 			q0:  out STD_LOGIC;
 			q1:  out STD_LOGIC);
 end entity;
+
+architecture arch of DMux2Way is
+begin
+
+end main;

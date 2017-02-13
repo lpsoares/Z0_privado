@@ -13,3 +13,8 @@ entity Nor8Way is
 			h:   in  STD_LOGIC;
 			q:   out STD_LOGIC);
 end entity;
+
+architecture arch of Nor8Way is
+begin
+
+end main;

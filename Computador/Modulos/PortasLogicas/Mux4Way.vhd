@@ -10,3 +10,8 @@ entity Mux4Way is
 			sel: in  STD_LOGIC_VECTOR(1 downto 0);
 			q:   out STD_LOGIC);
 end entity;
+
+architecture arch of Mux4Way is
+begin
+
+end main;

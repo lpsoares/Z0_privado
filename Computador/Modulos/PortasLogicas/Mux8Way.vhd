@@ -14,3 +14,8 @@ entity Mux8Way is
 			sel: in  STD_LOGIC_VECTOR(2 downto 0);
 			q:   out STD_LOGIC);
 end entity;
+
+architecture arch of Mux8Way is
+begin
+
+end main;

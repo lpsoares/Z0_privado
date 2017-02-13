@@ -31,7 +31,9 @@ begin
       -- Teste: 1
       inA <= "1111000011110000"; inB <= "0000111100001111";
       wait for 200 ps;
-      assert(outQ = "1111111111111111")  report "Falha em teste: 1" severity error;
+      assert(outQ = "0000000000000000")  report "Falha em teste: 1" severity error;
+
+-- acertar o resto
 
       -- Teste: 2
       inA <= "1010101010101010"; inB <= "0000000000000000";
