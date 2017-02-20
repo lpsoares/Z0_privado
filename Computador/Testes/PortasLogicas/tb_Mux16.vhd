@@ -31,7 +31,7 @@ begin
     test_runner_setup(runner, runner_cfg);
 
       -- Teste: 1
-      inA <= "1111000011110000";
+      inA <= "1111000011110000"; inB <= "0000000000000000";
       wait for 200 ps;
       assert(outQ = "0000111100001111")  report "Falha em teste: 1" severity error;
 

@@ -18,11 +18,20 @@ component DMux2Way is
 			q1:  out STD_LOGIC);
 end component;
 
+   signal  inA, inSel, outQ0, outQ1 : STD_LOGIC;
+
 begin
+
+	mapping: DMux2Way port map(inA, inSel, outQ0, outQ1);
 
   main : process
   begin
     test_runner_setup(runner, runner_cfg);
+
+      -- Teste: 1
+      inA <= '1'; inSel<= '0';
+      wait for 200 ps;
+      assert(outQ0 = '1' and outQ1 = '0')  report "Falha em teste: 1" severity error;
 
 
     test_runner_cleanup(runner); -- Simulacao acaba aqui

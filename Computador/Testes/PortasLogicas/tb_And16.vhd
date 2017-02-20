@@ -33,27 +33,25 @@ begin
       wait for 200 ps;
       assert(outQ = "0000000000000000")  report "Falha em teste: 1" severity error;
 
--- acertar o resto
-
       -- Teste: 2
       inA <= "1010101010101010"; inB <= "0000000000000000";
       wait for 200 ps;
-      assert(outQ = "1010101010101010")  report "Falha em teste: 2" severity error;
+      assert(outQ = "0000000000000000")  report "Falha em teste: 2" severity error;
 
       -- Teste: 3
       inA <= "0101010101010101"; inB <= "0000000000000000";
       wait for 200 ps;
-      assert(outQ = "0101010101010101")  report "Falha em teste: 3" severity error;
+      assert(outQ = "0000000000000000")  report "Falha em teste: 3" severity error;
 
       -- Teste: 4
       inA <= "0000000000000000"; inB <= "1010101010101010";
       wait for 200 ps;
-      assert(outQ = "1010101010101010")  report "Falha em teste: 4" severity error;
+      assert(outQ = "0000000000000000")  report "Falha em teste: 4" severity error;
 
       -- Teste: 5
       inA <= "0000000000000000"; inB <= "0101010101010101";
       wait for 200 ps;
-      assert(outQ = "0101010101010101")  report "Falha em teste: 5" severity error;
+      assert(outQ = "0000000000000000")  report "Falha em teste: 5" severity error;
 
       -- Teste: 6
       inA <= "1111111111111111"; inB <= "1111111111111111";
@@ -64,6 +62,16 @@ begin
       inA <= "0000000000000000"; inB <= "0000000000000000";
       wait for 200 ps;
       assert(outQ = "0000000000000000")  report "Falha em teste: 7" severity error;
+      
+      -- Teste: 8
+      inA <= "0101010101010101"; inB <= "0101010101010101";
+      wait for 200 ps;
+      assert(outQ = "0101010101010101")  report "Falha em teste: 3" severity error;
+
+      -- Teste: 9
+      inA <= "1010101010101010"; inB <= "1010101010101010";
+      wait for 200 ps;
+      assert(outQ = "1010101010101010")  report "Falha em teste: 3" severity error;
 
     test_runner_cleanup(runner); -- Simulacao acaba aqui
 
