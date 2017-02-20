@@ -66,12 +66,12 @@ begin
       -- Teste: 8
       inA <= "0101010101010101"; inB <= "0101010101010101";
       wait for 200 ps;
-      assert(outQ = "0101010101010101")  report "Falha em teste: 3" severity error;
+      assert(outQ = "0101010101010101")  report "Falha em teste: 8" severity error;
 
       -- Teste: 9
       inA <= "1010101010101010"; inB <= "1010101010101010";
       wait for 200 ps;
-      assert(outQ = "1010101010101010")  report "Falha em teste: 3" severity error;
+      assert(outQ = "1010101010101010")  report "Falha em teste: 9" severity error;
 
     test_runner_cleanup(runner); -- Simulacao acaba aqui
 

@@ -35,17 +35,17 @@ begin
       -- Teste: 2
       inA <= "0000111100001111";
       wait for 200 ps;
-      assert(outQ = "1111000011110000")  report "Falha em teste: 1" severity error;
+      assert(outQ = "1111000011110000")  report "Falha em teste: 2" severity error;
 
       -- Teste: 3
       inA <= "0000000000000000";
       wait for 200 ps;
-      assert(outQ = "1111111111111111")  report "Falha em teste: 1" severity error;
+      assert(outQ = "1111111111111111")  report "Falha em teste: 3" severity error;
 
       -- Teste: 4
       inA <= "1111111111111111";
       wait for 200 ps;
-      assert(outQ = "0000000000000000")  report "Falha em teste: 1" severity error;
+      assert(outQ = "0000000000000000")  report "Falha em teste: 4" severity error;
 
 
     test_runner_cleanup(runner); -- Simulacao acaba aqui

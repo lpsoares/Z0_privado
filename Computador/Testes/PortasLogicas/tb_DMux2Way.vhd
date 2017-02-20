@@ -33,6 +33,21 @@ begin
       wait for 200 ps;
       assert(outQ0 = '1' and outQ1 = '0')  report "Falha em teste: 1" severity error;
 
+      -- Teste: 2
+      inA <= '1'; inSel<= '1';
+      wait for 200 ps;
+      assert(outQ0 = '0' and outQ1 = '1')  report "Falha em teste: 2" severity error;
+
+      -- Teste: 3
+      inA <= '0'; inSel<= '0';
+      wait for 200 ps;
+      assert(outQ0 = '0' and outQ1 = '0')  report "Falha em teste: 3" severity error;
+
+      -- Teste: 4
+      inA <= '0'; inSel<= '1';
+      wait for 200 ps;
+      assert(outQ0 = '0' and outQ1 = '0')  report "Falha em teste: 4" severity error;
+
 
     test_runner_cleanup(runner); -- Simulacao acaba aqui
 
