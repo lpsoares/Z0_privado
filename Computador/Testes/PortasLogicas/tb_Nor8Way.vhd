@@ -44,6 +44,46 @@ begin
       wait for 200 ps;
       assert(outQ = '0')  report "Falha em teste: 2" severity error;
 
+      -- Teste: 3
+      inA <= '0'; inB <= '0'; inC <= '0'; inD <= '0'; inE <= '0'; inF <= '0'; inG <= '1'; inH <= '0';
+      wait for 200 ps;
+      assert(outQ = '0')  report "Falha em teste: 2" severity error;
+      
+      -- Teste: 4
+      inA <= '0'; inB <= '0'; inC <= '0'; inD <= '0'; inE <= '0'; inF <= '1'; inG <= '0'; inH <= '0';
+      wait for 200 ps;
+      assert(outQ = '0')  report "Falha em teste: 2" severity error;
+
+      -- Teste: 5
+      inA <= '0'; inB <= '0'; inC <= '0'; inD <= '0'; inE <= '1'; inF <= '0'; inG <= '0'; inH <= '0';
+      wait for 200 ps;
+      assert(outQ = '0')  report "Falha em teste: 2" severity error;
+      
+      -- Teste: 6
+      inA <= '0'; inB <= '0'; inC <= '0'; inD <= '1'; inE <= '0'; inF <= '0'; inG <= '0'; inH <= '0';
+      wait for 200 ps;
+      assert(outQ = '0')  report "Falha em teste: 2" severity error;
+      
+      -- Teste: 7
+      inA <= '0'; inB <= '0'; inC <= '1'; inD <= '0'; inE <= '0'; inF <= '0'; inG <= '0'; inH <= '0';
+      wait for 200 ps;
+      assert(outQ = '0')  report "Falha em teste: 2" severity error;
+      
+      -- Teste: 8
+      inA <= '0'; inB <= '1'; inC <= '0'; inD <= '0'; inE <= '0'; inF <= '0'; inG <= '0'; inH <= '0';
+      wait for 200 ps;
+      assert(outQ = '0')  report "Falha em teste: 2" severity error;
+
+      -- Teste: 9
+      inA <= '1'; inB <= '0'; inC <= '0'; inD <= '0'; inE <= '0'; inF <= '0'; inG <= '0'; inH <= '0';
+      wait for 200 ps;
+      assert(outQ = '0')  report "Falha em teste: 2" severity error;
+
+      -- Teste: 10
+      inA <= '1'; inB <= '1'; inC <= '1'; inD <= '1'; inE <= '1'; inF <= '1'; inG <= '1'; inH <= '1';
+      wait for 200 ps;
+      assert(outQ = '0')  report "Falha em teste: 2" severity error;
+
     test_runner_cleanup(runner); -- Simulacao acaba aqui
 
   end process;

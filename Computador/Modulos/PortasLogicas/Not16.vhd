@@ -9,5 +9,5 @@ end entity;
 
 architecture arch of Not16 is
 begin
-
+	q <= not a;
 end architecture;

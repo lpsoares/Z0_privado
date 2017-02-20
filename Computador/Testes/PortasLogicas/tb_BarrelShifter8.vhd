@@ -33,7 +33,55 @@ begin
 	-- Teste: 1
 	inA <= "00000010"; inDir <='0'; inSize <= "000";
 	wait for 200 ps;
-	assert(outQ = "00000100")  report "Falha em teste: 1" severity error;
+	assert(outQ = "00000010")  report "Falha em teste: 1" severity error;
+
+	-- Teste: 2
+	inA <= "00000010"; inDir <='0'; inSize <= "001";
+	wait for 200 ps;
+	assert(outQ = "00000100")  report "Falha em teste: 2" severity error;
+
+	-- Teste: 3
+	inA <= "00000010"; inDir <='0'; inSize <= "010";
+	wait for 200 ps;
+	assert(outQ = "00001000")  report "Falha em teste: 3" severity error;
+
+	-- Teste: 4
+	inA <= "00000010"; inDir <='0'; inSize <= "011";
+	wait for 200 ps;
+	assert(outQ = "00010000")  report "Falha em teste: 4" severity error;
+
+	-- Teste: 5
+	inA <= "00000010"; inDir <='0'; inSize <= "100";
+	wait for 200 ps;
+	assert(outQ = "00100000")  report "Falha em teste: 5" severity error;
+
+	-- Teste: 6
+	inA <= "01000000"; inDir <='1'; inSize <= "000";
+	wait for 200 ps;
+	assert(outQ = "01000000")  report "Falha em teste: 6" severity error;
+
+	-- Teste: 7
+	inA <= "01000000"; inDir <='1'; inSize <= "001";
+	wait for 200 ps;
+	assert(outQ = "00100000")  report "Falha em teste: 7" severity error;
+
+	-- Teste: 8
+	inA <= "01000000"; inDir <='1'; inSize <= "010";
+	wait for 200 ps;
+	assert(outQ = "00010000")  report "Falha em teste: 8" severity error;
+
+	-- Teste: 9
+	inA <= "01000000"; inDir <='1'; inSize <= "011";
+	wait for 200 ps;
+	assert(outQ = "00001000")  report "Falha em teste: 9" severity error;
+
+	-- Teste: 10
+	inA <= "01000000"; inDir <='1'; inSize <= "100";
+	wait for 200 ps;
+	assert(outQ = "00000100")  report "Falha em teste: 10" severity error;
+
+
+
 
 	test_runner_cleanup(runner); -- Simulacao acaba aqui
 

@@ -1,5 +1,6 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.numeric_std.all;
 
 entity BarrelShifter8 is
 	port ( 
@@ -11,5 +12,11 @@ end entity;
 
 architecture arch of BarrelShifter8 is
 begin
+
+	with dir select  
+      	q <= std_logic_vector(shift_left(unsigned(a),to_integer(unsigned(size)))) when '0',
+      	     std_logic_vector(shift_right(unsigned(a), to_integer(unsigned(size)))) when others;
+
+
 
 end architecture;

@@ -10,6 +10,13 @@ entity Mux2Way is
 end entity;
 
 architecture arch of Mux2Way is
+
+	signal tmp1, tmp2 : STD_LOGIC;
+
 begin
+
+	tmp1 <= a and (not sel);
+	tmp2 <= b and sel;
+	q <= tmp1 or tmp2;
 
 end architecture;

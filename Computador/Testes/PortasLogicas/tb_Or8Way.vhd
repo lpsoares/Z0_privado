@@ -79,6 +79,11 @@ begin
       wait for 200 ps;
       assert(outQ = '1')  report "Falha em teste: 2" severity error;
 
+      -- Teste: 10
+      inA <= '1'; inB <= '1'; inC <= '1'; inD <= '1'; inE <= '1'; inF <= '1'; inG <= '1'; inH <= '1';
+      wait for 200 ps;
+      assert(outQ = '1')  report "Falha em teste: 2" severity error;
+
     test_runner_cleanup(runner); -- Simulacao acaba aqui
 
   end process;
