@@ -4,50 +4,48 @@ use ieee.std_logic_1164.all;
 library vunit_lib;
 context vunit_lib.vunit_context;
 
-entity tb_DMux2Way is
+entity tb_Inc16 is
   generic (runner_cfg : string);
 end entity;
 
-architecture tb of tb_DMux2Way is
+architecture tb of tb_Inc16 is
 
-component DMux2Way is
-	port ( 
-			a:   in  STD_LOGIC;
-			sel: in  STD_LOGIC;
-			q0:  out STD_LOGIC;
-			q1:  out STD_LOGIC);
-end component;
+component Inc16 is
+	port(
+		a   :  in STD_LOGIC_VECTOR(15 downto 0);
+		q   : out STD_LOGIC_VECTOR(15 downto 0) 
+	);
+end component; 
 
-   signal  inA, inSel, outQ0, outQ1 : STD_LOGIC;
+   signal  inA, outQ : STD_LOGIC_VECTOR(15 downto 0);
 
 begin
 
-	mapping: DMux2Way port map(inA, inSel, outQ0, outQ1);
+	mapping: Inc16 port map(inA, outQ);
 
   main : process
   begin
     test_runner_setup(runner, runner_cfg);
 
       -- Teste: 1
-      inA <= '1'; inSel<= '0';
+      inA <= "0000000000000000";
       wait for 200 ps;
-      assert(outQ0 = '1' and outQ1 = '0')  report "Falha em teste: 1" severity error;
+      assert(outQ = "0000000000000001")  report "Falha em teste: 1" severity error;
 
       -- Teste: 2
-      inA <= '1'; inSel<= '1';
+      inA <= "1111111111111111";
       wait for 200 ps;
-      assert(outQ0 = '0' and outQ1 = '1')  report "Falha em teste: 2" severity error;
+      assert(outQ = "0000000000000000")  report "Falha em teste: 2" severity error;
 
       -- Teste: 3
-      inA <= '0'; inSel<= '0';
+      inA <= "0000000000000101";
       wait for 200 ps;
-      assert(outQ0 = '0' and outQ1 = '0')  report "Falha em teste: 3" severity error;
+      assert(outQ = "0000000000000110")  report "Falha em teste: 3" severity error;
 
       -- Teste: 4
-      inA <= '0'; inSel<= '1';
+      inA <= "1111111111111011";
       wait for 200 ps;
-      assert(outQ0 = '0' and outQ1 = '0')  report "Falha em teste: 4" severity error;
-
+      assert(outQ = "1111111111111100")  report "Falha em teste: 4" severity error;
 
     test_runner_cleanup(runner); -- Simulacao acaba aqui
 

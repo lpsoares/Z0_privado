@@ -9,3 +9,10 @@ entity FullAdder is
 		soma,vaium: out STD_LOGIC   -- sum e carry
 	);
 end entity;
+
+architecture arch of FullAdder is
+	
+begin 
+	soma <= a xor b xor c;
+	vaium <= ((a and b) or (b and c) or (a and c));
+end architecture;
