@@ -56,15 +56,17 @@ public class Assemble {
         int ramAddress = 16;
 
         while (parser.advance()){
-                    
+                
                 if (parser.commandType() == Parser.CommandType.C_COMMAND) {
                     parser.C(out);
                 } else if (parser.commandType() == Parser.CommandType.A_COMMAND) {
                     symbol = parser.symbol();
-                    if (Character.isDigit(symbol.charAt(0)) ||
-                                  symbol.charAt(0) == '-'   ||
-                                  symbol.charAt(0) == '+'   ){
+                    value = Code.toBinary("0");
+                    if (Character.isDigit(symbol.charAt(0)) || 
+                        (symbol.charAt(0) == '+' && Character.isDigit(symbol.charAt(1)) ) ){
                         value = Code.toBinary(symbol);
+                    } else if (symbol.charAt(0) == '-'){
+                        System.err.println("Arquitetura não suporta a entrada de números negativos no LEAW");
                     } else if (table.contains(symbol)) {
                         value = Integer.toString(table.getAddress(symbol));
                         value = Code.toBinary(value);
