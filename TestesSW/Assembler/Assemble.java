@@ -13,10 +13,10 @@ public class Assemble {
     public Assemble(String file) throws IOException {
         // define input / output files
         inputFile = file;
-        String outputFile = inputFile.replaceAll("\\..*", "") + ".hack";
+        String outputFile = inputFile.substring(0, inputFile.lastIndexOf('.')) + ".hack";
         out = new PrintWriter(new FileWriter(outputFile));
         
-        // initialize symbol table
+        // Inicializa a tabela de simbolos
         table.initialize();
     }
 
@@ -38,7 +38,7 @@ public class Assemble {
                 romAddress++;
                 // print warning when memory is all used
                 if (romAddress > 32768)
-                    System.err.println("Warning: toda a ROM disponivel foi usada");
+                    System.err.println("Aviso: toda a ROM disponível do Z0 foi usada");
             }
         }
         parser.close();
@@ -49,7 +49,6 @@ public class Assemble {
     // handle variables
     // generate code, replace symbols with values from symbol table
     public void assemble2() throws FileNotFoundException, IOException{
-    
         Parser parser = new Parser(inputFile);
         String dest, comp, jump;
         String symbol, value;
@@ -62,8 +61,9 @@ public class Assemble {
                     parser.C(out);
                 } else if (parser.commandType() == Parser.CommandType.A_COMMAND) {
                     symbol = parser.symbol();
-
-                    if (Character.isDigit(symbol.charAt(0))){
+                    if (Character.isDigit(symbol.charAt(0)) ||
+                                  symbol.charAt(0) == '-'   ||
+                                  symbol.charAt(0) == '+'   ){
                         value = Code.toBinary(symbol);
                     } else if (table.contains(symbol)) {
                         value = Integer.toString(table.getAddress(symbol));
@@ -71,9 +71,9 @@ public class Assemble {
                     } else {
                         // print warnings about memory usage
                         if (ramAddress > 16383)
-                            System.err.println("Warning: allocating variable in I/O memory map");
+                            System.err.println("Aviso: alocando variável em memória mapeada de I/O");
                         if (ramAddress > 24576)
-                            System.err.println("Warning: no more RAM left");
+                            System.err.println("Aviso: não há mais memória RAM disponível");
 
                         table.addEntry(symbol, ramAddress);
                         value = Code.toBinary("" + ramAddress);
@@ -89,8 +89,7 @@ public class Assemble {
     }
 
     // close output file
-    public void close() throws IOException
-    {
+    public void close() throws IOException {
         out.close();
         return;
     }

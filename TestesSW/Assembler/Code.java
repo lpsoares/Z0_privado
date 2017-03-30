@@ -32,20 +32,25 @@ public class Code {
         }
         String c = "000000";
         switch (mnemnonic) {
-            case "$0":   c = "101010"; break;
-            case "$1":   c = "111111"; break;
-            case "$-1":  c = "111010"; break;
-            case "%D":   c = "001100"; break;
-            case "%A":   c = "110000"; break;
-            case "!%D":  c = "001101"; break;
-            case "!%A":  c = "110001"; break;
-            case "-%D":  c = "001111"; break;
-            case "-%A":  c = "110011"; break;
-            case "%D+1": c = "011111"; break;
-            case "%A+1": c = "110111"; break;
-            case "%D-1": c = "001110"; break;
-            case "%A-1": c = "110010"; break;
+            case "$0":    c = "101010"; break;
+            case "$1":    c = "111111"; break;
+            case "$-1":   c = "111010"; break;
+            case "%D":    c = "001100"; break;
+            case "%A":    c = "110000"; break;
+            case "!%D":   c = "001101"; break;
+            case "!%A":   c = "110001"; break;
+            case "-%D":   c = "001111"; break;
+            case "-%A":   c = "110011"; break;
+            case "%D+1":  c = "011111"; break;
+            case "%D+$1": c = "011111"; break;
+            case "%A+1":  c = "110111"; break;
+            case "%A+$1": c = "110111"; break;
+            case "%D-1":  c = "001110"; break;
+            case "%D-$1": c = "001110"; break;
+            case "%A-1":  c = "110010"; break;
+            case "%A-$1": c = "110010"; break;
             case "%D+%A": c = "000010"; break;
+            case "%A+%D": c = "000010"; break;
             case "%D-%A": c = "010011"; break;
             case "%A-%D": c = "000111"; break;
             case "%D&%A": c = "000000"; break;
@@ -77,7 +82,6 @@ public class Code {
     public static String toBinary(String symbol) {
         int value = Integer.valueOf(symbol);
         String binary = Integer.toBinaryString(value);
-
         return String.format("%1$15s", binary).replace(" ", "0");
     }
 }

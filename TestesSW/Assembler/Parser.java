@@ -142,16 +142,18 @@ public class Parser {
           }
 
           out.println("111" + Code.comp(comp) + Code.dest(dest) + Code.jump(jump));
+
             }
             catch (InvalidDestException ex) {
-                Error.error("Invalid destination"+currentCommand);
+                Error.error("Tentando salvar em um local inválido", inputFile, lineNumber, currentLine);
             }
             catch (InvalidCompException ex) {
-                Error.error("Invalid computation"+currentCommand);
+                Error.error("Cálculo inválido", inputFile, lineNumber, currentLine);
             }
             catch (InvalidJumpException ex) {
-                Error.error("Invalid jump"+currentCommand);
+                Error.error("Instrução de jump inválida", inputFile, lineNumber, currentLine);
             }
+       
         return;
     }
 

@@ -1,11 +1,11 @@
 import java.io.*;
 
-class Assembler {
+class AssemblerZ0 {
 
     public static void main(String[] args) {
 
         if (args.length != 1)  // checa se arquivo foi passado
-            Error.error("informe o nome do arquivo nasm");
+            Error.error("informe o nome do arquivo assembly Z0 nasm");
 
         String inputFile = args[0];
 
