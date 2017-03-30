@@ -1,0 +1,48 @@
+
+   @KBD // Define o registrador A para apontar para o teclado
+   D = M // Coloca no registrador D o valor ASCII da tecla.
+   @0
+   D,JEQ   
+   @15
+   D=A
+   @INFINITE_LOOP
+   D;JLE 
+   @counter
+   M=D
+   @SCREEN
+   D=A
+   @address
+   M=D
+   @9
+   D=A
+   @counter2
+   M=D
+(LOOP1)
+   @address
+   A=M
+   M=-1
+   @address
+   D=M
+   @1
+   D=D+A
+   @address
+   M=D
+   @counter
+   MD=M-1
+   @LOOP1
+   D;JGE
+   @529
+   D=A
+   @address
+   M=M+D
+   @15
+   D=A
+   @counter
+   M=D
+   @counter2
+   MD=M-1
+   @LOOP1
+   D;JGE
+(INFINITE_LOOP)
+   @INFINITE_LOOP
+   0;JMP
