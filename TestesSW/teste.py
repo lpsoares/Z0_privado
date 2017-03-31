@@ -6,7 +6,7 @@ import unittest
 import pytest
 import loadTestes
 
-nomes_testes = loadTestes.testes("testesSW/testes.txt")
+nomes_testes = loadTestes.testes("TestesSW/testes.txt")
 
 @pytest.mark.parametrize(('nomes_testes'),nomes_testes)
 def test_Assembly(nomes_testes):
@@ -15,8 +15,8 @@ def test_Assembly(nomes_testes):
 
 	for i in range(int(nomes_testes[1])):
 
-		resultado = "testesSW/machine_code/{0}{1}_out.mif".format(nomes_testes[0],i)
-		teste = "testesSW/testesAssembly/{0}{1}_tst.mif".format(nomes_testes[0],i)
+		resultado = "TestesSW/machine_code/{0}{1}_out.mif".format(nomes_testes[0],i)
+		teste = "TestesSW/testesAssembly/{0}{1}_tst.mif".format(nomes_testes[0],i)
 		debug = False
 
 		ram = {}
