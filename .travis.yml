@@ -32,6 +32,8 @@ addons:
       - oracle-java8-installer
 
 script:
+- pwd
+- ls -la
 - python testesHW/run.py -p3
 - python testesSW/assembler.py
 - python testesSW/emulate.py
