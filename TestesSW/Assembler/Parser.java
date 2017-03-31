@@ -54,6 +54,11 @@ public class Parser {
         }
     }
 
+
+    public String command() {
+      return currentCommand;
+    }
+
     // returns symbol or decimal xxx of the current command
     // only applies to A_COMMAND or L_COMMAND
     public String symbol() {

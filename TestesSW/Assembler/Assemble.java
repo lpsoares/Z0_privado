@@ -6,16 +6,24 @@ public class Assemble {
     // input and output files
     private String inputFile;
     private PrintWriter out;
+    boolean debug;
 
     // symbol table for variables / labels
     private SymbolTable table = new SymbolTable();
 
-    public Assemble(String file) throws IOException {
+    public Assemble(String inFile, String outFile, boolean debug) throws IOException {
         // define input / output files
-        inputFile = file;
-        String outputFile = inputFile.substring(0, inputFile.lastIndexOf('.')) + ".hack";
-        out = new PrintWriter(new FileWriter(outputFile));
-        
+
+        this.debug = debug;
+
+        inputFile = inFile;
+        if(outFile==null) {
+            String outputFile = inputFile.substring(0, inputFile.lastIndexOf('.')) + ".hack";
+            out = new PrintWriter(new FileWriter(outputFile));
+        } else {
+            out = new PrintWriter(new FileWriter(outFile));
+        }
+
         // Inicializa a tabela de simbolos
         table.initialize();
     }
@@ -56,7 +64,9 @@ public class Assemble {
         int ramAddress = 16;
 
         while (parser.advance()){
-                
+                if(this.debug) {
+                    System.out.println(parser.command());
+                }
                 if (parser.commandType() == Parser.CommandType.C_COMMAND) {
                     parser.C(out);
                 } else if (parser.commandType() == Parser.CommandType.A_COMMAND) {

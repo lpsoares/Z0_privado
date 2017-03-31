@@ -16,6 +16,14 @@ public class MainActivity {
         for (int i = 0; i < args.length; i++) {
             switch (args[i].charAt(0)) {
             case '-':
+                if (args[i].charAt(1) == 'h') {
+                    System.out.println("Opções");
+                    System.out.println("<arquivo> : programa em linguagem de máquina a ser carregado");
+                    System.out.println("-d : Mostra informações de debug na tela");
+                    System.out.println("-i <arquivo> : carrega arquivo com dados para memória RAM");
+                    System.out.println("-o <arquivo> : salva arquivo com dados da memória RAM");
+                    System.out.println("-c <clocks) : define quantidade de ciclos para rodar programa");
+                } else
                 if (args[i].charAt(1) == 'd') {
                     Log.debug = true;
                 } else
