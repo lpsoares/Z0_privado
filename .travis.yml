@@ -32,12 +32,10 @@ addons:
       - oracle-java8-installer
 
 script:
-- pwd
-- ls -la
-- python testesHW/run.py -p3
-- python testesSW/assembler.py
-- python testesSW/emulate.py
-- python -m pytest -v testesSW/teste.py 
+- python TestesHW/run.py -p3
+- python TestesSW/assembler.py
+- python TestesSW/emulate.py
+- python -m pytest -v TestesSW/teste.py 
 
 notifications:
   email: false
