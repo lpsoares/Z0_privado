@@ -1,17 +1,13 @@
-//package elemulator;
-
-import java.util.ArrayList;
-
-//import br.edu.insper.elemulator.util.Converter;
-
 /**
  * Created by lucas on 28/11/2016.
+ * Update by Luciano on 04/02/2017
  */
+
+import java.util.ArrayList;
 
 public class DisplayDriver {
     private Screen screen;
     private Converter converter;
-
 
     public DisplayDriver (Screen screen) {
         this.screen = screen;
@@ -20,16 +16,10 @@ public class DisplayDriver {
 
     public void update(boolean[] register, boolean[] index) {
         int cx = converter.booleanToInt(index) - 16384;
-        int y = cx/32;
-        ArrayList<Integer> x = new ArrayList<>();
+        int x = cx/32;
+        int y = (cx%32)*16;
 
-        for (int i = 0; i < register.length;i++) {
-            if (register[i]) {
-                x.add((cx%32)*16 + i);
-            }
-        }
-
-        screen.markPixel(x,y);
+        screen.markPixel(x,y,register);
 
     }
 

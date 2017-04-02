@@ -1,4 +1,7 @@
-//package elemulator;
+/**
+ * Created by lucas on 28/11/2016.
+ * Update by Luciano on 04/02/2017
+ */
 
 import java.util.*;
 import java.io.*;
@@ -11,6 +14,7 @@ public class MainActivity {
         String code_file = "";
         String memory_load = null;
         String memory_dump = null;
+        String display_dump = null;
         int clocks = 100;
 
         for (int i = 0; i < args.length; i++) {
@@ -22,6 +26,7 @@ public class MainActivity {
                     System.out.println("-d : Mostra informações de debug na tela");
                     System.out.println("-i <arquivo> : carrega arquivo com dados para memória RAM");
                     System.out.println("-o <arquivo> : salva arquivo com dados da memória RAM");
+                    System.out.println("-p <arquivo> : salva arquivo com dados do display");
                     System.out.println("-c <clocks) : define quantidade de ciclos para rodar programa");
                 } else
                 if (args[i].charAt(1) == 'd') {
@@ -33,6 +38,10 @@ public class MainActivity {
                 } else
                 if (args[i].charAt(1) == 'o') {
                     memory_dump = args[i+1]; // arquivo output
+                    i++;
+                } else
+                if (args[i].charAt(1) == 'p') {
+                    display_dump = args[i+1]; // arquivo output
                     i++;
                 } else
                 if (args[i].charAt(1) == 'c') {
@@ -62,17 +71,16 @@ public class MainActivity {
             hack.load_ram(memory_load);
 
             int count = 0;
-            //try {
-                while( (hack.pc_value <= hack.current_line-1) && (count < clocks) ) {
-                    hack.execute();
-                    count++;
-                }
-                //Thread.sleep(10);
-            //} catch (InterruptedException ex) {
-            //    Thread.currentThread().interrupt();
-            //}
+
+            while( (hack.pc_value <= hack.current_line-1) && (count < clocks) ) {
+                hack.execute();
+                count++;
+            }
             
             hack.dump_ram(memory_dump);
+            if(display_dump!=null) {
+                screen.saveDisplay(display_dump);
+            }
 
             //hack.reset = true;
             //char kbd = keyboard.getText().toString().charAt(0); //passo 3

@@ -1,48 +1,53 @@
+; Parallelogram.nasm
 
-   @KBD // Define o registrador A para apontar para o teclado
-   D = M // Coloca no registrador D o valor ASCII da tecla.
-   @0
-   D,JEQ   
-   @15
-   D=A
-   @INFINITE_LOOP
-   D;JLE 
-   @counter
-   M=D
-   @SCREEN
-   D=A
-   @address
-   M=D
-   @9
-   D=A
-   @counter2
-   M=D
-(LOOP1)
-   @address
-   A=M
-   M=-1
-   @address
-   D=M
-   @1
-   D=D+A
-   @address
-   M=D
-   @counter
-   MD=M-1
-   @LOOP1
-   D;JGE
-   @529
-   D=A
-   @address
-   M=M+D
-   @15
-   D=A
-   @counter
-   M=D
-   @counter2
-   MD=M-1
-   @LOOP1
-   D;JGE
-(INFINITE_LOOP)
-   @INFINITE_LOOP
-   0;JMP
+; Desenha um paralelograma na tela.
+
+
+
+
+; desenha quadrado
+; centraliza na tela
+leaw $4112,%A
+movw %A,%D
+leaw $SCREEN,%A
+addw %A,%D,%D
+
+; onde desenhar
+leaw $R1,%A
+movw %D,(%A)
+
+; contador
+leaw $16,%A
+movw %A,%D
+leaw $COUNTER,%A
+movw %D,(%A)
+
+LOOP:
+
+leaw $R1,%A
+movw (%A),%A
+movw $-1,(%A)
+
+leaw $32,%A
+movw %A,%D
+
+leaw $R1,%A
+movw (%A),%A
+
+addw %A,%D,%D
+leaw $R1,%A
+movw %D,(%A)
+
+leaw $COUNTER,%A
+decw (%A)
+movw (%A),%D
+
+leaw $LOOP,%A
+jne
+
+; loop infinito para parar
+END:
+leaw $END,%A
+jmp
+
+

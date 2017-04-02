@@ -8,3 +8,11 @@ SternDiatomicSeries 1 32768
 Factorial 8 4096
 Fibonacci 1 4096
 KolakoskiSequence 1 4096
+Parallelogram 0 32768
+Diamond 0 32768
+EquilateralTriangle 0 32768
+Hexagon 0 32768
+Hourglass 0 32768
+Pentagon 0 32768
+RightTriangle 0 32768
+SquareWave 0 32768
