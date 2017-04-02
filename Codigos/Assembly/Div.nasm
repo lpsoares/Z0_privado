@@ -6,31 +6,26 @@
 
 leaw $R2,%A
 movw $0, (%A)
+
 LOOP:
+
+; subtrai R0 de R1
 leaw $R1,%A
 movw (%A), %D
-leaw $END,%A
-je
-leaw $0,%A
-movw (%A), %D
-leaw $1,%A
-subw %D,(%A),%D
-leaw $END,%A
-jl
-leaw $0,%A
-movw (%A), %D
-leaw $1,%A
-movw (%A), %D
-leaw $0,%A
+leaw $R0,%A
 subw (%A),%D,(%A)
-leaw $END,%A
-jl
+
+; incrementa R2
 leaw $R2,%A
-inc (%A)
-movw (%A), %D
+incw (%A)
+
+; testa se R0 >= R1
+leaw $R0,%A
+subw (%A),%D,%D
 leaw $LOOP,%A
-jg
+jge
+
+; loop infinito
 END:
 leaw $END,%A
-movw %A, %D
 jmp

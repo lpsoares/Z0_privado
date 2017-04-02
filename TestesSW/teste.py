@@ -51,6 +51,4 @@ def test_Assembly(nomes_testes):
 				print("\n")
 
 			for e,v in validacao.items():
-				assert (v==ram[e]),"Erro RAM[{0}]={1:016b}, valor esperado ({2:016b})".format(e,ram[e],v)	
-
-	
+				assert (v==ram[e]),"Erro: {0}{1} RAM[{2}]={3:016b}, valor esperado ({4:016b})".format(nomes_testes[0],i,e,ram[e],v)	

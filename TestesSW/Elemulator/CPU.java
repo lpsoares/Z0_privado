@@ -32,19 +32,19 @@ public class CPU {
         id.execute(instruction);
         this.writeM = id.isLoadM();
 
-        registerA.loadRegister(mux.execute(alu.getOut(), instruction, id.isMuxIOsel()), id.isLoadA());
         this.addressM = registerA.getRegister();
 
-        Log.print("REG-A     ",registerA.getRegister());
         
         muxAM = mux.execute(inM, registerA.getRegister(), id.isMuxAMsel());
         alu.execute(registerD.getRegister(), muxAM, id.isZx(), id.isNx(), id.isZy(), id.isNy(), id.isF(), id.isNo());
         this.outM = alu.getOut();
         
         Log.print("ALU       ",alu.getOut(),"ng",alu.getNg(),"zr",alu.getZr());
+
+        registerA.loadRegister(mux.execute(alu.getOut(), instruction, id.isMuxIOsel()), id.isLoadA());
+        Log.print("REG-A     ",registerA.getRegister());
         
         registerD.loadRegister(alu.getOut(), id.isLoadD());
-
         Log.print("REG-D     ",registerD.getRegister());
         
         id.executeJump(instruction, alu.getZr(), alu.getNg());

@@ -1,2 +1,10 @@
-Abs 1
-Div 1
+# Arquivo que define as rotinas de testes
+Div 8 524288
+Mod 8 524288
+Pow 5 8096
+Abs 6 1024
+Fibonacci 1 4096
+SternDiatomicSeries 1 32768
+Factorial 8 4096
+Fibonacci 1 4096
+KolakoskiSequence 1 4096

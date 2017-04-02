@@ -12,7 +12,8 @@ public class Log {
 	            if (code[i]) System.out.print("1");
 	            else System.out.print("0");
 	        }
-	        System.out.println("");
+	        System.out.print(" - ");
+	        System.out.println(Converter.booleanToInt(code));
 	    }
     }
 
@@ -24,6 +25,8 @@ public class Log {
 	            if (code[i]) System.out.print("1");
 	            else System.out.print("0");
 	        }
+	        System.out.print(" - ");
+	        System.out.print(Converter.booleanToInt(code));
 	        System.out.print("     "+sng+" : "+(ng?"1":"0"));
 	        System.out.print("     "+szr+" : "+(zr?"1":"0"));
 	        System.out.println("");

@@ -9,6 +9,7 @@ def assembler():
 	nomes_testes = loadTestes.testes("TestesSW/testes.txt")
 
 	for i in nomes_testes:
+
 		nome = i.split()
 		error_code = subprocess.call(['java', '-jar', 'TestesSW/Assembler/AssemblerZ0.jar',
 			"Codigos/Assembly/{0}.nasm".format(nome[0]),

@@ -2,7 +2,7 @@
 
 public class Converter {
 
-    public int booleanToInt(boolean[] a) {
+    public static int booleanToInt(boolean[] a) {
         String s = "";
 
         for (int i = a.length-1; i>=0; i--) {
@@ -15,7 +15,7 @@ public class Converter {
         return decimal;
     }
 
-    public boolean[] intToBoolean(int decimal) {
+    public static boolean[] intToBoolean(int decimal) {
         boolean[] a = new boolean[16];
         String s = Integer.toBinaryString(decimal);
 
@@ -27,7 +27,7 @@ public class Converter {
         return a;
     }
 
-    public String booleanToString(boolean[] a) {
+    public static String booleanToString(boolean[] a) {
         String s = "";
 
         for (int i = a.length-1; i>=0; i--) {
@@ -38,7 +38,7 @@ public class Converter {
         return s;
     }
 
-    public boolean[] stringToBoolean (String s) {
+    public static boolean[] stringToBoolean (String s) {
         boolean[] a = new boolean[16];
 
         for (int j = 0; j<s.length();j++) {

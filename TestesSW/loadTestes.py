@@ -4,6 +4,11 @@ def testes(nome_arquivo):
 
 	# rotina de leitura do resultado da emulação
 	with open(nome_arquivo, 'r') as arquivo:
-		nomes_testes = arquivo.read().splitlines()
+		tmp = arquivo.read().splitlines()
+
+		for i in tmp:
+			if i.strip():
+				if i.strip()[0]!='#':
+					nomes_testes.append(i)
 
 	return nomes_testes
