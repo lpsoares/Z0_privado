@@ -10,6 +10,7 @@ movw $0, (%A)
 LOOP:
 
 ; subtrai R0 de R1
+
 leaw $R1,%A
 movw (%A), %D
 leaw $R0,%A

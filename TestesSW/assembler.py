@@ -12,17 +12,26 @@ def assembler():
 
 	nomes_testes = loadTestes.testes("TestesSW/testes.txt")
 
+	error_code = 0
+	done = 0
+
 	for i in nomes_testes:
 
 		nome = i.split()
-		error_code = subprocess.call(['java', '-jar', 'TestesSW/Assembler/AssemblerZ0.jar',
+		error = subprocess.call(['java', '-jar', 'TestesSW/Assembler/AssemblerZ0.jar',
 			"Codigos/Assembly/{0}.nasm".format(nome[0]),
 			"-o","TestesSW/machine_code/{0}.hack".format(nome[0])])
-		if(error_code!=0):
-			exit(error_code)
+		if(error!=0):
+			error_code += error
+		else:
+			done += 1
 
 	elapsed_time = time.time() - start_time
-	print('\033[92m'+"Assembled {0} files in {1:.2f} seconds".format(len(nomes_testes),elapsed_time)+'\033[0m') 
+	print('\033[92m'+"Assembled {0} file(s) in {1:.2f} seconds".format(done,elapsed_time)+'\033[0m') 
+
+	if(error_code!=0):
+		print('\033[91m'+"Failed {0} file(s)".format(len(nomes_testes)-done)+'\033[0m') 
+		exit(error_code)
 
 
 if __name__ == '__main__':
