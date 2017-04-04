@@ -1,7 +1,9 @@
-//package elemulator;
-
-//import br.edu.insper.elemulator.controller.DisplayDriver;
-//import br.edu.insper.elemulator.util.Converter;
+/**
+ * Curso: Elementos de Sistemas
+ * Arquivo: MainActivity.java
+ * Created by lucas on 28/11/2016.
+ * Update by Luciano Soares on 04/02/2017
+ */
 
 import java.io.*;
 import java.util.Scanner;

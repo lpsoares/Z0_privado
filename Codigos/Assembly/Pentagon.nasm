@@ -1,5 +1,7 @@
-; Luciano Soares
-; File name: Pentagon.nasm
+; Arquivo: Pentagon.nasm
+; Curso: Elementos de Sistemas
+; Criado por: Luciano Soares
+; Data: 27/03/2017
 
 ; Desenha um pentâgono na tela quando uma tecla é pressionada.
 

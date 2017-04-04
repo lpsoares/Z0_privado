@@ -1,8 +1,10 @@
+# Curso de Elementos de Sistemas
+# Desenvolvido por: Luciano Soares <lpsoares@insper.edu.br>
+# Data de criação: 30/03/2017
 
 import subprocess
 import loadTestes
 import time
-
 
 def assembler():
 	

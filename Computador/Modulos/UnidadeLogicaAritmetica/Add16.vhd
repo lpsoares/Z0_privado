@@ -1,3 +1,7 @@
+-- Elementos de Sistemas
+-- by Luciano Soares
+-- Add16.vhd
+
 -- Soma dois valores de 16 bits
 -- ignorando o carry mais significativo
 

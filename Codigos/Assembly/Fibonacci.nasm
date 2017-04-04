@@ -1,4 +1,8 @@
-; Fibonacci.asm
+; Arquivo: Fibonacci.nasm
+; Curso: Elementos de Sistemas
+; Criado por: Luciano Soares
+; Data: 27/03/2017
+
 
 ; Le a quantidade de valores da RAM[0] e grava a sequencia de números 
 ; de Fibonacci nas posições seguintes RAM[1], RAM[2], etc....

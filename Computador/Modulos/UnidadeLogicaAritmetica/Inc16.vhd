@@ -1,3 +1,7 @@
+-- Elementos de Sistemas
+-- by Luciano Soares
+-- Inc16.vhd
+
 -- Incrementador de 16 bits
 -- adiciona 1 ao valore de entrada (adição aritmética)
 

@@ -1,3 +1,9 @@
+/**
+ * Curso: Elementos de Sistemas
+ * Arquivo: MainActivity.java
+ * Created by Luciano Soares <lpsoares@insper.edu.br> 
+ * Date: 04/02/2017
+ */
 
 import java.util.*;
 

@@ -1,12 +1,19 @@
+/**
+ * Curso: Elementos de Sistemas
+ * Arquivo: MainActivity.java
+ * Created by Luciano Soares <lpsoares@insper.edu.br> 
+ * Date: 04/02/2017
+ */
+
 import java.io.*;
 
 public class Parser {
 
-    public String currentCommand = "";		// comando atual
-    public String inputFile;				// arquivo de leitura
-    public int lineNumber = 0;				// linha atual do arquivo (nao do codigo gerado)
-    public String currentLine;				// linha de codigo atual
-    private BufferedReader fileReader;		// leitor de arquivo
+    public String currentCommand = "";  // comando atual
+    public String inputFile;				    // arquivo de leitura
+    public int lineNumber = 0;				  // linha atual do arquivo (nao do codigo gerado)
+    public String currentLine;				  // linha de codigo atual
+    private BufferedReader fileReader;  // leitor de arquivo
 
     // tipos de comandos
     enum CommandType {
@@ -22,45 +29,38 @@ public class Parser {
         lineNumber = 0;
     }
 
-    // reads next command from input and makes it the curent command
-    // returns true if command found
-    // returns false at end of file
+    
+    // carrega proximo comando e faz ele o comando atual
     public boolean advance() throws IOException {
-        while (true){
+        while(true){
             currentLine = fileReader.readLine();
             lineNumber++;
             if (currentLine == null)
-                return false;
+                return false;  // caso não haja mais comandos
             currentCommand = currentLine.replaceAll(";.*$", "").trim();
             if (currentCommand.equals(""))
                 continue;
-
-            return true;
+            return true;   // caso um comando seja encontrado
         }
     }
 
-    // returns the type of the current command
-    // A_COMMAND for lea xxx
-    // L_COMMAND for a label, xxx:
-    // C_COMMAND for mov, etc...
+    // informa qual o tipo do comando atual
     public CommandType commandType() {
-    
         if (currentCommand.startsWith("lea")) {
-            return CommandType.A_COMMAND;
+            return CommandType.A_COMMAND;  // A_COMMAND for lea xxx
         } else if (currentCommand.endsWith(":")) {
-            return CommandType.L_COMMAND;
+            return CommandType.L_COMMAND;  // L_COMMAND for a label, xxx:
         } else {
-            return CommandType.C_COMMAND;
+            return CommandType.C_COMMAND;  // C_COMMAND for mov, etc...
         }
     }
 
-
+    // somente retorna o comando atual
     public String command() {
       return currentCommand;
     }
 
-    // returns symbol or decimal xxx of the current command
-    // only applies to A_COMMAND or L_COMMAND
+    // retorna o simbolo ou valor decimal do comando atual
     public String symbol() {
 	    if (currentCommand.startsWith("lea")) {
 	        String[] array = currentCommand.split("[ ,]+");
@@ -70,6 +70,7 @@ public class Parser {
         }
     }
         
+    // identifica o tipo de instrução C e salva no arquivo
     public void C(PrintWriter out) {
         String comp = "";
         String dest = "";
@@ -146,25 +147,20 @@ public class Parser {
             comp = "$0";
           }
 
+          // salva no arquivo a instrução
           out.println("111" + Code.comp(comp) + Code.dest(dest) + Code.jump(jump));
 
-            }
-            catch (InvalidDestException ex) {
-                Error.error("Tentando salvar em um local inválido", inputFile, lineNumber, currentLine);
-            }
-            catch (InvalidCompException ex) {
-                Error.error("Cálculo inválido", inputFile, lineNumber, currentLine);
-            }
-            catch (InvalidJumpException ex) {
-                Error.error("Instrução de jump inválida", inputFile, lineNumber, currentLine);
-            }
-       
-        return;
+        } catch (InvalidDestException ex) {
+            Error.error("Tentando salvar em um local inválido", inputFile, lineNumber, currentLine);
+        } catch (InvalidCompException ex) {
+            Error.error("Cálculo inválido", inputFile, lineNumber, currentLine);
+        } catch (InvalidJumpException ex) {
+            Error.error("Instrução de jump inválida", inputFile, lineNumber, currentLine);
+        }
     }
 
-    // close input file
+    // fecha o arquivo de leitura
     public void close() throws IOException {
         fileReader.close();
-        return;
     }
 }

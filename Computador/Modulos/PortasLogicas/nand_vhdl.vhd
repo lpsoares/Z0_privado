@@ -1,3 +1,7 @@
+-- Elementos de Sistemas
+-- by Luciano Soares
+-- nand_vhdl.vhd
+
 Library ieee; 
 use ieee.std_logic_1164.all; 
 

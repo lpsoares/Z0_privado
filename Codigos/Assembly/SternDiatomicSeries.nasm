@@ -1,4 +1,7 @@
-; SternDiatomicSeries.nasm
+; Arquivo: SternDiatomicSeries.nasm
+; Curso: Elementos de Sistemas
+; Criado por: Luciano Soares
+; Data: 27/03/2017
 
 ; Calcula a série Stern’s Diatomic, a quantidade de elementos gerados é RAM[0]*2+1
 ; Os resultados são armazenados na RAM[1], RAM[2], etc....

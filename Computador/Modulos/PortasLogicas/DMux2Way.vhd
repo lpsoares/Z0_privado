@@ -1,3 +1,7 @@
+-- Elementos de Sistemas
+-- by Luciano Soares
+-- DMux2Way.vhd
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 

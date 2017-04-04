@@ -1,3 +1,7 @@
+-- Elementos de Sistemas
+-- by Luciano Soares
+-- ALU.vhd
+
 -- Unidade Lógica Aritmética (ULA)
 -- Recebe dois valores de 16bits e 
 -- calcula uma das seguintes funções:

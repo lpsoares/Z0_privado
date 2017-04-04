@@ -1,5 +1,7 @@
-; Luciano Soares
-; File name: Hourglass.nasm
+; Arquivo: Hourglass.nasm
+; Curso: Elementos de Sistemas
+; Criado por: Luciano Soares
+; Data: 27/03/2017
 
 ; Desenha uma ampulheta (dois triangulo invertidos um em cima do outro) 
 ; na tela quando uma tecla é pressionada.

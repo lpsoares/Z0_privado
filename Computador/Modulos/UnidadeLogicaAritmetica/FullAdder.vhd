@@ -1,4 +1,8 @@
--- Full Adder
+-- Elementos de Sistemas
+-- by Luciano Soares
+-- FullAdder.vhd
+
+-- Implementa Full Adder
 
 Library ieee;
 use ieee.std_logic_1164.all;

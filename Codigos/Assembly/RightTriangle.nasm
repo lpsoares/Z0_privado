@@ -1,5 +1,7 @@
-; Luciano Soares
-; File name: RightTriangle.nasm
+; Arquivo: RightTriangle.nasm
+; Curso: Elementos de Sistemas
+; Criado por: Luciano Soares
+; Data: 27/03/2017
 
 ; Desenha um triângulo retângulo na tela quando uma tecla é pressionada.
 

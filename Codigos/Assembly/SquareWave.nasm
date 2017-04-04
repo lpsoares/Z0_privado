@@ -1,3 +1,7 @@
+; Arquivo: SquareWave.nasm
+; Curso: Elementos de Sistemas
+; Criado por: Luciano Soares
+; Data: 27/03/2017
 
 ; desenha três linhas
 ; centraliza na tela

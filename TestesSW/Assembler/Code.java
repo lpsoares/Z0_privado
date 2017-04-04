@@ -1,6 +1,13 @@
+/**
+ * Curso: Elementos de Sistemas
+ * Arquivo: MainActivity.java
+ * Created by Luciano Soares <lpsoares@insper.edu.br> 
+ * Date: 04/02/2017
+ */
+
 public class Code {
 
-    // returns binary code (3 bits) of dest mnemnonic
+    // retorna o opcode (3 bits) a partir do mnemonico de destino
     public static String dest(String mnemnonic) throws InvalidDestException {
         String d1 = "0";
         String d2 = "0";
@@ -23,7 +30,7 @@ public class Code {
         return d1 + d2 + d3;
     }
 
-    // retorna um binario de 7 bits da instrucao
+    // retorna o opcode (7 bits) a partir do mnemonico de cálculo
     public static String comp(String mnemnonic) throws InvalidCompException {
         String a = "0";
         if (mnemnonic.contains("(%A)")) {
@@ -61,11 +68,9 @@ public class Code {
         return a + c;
     }
 
-    // returns binary code (3 bits) of jump mnemnonic
-    public static String jump(String mnemnonic) throws InvalidJumpException
-    {
-        switch (mnemnonic)
-        {
+    // retorna o opcode (3 bits) a partir do mnemonico de jump (salto)
+    public static String jump(String mnemnonic) throws InvalidJumpException {
+        switch (mnemnonic){
             case "":    return "000";
             case "jg": return "001";
             case "je": return "010";

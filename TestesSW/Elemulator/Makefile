@@ -1,10 +1,26 @@
-JAVAC=javac
+# Makefile para Assembler do Z0
+# Desenvolvido por: Luciano Soares <lpsoares@insper.edu.br>
+# Data: 03/04/2017
 
-all:
-	$(JAVAC) *.java
+JAVAC = javac
+JAVA_FLAGS = -g
 
-clean :
-	rm -f *.class *.jar
+JAR = jar
+JAR_FLAGS = cfm
 
-jar:
-	jar cfm Elemulator.jar MANIFEST.MF *.class
+.SUFFIXES: .java .class .jar
+
+sources = $(wildcard *.java)
+classes = $(sources:.java=.class)
+jarfile = Elemulator.jar 
+
+all: $(jarfile) $(classes)
+
+%.class : %.java
+	$(JAVAC) $(sources)
+
+$(jarfile): $(classes) $(sources) 
+	jar cfm $(jarfile) MANIFEST.MF $(classes)
+
+clean:
+	$(RM) *.class *.jar

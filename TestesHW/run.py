@@ -1,3 +1,8 @@
+# Curso de Elementos de Sistemas
+# Desenvolvido por: Pedro Cunial   <pedrocc4@al.insper.edu.br>
+#                   Luciano Soares <lpsoares@insper.edu.br>
+# Data de criação: 25/01/2017
+
 from os.path import join, dirname
 from vunit import VUnit
 

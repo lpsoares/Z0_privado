@@ -1,4 +1,10 @@
-//package elemulator;
+/**
+ * Curso: Elementos de Sistemas
+ * Arquivo: CPU.java
+ * Created by lucas on 28/11/2016.
+ * Update by Luciano on 04/02/2017
+ */
+
 
 public class CPU {
 

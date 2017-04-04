@@ -1,4 +1,7 @@
-; KolakoskiSequence.nasm
+; Arquivo: KolakoskiSequence.nasm
+; Curso: Elementos de Sistemas
+; Criado por: Luciano Soares
+; Data: 27/03/2017
 
 ; Le a quantidade de valores da RAM[0] e grava a sequencia de números 
 ; da Sequencia de Kolakoski nas posições seguintes RAM[1], RAM[2], etc....

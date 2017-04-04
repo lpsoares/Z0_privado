@@ -1,5 +1,7 @@
-; Luciano Soares
-; File name: Hexagon.asm
+; Arquivo: Hexagon.nasm
+; Curso: Elementos de Sistemas
+; Criado por: Luciano Soares
+; Data: 27/03/2017
 
 ; Desenha um hezagono na tela quando uma tecla é pressionada.
 
