@@ -1,6 +1,7 @@
 -- Elementos de Sistemas
--- by Luciano Soares
+-- developed by Luciano Soares
 -- tb_Ram8.vhd
+-- date: 4/4/2017
 
 Library ieee; 
 use ieee.std_logic_1164.all;
@@ -48,42 +49,42 @@ begin
 		-- Teste: 1
 		inInput <= "0000000000000000"; inAddress <= "000"; inLoad <= '1'; 
 		wait for 200 ps;
-		assert(outOutput = "0000000000000000")  report "Falha em teste: 0" severity error;
+		assert(outOutput = "0000000000000000")  report "Falha em teste: 1" severity error;
 
 		-- Teste: 2
 		inInput <= "0010101101100111"; inAddress <= "000"; inLoad <= '0'; 
 		wait for 200 ps;
-		assert(outOutput = "0000000000000000")  report "Falha em teste: 0" severity error;
+		assert(outOutput = "0000000000000000")  report "Falha em teste: 2" severity error;
 
 		-- Teste: 3
 		inInput <= "0010101101100111"; inAddress <= "001"; inLoad <= '1'; 
 		wait for 200 ps;
-		assert(outOutput = "0010101101100111")  report "Falha em teste: 0" severity error;
+		assert(outOutput = "0010101101100111")  report "Falha em teste: 3" severity error;
 
 		-- Teste: 4
 		inInput <= "0010101101100111"; inAddress <= "000"; inLoad <= '0'; 
 		wait for 200 ps;
-		assert(outOutput = "0000000000000000")  report "Falha em teste: 0" severity error;
+		assert(outOutput = "0000000000000000")  report "Falha em teste: 4" severity error;
 
 		-- Teste: 5
 		inInput <= "0000110100000101"; inAddress <= "011"; inLoad <= '1'; 
 		wait for 200 ps;
-		assert(outOutput = "0000110100000101")  report "Falha em teste: 0" severity error;
+		assert(outOutput = "0000110100000101")  report "Falha em teste: 5" severity error;
 
 		-- Teste: 6
 		inInput <= "0000110100000101"; inAddress <= "011"; inLoad <= '1'; 
 		wait for 200 ps;
-		assert(outOutput = "0000110100000101")  report "Falha em teste: 0" severity error;
+		assert(outOutput = "0000110100000101")  report "Falha em teste: 6" severity error;
 
 		-- Teste: 7
 		inInput <= "0000110100000101"; inAddress <= "011"; inLoad <= '0'; 
 		wait for 200 ps;
-		assert(outOutput = "0000110100000101")  report "Falha em teste: 0" severity error;
+		assert(outOutput = "0000110100000101")  report "Falha em teste: 7" severity error;
 
 		-- Teste: 8
 		inInput <= "0001111001100001"; inAddress <= "001"; inLoad <= '0'; 
 		wait for 200 ps;
-		assert(outOutput = "0010101101100111")  report "Falha em teste: 0" severity error;
+		assert(outOutput = "0010101101100111")  report "Falha em teste: 8" severity error;
 
     test_runner_cleanup(runner); -- Simulation ends here
 

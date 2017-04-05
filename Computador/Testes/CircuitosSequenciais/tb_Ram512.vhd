@@ -1,6 +1,7 @@
 -- Elementos de Sistemas
--- by Luciano Soares
+-- developed by Luciano Soares
 -- tb_Ram512.vhd
+-- date: 4/4/2017
 
 Library ieee; 
 use ieee.std_logic_1164.all;

@@ -26,7 +26,8 @@ leaw $R1,%A
 movw (%A),%D
 
 leaw $R0,%A
-addw (%A), %D, (%A)
+addw (%A), %D, %D
+movw %D, (%A)
 
 leaw $R2,%A
 movw (%A),%D
@@ -34,7 +35,6 @@ movw (%A),%D
 leaw $LOOP,%A
 jmp
 nop
-
 
 END:
 leaw $END,%A

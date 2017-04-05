@@ -16,7 +16,7 @@ leaw $1,%A
 movw %A,(%A)
 leaw $END,%A 
 je
-
+nop
 
 ; Fatorial de 1
 leaw $0,%A 
@@ -25,7 +25,7 @@ leaw $1,%A
 movw %A,(%A)
 leaw $END,%A 
 je
-
+nop
 
 leaw $0,%A
 subw (%A),$1,%D
@@ -46,12 +46,18 @@ LOOP:
 leaw $4,%A
 movw (%A),%D
 leaw $1,%A
-addw (%A),%D,(%A)
+addw (%A),%D,%D
+movw %D,(%A)
+
+
 leaw $2,%A
-dec (%A)
+subw (%A),$1,%D
+movw %D,(%A)
+
 movw (%A),%D
 leaw $LOOP,%A
 jg
+nop
 
 ; LOOP EXTERNO
 leaw $1,%A
@@ -59,13 +65,17 @@ movw (%A),%D
 leaw $4,%A
 movw %D,(%A)
 leaw $3,%A
-decw (%A)
+subw (%A),$1,%D
+movw %D,(%A)
+
 movw (%A),%D
 leaw $2,%A
 movw %D,(%A)
 leaw $LOOP,%A
 jg
+nop
 
 END:
 leaw $END,%A
 jmp ; Loop
+nop

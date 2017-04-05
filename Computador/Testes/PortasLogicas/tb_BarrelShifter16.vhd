@@ -1,3 +1,8 @@
+-- Elementos de Sistemas
+-- developed by Luciano Soares
+-- file: tb_BarrelShifter16.vhd
+-- date: 4/4/2017
+
 library ieee;
 use ieee.std_logic_1164.all;
 

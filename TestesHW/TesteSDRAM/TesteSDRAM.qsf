@@ -289,9 +289,9 @@ set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[13] -
 set_global_assignment -name EDA_SIMULATION_TOOL "ModelSim-Altera (VHDL)"
 set_global_assignment -name EDA_OUTPUT_DATA_FORMAT VHDL -section_id eda_simulation
 set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_ADVANCED_TRIGGER_ENTITY=sld_reserved_TesteSDRAM_auto_signaltap_0_1_9e31," -section_id auto_signaltap_0
+set_global_assignment -name QSYS_FILE src/sdram.qsys
+set_global_assignment -name VHDL_FILE src/interfaceSDRAM.vhd
 set_global_assignment -name SDC_FILE TesteSDRAM.sdc
 set_global_assignment -name VHDL_FILE src/TesteSDRAM.vhd
-set_global_assignment -name SIGNALTAP_FILE src/stp2.stp
-set_global_assignment -name QIP_FILE src/sdram/synthesis/sdram.qip
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
 set_global_assignment -name SLD_FILE db/stp2_auto_stripped.stp

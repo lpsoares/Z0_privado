@@ -13,23 +13,29 @@ movw $0, (%A)
 LOOP:
 
 ; subtrai R0 de R1
-
 leaw $R1,%A
 movw (%A), %D
 leaw $R0,%A
-subw (%A),%D,(%A)
+
+subw (%A),%D,%D
+movw %D,(%A)
 
 ; incrementa R2
 leaw $R2,%A
-incw (%A)
+addw (%A),$1,%D
+movw %D,(%A)
 
 ; testa se R0 >= R1
+leaw $R1,%A
+movw (%A), %D
 leaw $R0,%A
 subw (%A),%D,%D
 leaw $LOOP,%A
 jge
+nop
 
 ; loop infinito
 END:
 leaw $END,%A
 jmp
+nop

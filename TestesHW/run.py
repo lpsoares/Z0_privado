@@ -6,14 +6,19 @@
 from os.path import join, dirname
 from vunit import VUnit
 
-root = dirname(__file__)
+def testeVHDL(root):
+	ui = VUnit.from_argv()
+	lib = ui.add_library("lib")
+	lib.add_source_files(join(root, "..","Computador","Modulos","PortasLogicas", "*.vhd"))  # source
+	lib.add_source_files(join(root, "..","Computador","Modulos","UnidadeLogicaAritmetica", "*.vhd"))  # source
+	lib.add_source_files(join(root, "..","Computador","Modulos","CircuitosSequenciais", "*.vhd"))   # source
+	lib.add_source_files(join(root, "..","Computador","Modulos","CPU", "*.vhd"))   # source
+	#lib.add_source_files(join(root, "..","Computador","Testes","PortasLogicas", "*.vhd"))   # test
+	#lib.add_source_files(join(root, "..","Computador","Testes","UnidadeLogicaAritmetica", "*.vhd"))   # test
+	#lib.add_source_files(join(root, "..","Computador","Testes","CircuitosSequenciais", "*.vhd"))   # test
+	lib.add_source_files(join(root, "..","Computador","Testes","CPU", "*.vhd"))   # test
+	ui.main()
 
-ui = VUnit.from_argv()
-lib = ui.add_library("lib")
-lib.add_source_files(join(root, "..","Computador","Modulos","PortasLogicas", "*.vhd"))  # source
-lib.add_source_files(join(root, "..","Computador","Modulos","UnidadeLogicaAritmetica", "*.vhd"))  # source
-lib.add_source_files(join(root, "..","Computador","Modulos","CircuitosSequenciais", "*.vhd"))   # source
-lib.add_source_files(join(root, "..","Computador","Testes","PortasLogicas", "*.vhd"))   # test
-lib.add_source_files(join(root, "..","Computador","Testes","UnidadeLogicaAritmetica", "*.vhd"))   # test
-lib.add_source_files(join(root, "..","Computador","Testes","CircuitosSequenciais", "*.vhd"))   # test
-ui.main()
+if __name__ == "__main__":
+	root = dirname(__file__)
+	testeVHDL(root)

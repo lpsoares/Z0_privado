@@ -44,11 +44,13 @@ leaw $R1,%A
 movw %D,(%A)
 
 leaw $COUNTER,%A
-decw (%A)
 movw (%A),%D
+decw %D
+movw %D,(%A)
 
 leaw $LOOP,%A
 jne
+nop
 
 ; terceiro traco
 leaw $R1,%A
@@ -59,3 +61,4 @@ movw $-1,(%A)
 END:
 leaw $END,%A
 jmp
+nop

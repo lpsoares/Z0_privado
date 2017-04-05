@@ -27,29 +27,37 @@ movw (%A),%A
 movw %D,(%A)
 
 leaw $1000,%A
-inc (%A)
+addw (%A),$1,%D
+movw %D,(%A)
+
 leaw $1001,%A
 movw (%A),%A
 movw (%A),%D
 incw %A
 addw %D,(%A),%D
 
-
 leaw $1000,%A
 movw (%A),%A
 movw %D,(%A)
 leaw $1000,%A
-inc (%A)
+addw (%A),$1,%D
+movw %D,(%A)
+
 leaw $1001,%A
-inc (%A)
+addw (%A),$1,%D
+movw %D,(%A)
 
 leaw $0,%A
-dec (%A)
+subw (%A),$1,%D
+movw %D,(%A)
+
 movw (%A),%D
 leaw $LOOP,%A
 jg
+nop
 
 END:
 leaw $END,%A
 jmp
+nop
 

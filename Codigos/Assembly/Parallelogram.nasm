@@ -42,15 +42,17 @@ leaw $R1,%A
 movw %D,(%A)
 
 leaw $COUNTER,%A
-decw (%A)
 movw (%A),%D
+decw %D
+movw %D,(%A)
 
 leaw $LOOP,%A
 jne
+nop
 
 ; loop infinito para parar
 END:
 leaw $END,%A
 jmp
-
+nop
 

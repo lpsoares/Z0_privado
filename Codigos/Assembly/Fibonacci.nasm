@@ -18,11 +18,13 @@ leaw $R0,%A
 subw (%A),$1,%D
 leaw $END,%A
 jl
+nop
 
 leaw $R0,%A
 dec %D
 leaw $END,%A
 jl
+nop
 
 leaw $R0,%A
 dec %D
@@ -30,7 +32,7 @@ leaw $R2,%A
 movw $1,(%A)
 leaw $END,%A
 jl
-
+nop
 
 leaw $R0,%A
 dec %D
@@ -38,7 +40,7 @@ leaw $R3,%A
 movw $1,(%A)
 leaw $END,%A
 jl
-
+nop
 
 leaw $R3,%A
 movw %A,%D
@@ -51,29 +53,35 @@ movw (%A),%D
 movw %D,%A
 movw (%A),%D
 inc %A
-addw %D,(%A),(%A)
+addw %D,(%A),%D
+movw %D,(%A)
 dec %A
 dec %A
 movw (%A),%D
 inc %A
 inc %A
-addw %D,(%A),(%A)
+addw %D,(%A),%D
+movw %D,(%A)
 
+
+leaw $1,%A
+addw (%A),$1,%D
+movw %D,(%A)
 
 leaw $R0,%A
 movw (%A),%D
 leaw $1,%A
-inc (%A)
+
 subw (%A),%D,%D
 
 leaw $LOOP,%A
 jl
-
+nop
 
 END:
 leaw $1,%A
 movw $0,(%A)
 leaw $END,%A
 jmp
-
+nop
 

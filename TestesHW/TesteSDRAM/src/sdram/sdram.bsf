@@ -225,7 +225,7 @@ agreement for further details.
 		(text "dqm" (rect 165 491 348 992)(font "Arial" (color 0 0 0)))
 		(text "ras_n" (rect 165 507 360 1024)(font "Arial" (color 0 0 0)))
 		(text "we_n" (rect 165 523 354 1056)(font "Arial" (color 0 0 0)))
-		(text " system " (rect 381 544 810 1098)(font "Arial" ))
+		(text " sdram " (rect 386 544 814 1098)(font "Arial" ))
 		(line (pt 160 32)(pt 256 32)(line_width 1))
 		(line (pt 256 32)(pt 256 544)(line_width 1))
 		(line (pt 160 544)(pt 256 544)(line_width 1))

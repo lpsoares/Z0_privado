@@ -56,7 +56,7 @@ ARCHITECTURE logic OF Computador IS
 
 component CPU is
     port(
-        clock:	     in  STD_LOGIC;
+        clock:	      in  STD_LOGIC;
         inM:         in  STD_LOGIC_VECTOR(15 downto 0);
         instruction: in  STD_LOGIC_VECTOR(15 downto 0);
         reset:       in  STD_LOGIC;
@@ -70,13 +70,14 @@ end component;
 component ROM32K IS
 	PORT
 	(
-		address	 : IN STD_LOGIC_VECTOR (14 DOWNTO 0);
+		--address	 : IN STD_LOGIC_VECTOR (14 DOWNTO 0);
+		address	 : IN STD_LOGIC_VECTOR (10 DOWNTO 0);
 		clock		 : IN STD_LOGIC  := '1';
 		q		    : OUT STD_LOGIC_VECTOR (15 DOWNTO 0)
 	);
 END component;
 
-component Memory is
+component MemoryIO is
    PORT(
         -- Sistema
         CLK : IN  STD_LOGIC;
@@ -95,7 +96,7 @@ component Memory is
         LCD_RESET_N  : OUT   STD_LOGIC;	
         LCD_RS       : OUT   STD_LOGIC;	-- (DCx) 0 : reg, 1: command
         LCD_WR_N     : OUT   STD_LOGIC;	
-		  LCD_ACK 		: OUT STD_LOGIC;
+		  --LCD_ACK 		: OUT STD_LOGIC;
 		
 		  -- Teclado
 		  key_clk      : IN  STD_LOGIC;                     --clock signal from PS/2 keyboard
@@ -128,15 +129,21 @@ component PLL IS
 	);
 END component;
 
+
+SIGNAL CLK_2KHZ      : STD_LOGIC;
+
 SIGNAL RST_INTERNAL  : STD_LOGIC := '1';
+
+SIGNAL LOAD          : STD_LOGIC := '0';
 SIGNAL INPUT_MEMORY  : STD_LOGIC_VECTOR(15 downto 0);
 SIGNAL ADDRESS       : STD_LOGIC_VECTOR(14 downto 0);
-SIGNAL LOAD          : STD_LOGIC := '0';
-SIGNAL CLK_2KHZ      : STD_LOGIC;
+
 SIGNAL OUTPUT_RAM    : STD_LOGIC_VECTOR(15 downto 0);
 SIGNAL INSTRUCTION   : STD_LOGIC_VECTOR(15 downto 0);
 SIGNAL PC			   : STD_LOGIC_VECTOR(14 downto 0);
-SIGNAL LCD_ACK 		: STD_LOGIC;
+
+
+-- SIGNAL LCD_ACK 		: STD_LOGIC;
 
 SIGNAL S_key_code : STD_LOGIC_VECTOR(6 downto 0);
 SIGNAL S_key_new : STD_LOGIC;
@@ -148,22 +155,22 @@ MAIN_CPU : CPU PORT MAP (
         inM =>         OUTPUT_RAM,
         instruction => INSTRUCTION,
         reset =>       RST_INTERNAL,
-        --outM =>        INPUT_MEMORY,
-		  outM =>        OPEN,
-        writeM =>      OPEN,
-		  --writeM =>      LOAD,
-        addressM =>    OPEN,
-		  --addressM =>    ADDRESS,
+        outM =>        INPUT_MEMORY,
+		  --outM =>        OPEN,
+		  writeM =>      LOAD,  
+		  --writeM =>      OPEN,
+		  addressM =>    ADDRESS,
+		  --addressM =>    OPEN,
         pcout =>       PC
   );
 
 ROM : ROM32K PORT MAP (
-		address	 => PC,
+		address	 => PC(10 downto 0),
 		clock		 => CLK_2KHZ,
 		q		    => INSTRUCTION
 	);
 
-MEMORY_MAPED : Memory PORT MAP (
+MEMORY_MAPED : MemoryIO PORT MAP (
 			CLK         => CLK, 
 			RST         => RST,
 			ADDRESS		=> ADDRESS,
@@ -176,7 +183,7 @@ MEMORY_MAPED : Memory PORT MAP (
 			LCD_RESET_N => LCD_RESET_N, 
 			LCD_RS 		=> LCD_RS, 
 			LCD_WR_N 	=> LCD_WR_N,
-			LCD_ACK 		=> LCD_ACK,
+			--LCD_ACK 		=> LCD_ACK,
          key_clk     => key_clk,
          key_data    => key_data,
          key_code    => s_key_code,
@@ -201,54 +208,71 @@ PLL_inst : PLL PORT MAP (
 		locked	 => OPEN
 	);
 
---LED <= s_key_code&s_key_new;
---LED <= PC(7 downto 0);
+--LED <= s_key_code&RST;    -- LED <= s_key_code&s_key_new;
+--LED <= INSTRUCTION(7 downto 0);
+LED <= PC(6 downto 0)&RST;
 --LED <= ADDRESS(7 downto 0);
-LED <= OUTPUT_RAM(7 downto 0);
+--LED <= OUTPUT_RAM(7 downto 0);
 
 process (CLK_2KHZ, RST)
 variable aguarda : integer := 0;
+
 variable contador : integer range 0 to 255 := 0;
 variable c2 : integer := 0;
+
 begin
-	if(RST = '0') then
-	  RST_INTERNAL <= '1';
-	else
-    if(rising_edge(CLK_2KHZ)) then
-	  if(LCD_ACK='1') then
-	    RST_INTERNAL <= '0';
-		end if;
-		
-		
-		
--- Teste de Memoria
-		if(c2 = 0) then
-   	  if(aguarda = 4) then
-		    contador := contador + 1;
-		    ADDRESS <= std_logic_vector(to_unsigned(contador, 15));
-		    INPUT_MEMORY  <= std_logic_vector(to_unsigned(contador, 16));
-		    LOAD <= '1';
-		    aguarda := 0;
-		  else
-		    LOAD <= '0';
-			 if(contador = 127) then
-            c2 := 1;
-		      contador := 0;
-		    end if;
-		  end if;
+	
+	-- Inicializacao	
+	if(rising_edge(CLK_2KHZ)) then
+		if(RST = '1') then
+			if(aguarda > 1000) then
+				RST_INTERNAL <= '0';
+			else
+				aguarda := aguarda + 1;
+			end if;
 		else
-		  if(aguarda = 2000) then
-		    contador := contador + 1;
-		    ADDRESS <= std_logic_vector(to_unsigned(contador, 15));
-		    aguarda := 0;
-		  end if;
+			RST_INTERNAL <= '1';
+			aguarda := 0;
 		end if;
-		aguarda := aguarda + 1;	
--- Teste de Memoria		
+	end if;
+
+	-- Teste de Display --
+--	if(rising_edge(CLK_2KHZ)) then
+--		if(RST_INTERNAL = '0') then
+--			LOAD <= not LOAD;
+--			INPUT_MEMORY <= "1111111111111111";
+--			ADDRESS <= std_logic_vector(to_unsigned(to_integer(unsigned( ADDRESS )) + 1, 15));
+--		else
+--			ADDRESS <= std_logic_vector(to_unsigned(16384,15)); -- para teste de memoria
+--		end if;
+--	end if;
+
+	
+   -- Teste de Memoria
+--	if(rising_edge(CLK_2KHZ)) then
+--		if(RST_INTERNAL = '0') then
+--			if(c2 = 0) then
+--				contador := contador + 1;
+--				ADDRESS <= std_logic_vector(to_unsigned(contador, 15));
+--				INPUT_MEMORY  <= std_logic_vector(to_unsigned(contador, 16));
+--				LOAD <= '1';
+--				if(contador = 255) then
+--					LOAD <= '0';
+--					c2 := 1;
+--					contador := 0;
+--				end if;
+--			else
+--				if(aguarda = 2000) then
+--					contador := contador + 1;
+--					ADDRESS <= std_logic_vector(to_unsigned(contador, 15));
+--					aguarda := 0;
+--				end if;
+--			end if;
+--			aguarda := aguarda + 1;	
+--		end if;
+--	end if;
 
 		
-	  end if;
-   end if;
 END PROCESS;
 
 END logic;

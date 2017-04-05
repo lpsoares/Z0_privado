@@ -2,7 +2,7 @@ set_global_assignment -entity "sdram" -library "sdram" -name IP_TOOL_NAME "Qsys"
 set_global_assignment -entity "sdram" -library "sdram" -name IP_TOOL_VERSION "16.1"
 set_global_assignment -entity "sdram" -library "sdram" -name IP_TOOL_ENV "Qsys"
 set_global_assignment -library "sdram" -name SOPCINFO_FILE [file join $::quartus(qip_path) "../../sdram.sopcinfo"]
-set_global_assignment -entity "sdram" -library "sdram" -name SLD_INFO "QSYS_NAME sdram HAS_SOPCINFO 1 GENERATION_ID 1485604911"
+set_global_assignment -entity "sdram" -library "sdram" -name SLD_INFO "QSYS_NAME sdram HAS_SOPCINFO 1 GENERATION_ID 1491408203"
 set_global_assignment -library "sdram" -name MISC_FILE [file join $::quartus(qip_path) "../sdram.cmp"]
 set_global_assignment -library "sdram" -name SLD_FILE [file join $::quartus(qip_path) "sdram.debuginfo"]
 set_global_assignment -entity "sdram" -library "sdram" -name IP_TARGETED_DEVICE_FAMILY "Cyclone IV E"
@@ -15,7 +15,7 @@ set_global_assignment -entity "sdram" -library "sdram" -name IP_COMPONENT_DISPLA
 set_global_assignment -entity "sdram" -library "sdram" -name IP_COMPONENT_REPORT_HIERARCHY "On"
 set_global_assignment -entity "sdram" -library "sdram" -name IP_COMPONENT_INTERNAL "Off"
 set_global_assignment -entity "sdram" -library "sdram" -name IP_COMPONENT_VERSION "MS4w"
-set_global_assignment -entity "sdram" -library "sdram" -name IP_COMPONENT_PARAMETER "QVVUT19HRU5FUkFUSU9OX0lE::MTQ4NTYwNDkxMQ==::QXV0byBHRU5FUkFUSU9OX0lE"
+set_global_assignment -entity "sdram" -library "sdram" -name IP_COMPONENT_PARAMETER "QVVUT19HRU5FUkFUSU9OX0lE::MTQ5MTQwODIwMw==::QXV0byBHRU5FUkFUSU9OX0lE"
 set_global_assignment -entity "sdram" -library "sdram" -name IP_COMPONENT_PARAMETER "QVVUT19ERVZJQ0VfRkFNSUxZ::Q3ljbG9uZSBJViBF::QXV0byBERVZJQ0VfRkFNSUxZ"
 set_global_assignment -entity "sdram" -library "sdram" -name IP_COMPONENT_PARAMETER "QVVUT19ERVZJQ0U=::RVA0Q0UyMkYxN0M2::QXV0byBERVZJQ0U="
 set_global_assignment -entity "sdram" -library "sdram" -name IP_COMPONENT_PARAMETER "QVVUT19ERVZJQ0VfU1BFRURHUkFERQ==::Ng==::QXV0byBERVZJQ0VfU1BFRURHUkFERQ=="
@@ -161,12 +161,12 @@ set_global_assignment -entity "sdram_altpll" -library "sdram" -name IP_COMPONENT
 set_global_assignment -entity "sdram_altpll" -library "sdram" -name IP_COMPONENT_PARAMETER "QVVUT19ERVZJQ0VfRkFNSUxZ::Q3ljbG9uZSBJViBF::QXV0byBERVZJQ0VfRkFNSUxZ"
 set_global_assignment -entity "sdram_altpll" -library "sdram" -name IP_COMPONENT_PARAMETER "QVVUT19JTkNMS19JTlRFUkZBQ0VfQ0xPQ0tfUkFURQ==::NTAwMDAwMDA=::QXV0byBDTE9DS19SQVRF"
 
-set_global_assignment -library "sdram" -name VERILOG_FILE [file join $::quartus(qip_path) "sdram.v"]
+set_global_assignment -library "sdram" -name VHDL_FILE [file join $::quartus(qip_path) "sdram.vhd"]
 set_global_assignment -library "sdram" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/altera_reset_controller.v"]
 set_global_assignment -library "sdram" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/altera_reset_synchronizer.v"]
 set_global_assignment -library "sdram" -name SDC_FILE [file join $::quartus(qip_path) "submodules/altera_reset_controller.sdc"]
-set_global_assignment -library "sdram" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/sdram_sdram_test_component.v"]
 set_global_assignment -library "sdram" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/sdram_sdram.v"]
+set_global_assignment -library "sdram" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/sdram_sdram_test_component.v"]
 set_global_assignment -library "sdram" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/sdram_altpll.v"]
 
 set_global_assignment -entity "altera_reset_controller" -library "sdram" -name IP_TOOL_NAME "altera_reset_controller"

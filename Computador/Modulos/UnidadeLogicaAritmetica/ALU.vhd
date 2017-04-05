@@ -39,7 +39,7 @@ entity ALU is
 			ng:    out STD_LOGIC;                    -- setado se saída é negativa
 			saida: out STD_LOGIC_VECTOR(15 downto 0) -- saída de dados da ALU
 	); 
-end entity; 
+end entity;
 
 architecture arch OF alu IS
 
