@@ -5,6 +5,8 @@
  * Update by Luciano Soares on 04/02/2017
  */
 
+package elemulator;
+
 public class ROM {
     private Register[] rom;
     private Converter converter = new Converter();

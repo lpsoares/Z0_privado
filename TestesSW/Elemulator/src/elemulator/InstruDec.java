@@ -5,6 +5,8 @@
  * Update by Luciano on 04/02/2017
  */
 
+package elemulator;
+
 public class InstruDec {
 
     private boolean muxIOsel, muxAMsel, zx, nx, zy, ny, f, no, loadA, loadD, loadM, loadPC;

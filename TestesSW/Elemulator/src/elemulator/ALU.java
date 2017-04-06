@@ -5,6 +5,7 @@
  * Update by Luciano on 04/02/2017
  */
 
+package elemulator;
 
 public class ALU {
     private boolean[] out, outx, outy;

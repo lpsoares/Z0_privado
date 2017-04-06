@@ -5,6 +5,8 @@
  * Update by Luciano Soares on 04/02/2017
  */
 
+package elemulator;
+
 public class Mux {
     public boolean[] execute (boolean[] a, boolean[] b, boolean load) {
         if(load) {return a;}

@@ -3,24 +3,27 @@
 # Data: 03/04/2017
 
 JAVAC = javac
-JAVA_FLAGS = -g
+JAVA_FLAGS = -g -d bin -classpath bin -sourcepath src
 
 JAR = jar
 JAR_FLAGS = cfm
 
 .SUFFIXES: .java .class .jar
 
-sources = $(wildcard *.java)
-classes = $(sources:.java=.class)
+sources = $(wildcard src/elemulator/*.java)
+
+javafile = src/elemulator/MainActivity.java
+classfile = bin/elemulator/MainActivity.class
 jarfile = Elemulator.jar 
+manifest = src/MANIFEST.MF
 
-all: $(jarfile) $(classes)
+all: $(classfile) $(jarfile)
 
-%.class : %.java
-	$(JAVAC) $(sources)
+$(classfile) : $(javafile) $(sources)
+	$(JAVAC) $(JAVA_FLAGS) $^
 
-$(jarfile): $(classes) $(sources) 
-	jar cfm $(jarfile) MANIFEST.MF $(classes)
+$(jarfile): $(classes) $(sources) $(manifest)
+	jar cfm $(jarfile) src/MANIFEST.MF -C bin/ . 
 
 clean:
-	$(RM) *.class *.jar
+	$(RM) bin/elemulator/*.class *.jar

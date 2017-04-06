@@ -5,6 +5,8 @@
  * Update by Luciano Soares on 04/02/2017
  */
 
+package elemulator;
+
 import java.io.*;
 import java.util.Scanner;
 

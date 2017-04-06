@@ -5,6 +5,8 @@
  * Update by Luciano on 04/02/2017
  */
 
+package elemulator;
+
 public class Converter {
 
     public static int booleanToInt(boolean[] a) {
