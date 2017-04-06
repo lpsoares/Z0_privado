@@ -71,7 +71,7 @@ component ROM32K IS
 	PORT
 	(
 		--address	 : IN STD_LOGIC_VECTOR (14 DOWNTO 0);
-		address	 : IN STD_LOGIC_VECTOR (10 DOWNTO 0);
+		address	 : IN STD_LOGIC_VECTOR (13 DOWNTO 0);
 		clock		 : IN STD_LOGIC  := '1';
 		q		    : OUT STD_LOGIC_VECTOR (15 DOWNTO 0)
 	);
@@ -165,7 +165,8 @@ MAIN_CPU : CPU PORT MAP (
   );
 
 ROM : ROM32K PORT MAP (
-		address	 => PC(10 downto 0),
+		--address	 => PC(14 downto 0),
+		address	 => PC(13 downto 0),
 		clock		 => CLK_2KHZ,
 		q		    => INSTRUCTION
 	);

@@ -44,7 +44,7 @@ ENTITY ROM32K IS
 	PORT
 	(
 		--address		: IN STD_LOGIC_VECTOR (14 DOWNTO 0);
-		address		: IN STD_LOGIC_VECTOR (10 DOWNTO 0);
+		address		: IN STD_LOGIC_VECTOR (13 DOWNTO 0);
 		clock		: IN STD_LOGIC  := '1';
 		q		: OUT STD_LOGIC_VECTOR (15 DOWNTO 0)
 	);
@@ -69,13 +69,13 @@ BEGIN
 		lpm_hint => "ENABLE_RUNTIME_MOD=YES,INSTANCE_NAME=ROM",
 		lpm_type => "altsyncram",
 		--numwords_a => 32768,
-		numwords_a => 2048,
+		numwords_a => 16384,
 		operation_mode => "ROM",
 		outdata_aclr_a => "CLEAR0",  -- começa a memória com tudo 0 (zero)
 		--outdata_reg_a => "UNREGISTERED",
 		outdata_reg_a => "CLOCK0",
 		--widthad_a => 15,
-		widthad_a => 11,
+		widthad_a => 14,
 		width_a => 16,
 		width_byteena_a => 1
 	)
