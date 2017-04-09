@@ -21,6 +21,7 @@ class AssemblerZ0 {
         String outputFileMif = null;
         boolean geraHack = true;
         boolean geraMif = false;
+        boolean simulator = false;
         boolean debug = false;
 
         for (int i = 0; i < args.length; i++) {
@@ -34,13 +35,16 @@ class AssemblerZ0 {
                     System.out.println("-f <arquivo> : salva arquivo com dados da memória RAM (tipo MIF)");
                     System.out.println("-hack : gera arquivo hack com dados da memória RAM");
                     System.out.println("-mif : gera arquivo mif com dados da memória RAM");
-                    
+                    System.out.println("-simulator : não testa limitações do hardware Z0");
                 } else
                 if (args[i].charAt(1) == 'd') {
                     debug = true;
                 } else
                 if (args[i].charAt(1) == 'h') {
                     geraHack = true;
+                } else
+                if (args[i].charAt(1) == 's') {
+                    simulator = true;
                 } else
                 if (args[i].charAt(1) == 'm') {
                     geraMif = true;
@@ -65,7 +69,7 @@ class AssemblerZ0 {
         }
 
         try {
-            Assemble assembler = new Assemble(inputFile, geraHack, outputFileHack, geraMif, outputFileMif, debug);
+            Assemble assembler = new Assemble(inputFile, geraHack, outputFileHack, geraMif, outputFileMif, simulator, debug);
             assembler.assemble1();
             assembler.assemble2();
             assembler.close();

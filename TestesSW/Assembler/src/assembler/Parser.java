@@ -15,6 +15,7 @@ public class Parser {
     public String inputFile;				    // arquivo de leitura
     public int lineNumber = 0;				  // linha atual do arquivo (nao do codigo gerado)
     public String currentLine;				  // linha de codigo atual
+    boolean simulator;                  // Testa se é para simulador e descarta limitações do hardware do Z0
     private BufferedReader fileReader;  // leitor de arquivo
 
     // tipos de comandos
@@ -25,10 +26,11 @@ public class Parser {
     }
 
     // abre arquivo NASM
-    public Parser(String file) throws FileNotFoundException {
+    public Parser(String file, boolean testSimulator) throws FileNotFoundException {
         inputFile = file;
         fileReader = new BufferedReader(new FileReader(file));
         lineNumber = 0;
+        this.simulator = testSimulator;
     }
 
     
@@ -153,7 +155,7 @@ public class Parser {
 
           String val = "111" + Code.comp(comp) + Code.dest(dest) + Code.jump(jump);
 
-          if(val.charAt(3)=='1' && val.charAt(12)=='1') {
+          if( (!this.simulator) && val.charAt(3)=='1' && val.charAt(12)=='1' ) {
             Error.error("Uma instrução não pode ler e gravar na memória RAM ao mesmo tempo", inputFile, lineNumber, currentLine);
           }
 

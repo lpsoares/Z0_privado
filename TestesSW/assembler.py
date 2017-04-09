@@ -21,7 +21,7 @@ def assembler():
 
 		nome = i.split()
 		error = subprocess.call(['java', '-jar', 'TestesSW/Assembler/AssemblerZ0.jar',
-			"Codigos/Assembly/{0}.nasm".format(nome[0]),
+			"Codigos/Assembly/{0}.nasm".format(nome[0]),"-s",
 			"-o","TestesSW/machine_code/{0}.hack".format(nome[0]),
 			"-f","TestesSW/machine_code/{0}.mif".format(nome[0])])
 		if(error!=0):

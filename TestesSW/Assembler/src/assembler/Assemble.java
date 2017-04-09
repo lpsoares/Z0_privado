@@ -18,10 +18,12 @@ public class Assemble {
     private PrintWriter outHACK = null;    // grava saida do código de máquina em Hack
     private PrintWriter outMIF = null;    // grava saida do código de máquina em MIF
     boolean debug;              // flag que especifica se mensagens de debug são impressas
+    boolean simulator;          // Testa se é para simulador e descarta limitações do hardware do Z0
     private SymbolTable table;  // tabela de símbolos (variáveis e marcadores)
 
-    public Assemble(String inFile, boolean hack, String outFileHack, boolean mif, String outFileMif, boolean debug) throws IOException {
+    public Assemble(String inFile, boolean hack, String outFileHack, boolean mif, String outFileMif, boolean testSimulator, boolean debug) throws IOException {
         this.debug = debug;
+        this.simulator = testSimulator;
         inputFile = inFile;
 
         if(hack) {
@@ -48,7 +50,7 @@ public class Assemble {
 
     // primeiro passo para a construção da tabela de símbolos de marcadores (labels)
     public void assemble1() throws FileNotFoundException, IOException {
-        Parser parser = new Parser(inputFile);
+        Parser parser = new Parser(inputFile,this.simulator);
         int romAddress = 0;
         String symbol;
         while (parser.advance()) {
@@ -77,12 +79,14 @@ public class Assemble {
 
     // Segundo passo para a geração do código de máquina
     public void assemble2() throws FileNotFoundException, IOException{
-        Parser parser = new Parser(inputFile);
+        Parser parser = new Parser(inputFile,this.simulator);
         String dest, comp, jump;
         String symbol, value;
         int ramAddress = START_RAM_ADDRESS; // endereço de início das variáveis
 
         int line = 0;
+
+        boolean flagNOP = false;    // para ser usado no teste de NOP depois um JUMP
 
         while (parser.advance()){
             if(this.debug) {
@@ -106,7 +110,6 @@ public class Assemble {
                         System.err.println("Aviso: alocando variável em memória mapeada de I/O");
                     if (ramAddress > 24576)
                         System.err.println("Aviso: não há mais memória RAM disponível");
-
                     table.addEntry(symbol, ramAddress);
                     value = "0" + Code.toBinary("" + ramAddress);
                     ramAddress++;
@@ -122,6 +125,22 @@ public class Assemble {
                 outMIF.println(String.format(" %5d", line)+" : "+value+";");
                 line++;
             }
+
+            if(!simulator) {
+                if(flagNOP) {
+                    if(value.charAt(0)=='1' && value.substring(10, 16).equals("000000")) {
+                        //System.out.println("NOP");    
+                        flagNOP = false;
+                    } else {
+                        Error.error("Uma instrução de JUMP precisa de um NOP após ela.");
+                    }
+                    flagNOP = false;
+                } else if(value.charAt(0)=='1' && ( value.charAt(13)=='1' || value.charAt(14)=='1' || value.charAt(15)=='1' ) ) {
+                    //System.out.println("JUMP");    
+                    flagNOP = true;
+                }
+            }
+
                
         }
 
