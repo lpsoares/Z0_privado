@@ -1,6 +1,6 @@
 ; Arquivo: KolakoskiSequence.nasm
 ; Curso: Elementos de Sistemas
-; Criado por: Luciano Soares
+; Criado por: Luciano Soares e Eduardo Tirta
 ; Data: 27/03/2017
 
 ; Le a quantidade de valores da RAM[0] e grava a sequencia de números 
@@ -9,67 +9,93 @@
 ; RAM[1]=1, RAM[2]=2, RAM[3]=1, RAM[4]=1, RAM[5]=2, RAM[6]=1
 ; Maiores informações em: https://oeis.org/A000002
 
-
-;migue, os alunos tem de fazer direito
-;n=9
-;l=[0]*3
-;l[0]=1
-;l[1]=2
-;l[2]=2
-;for i in range(2,n):
-;	l+=[1+i%2]*l[i]
-;print(l)
-
-
-
-leaw $2,%A
-movw %A,%D
-
-; comeca aqui
-leaw $1,%A
+; criacao de variavel
+leaw $1, %A
 movw $1,(%A)
 
-leaw $2,%A
-movw %D,(%A)
-
-leaw $3,%A
-movw %D,(%A)
-
-leaw $4,%A
+leaw $2, %A
 movw $1,(%A)
+incw (%A)
 
-leaw $5,%A
+leaw $3, %A
 movw $1,(%A)
+incw (%A)
 
-leaw $6,%A
-movw %D,(%A)
 
-leaw $7,%A
+;i=3------contador unitario(vai ler a casas)
+leaw $100,%A
 movw $1,(%A)
+incw (%A)
+incw (%A)
 
-leaw $8,%A
-movw %D,(%A)
-
-leaw $9,%A
-movw %D,(%A)
-
-leaw $10,%A
+;k=2
+leaw $101,%A
 movw $1,(%A)
+incw (%A)
 
-leaw $11,%A
-movw %D,(%A)
+;j=4-------contador da ultima casa(vai colocar os numeros na ultima casa)
+leaw $102,%A
+movw $1, (%A)
+incw (%A)
+incw (%A)
+incw (%A)
 
-leaw $12,%A
-movw %D,(%A)
 
-leaw $13,%A
-movw $1,(%A)
+LOOP:
 
-leaw $14,%A
-movw $1,(%A)
+;fazer k=1 ou k=2
+leaw $101,%A
+subw (%A),$1,%D
+leaw $PASSA2,%A
+je
+leaw $101,%A
+decw (%A)
+leaw $PASSA3
+jmp
+PASSA2:
+;vira 2
+leaw $101,%A
+incw (%A)
+PASSA3:
 
-leaw $15,%A
-movw %D,(%A)
+leaw $101,%A    ;k
+movw (%A),%D    ;copia valor de k
+leaw $102,%A    ;j
+movw (%A),%A    ; copio valor de j
+movw %D,(%A)    ; grava RAM[j]
 
-leaw $16,%A
-movw $1,(%A)
+leaw $100,%A
+movw (%A),%A
+subw (%A),$1,%D
+decw %D
+leaw $PASSA,%A
+jne
+
+
+leaw $102,%A
+incw (%A)  ;acrescenta mais 1 quando valor k[i]==2
+
+leaw $101,%A    ;k
+movw (%A),%D    ;copia valor de k
+leaw $102,%A    ;j                       ;SE k[i]=2 tem colocar outro k
+movw (%A),%A    ; copio valor de j
+movw %D,(%A)    ; grava RAM[j]
+
+PASSA:
+leaw $100,%A
+incw (%A) ;acrescenta 1 sempre ao i
+
+leaw $102,%A
+incw (%A) ;acrescenta 1 sempre ao j
+
+leaw $100,%A    ;i
+movw (%A),%D    ; copio valor de i
+leaw $0,%A      ; aponta RAM[0]
+movw (%A),%A    ; RAM[0]
+subw %D,%A,%D   ; D = i - n
+leaw $LOOP,%A
+jl
+
+END:
+leaw $END,%A
+jmp

@@ -5,48 +5,56 @@
 
 ; Desenha um triângulo retângulo na tela quando uma tecla é pressionada.
 
-; desenha quadrado
-; centraliza na tela
-leaw $4112,%A
-movw %A,%D
+; desenha triangulo no canto da tela
 leaw $SCREEN,%A
-addw %A,%D,%D
+movw %A,%D
 
 ; onde desenhar
-leaw $R1,%A
+leaw $R0,%A
 movw %D,(%A)
 
-; contador
-leaw $16,%A
+; o que desenhar
+leaw $1,%A
 movw %A,%D
-leaw $COUNTER,%A
+leaw $R1,%A
 movw %D,(%A)
 
 LOOP:
 
-leaw $R1,%A
-movw (%A),%A
-movw $-1,(%A)
-
-leaw $32,%A
-movw %A,%D
-
-leaw $R1,%A
-movw (%A),%A
-
-addw %A,%D,%D
-leaw $R1,%A
-movw %D,(%A)
-
-leaw $COUNTER,%A
+leaw $R1,%A   ; pixels
 movw (%A),%D
-decw %D
+
+leaw $R0,%A   ; local
+movw (%A),%A
+
+movw %D,(%A)  ; desenha
+
+leaw $R0,%A   ; pula linha
+movw (%A),%D
+leaw $32,%A
+addw %A,%D,%D 
+leaw $R0,%A
 movw %D,(%A)
 
+
+leaw $R1,%A   ; carrega linha
+movw (%A),%D
+movw %D,%A    ; aumenta triangulo
+addw %A,%D,%D
+incw %D
+leaw $R1,%A   ; salva nova linha do triangulo
+movw %D,(%A)
 
 leaw $LOOP,%A
-jne
+jg
 nop
+
+; ultima linha
+leaw $R1,%A   ; pixels
+movw (%A),%D
+leaw $R0,%A   ; local
+movw (%A),%A
+movw %D,(%A)  ; desenha
 
 ; loop infinito para parar
 END:
