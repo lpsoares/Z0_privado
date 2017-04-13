@@ -7,6 +7,8 @@
 
 package elemulator;
 
+import java.util.Arrays;
+
 public class CPU {
 
     private boolean[] outM, addressM, pcOut, muxAM; //outs
@@ -64,8 +66,8 @@ public class CPU {
         return outM;
     }
 
-    public boolean[] getAddressM() {
-        return addressM;
+    public boolean[] getAddressM(int start, int end) {
+        return Arrays.copyOfRange(addressM, start, end);
     }
 
     public boolean[] getPcOut() {

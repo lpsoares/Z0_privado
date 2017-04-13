@@ -45,8 +45,8 @@ public class Hack {
 
         Log.print("\nInstrução ",rom.getSelectedInstruction(cpu.getPcOut()));
 
-        cpu.execute(ram.getSelectedValue(cpu.getAddressM()), rom.getSelectedInstruction(cpu.getPcOut()), reset);
-        ram.setSelectedValue(cpu.getOutM(), cpu.getAddressM(), cpu.isWriteM());
+        cpu.execute(ram.getSelectedValue(cpu.getAddressM(0, 15)), rom.getSelectedInstruction(cpu.getPcOut()), reset);
+        ram.setSelectedValue(cpu.getOutM(), cpu.getAddressM(0, 15), cpu.isWriteM());
         this.reset = false;
 
         pc_value = converter.booleanToInt(cpu.getPcOut());

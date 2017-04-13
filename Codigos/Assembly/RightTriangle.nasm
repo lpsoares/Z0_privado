@@ -1,63 +1,219 @@
-; Arquivo: RightTriangle.nasm
-; Curso: Elementos de Sistemas
-; Criado por: Luciano Soares
-; Data: 27/03/2017
+; RightTriangle.nasm
+; Desenha um triângulo retângulo na tela.
 
-; Desenha um triângulo retângulo na tela quando uma tecla é pressionada.
-
-; desenha triangulo no canto da tela
-leaw $SCREEN,%A
-movw %A,%D
-
-; onde desenhar
-leaw $R0,%A
-movw %D,(%A)
-
-; o que desenhar
-leaw $1,%A
-movw %A,%D
-leaw $R1,%A
-movw %D,(%A)
-
-LOOP:
-
-leaw $R1,%A   ; pixels
-movw (%A),%D
-
-leaw $R0,%A   ; local
-movw (%A),%A
-
-movw %D,(%A)  ; desenha
-
-leaw $R0,%A   ; pula linha
-movw (%A),%D
+; Primeira linha
+movw $-1, %A
+movw %A, %D
+leaw %SCREEN, %A
+movw %D, (%A)
+; Segunda linha
+movw %A, %D
 leaw $32,%A
-addw %A,%D,%D 
-leaw $R0,%A
+addw %A, %D, %A
+movw %A, %D
+leaw $0, %A
+movw %D, (%A)
+leaw $32767, %A
+movw %A,%D
+leaw $1,%A
+movw %D,(%A)
+leaw $0, %A
+movw (%A), %A
+movw %D,(%A)
+
+movw %A, %D
+leaw $32,%A
+addw %A, %D, %A
+movw %A, %D
+leaw $0, %A
+movw %D, (%A)
+leaw $16383, %A
+movw %A,%D
+leaw $1,%A
+movw %D,(%A)
+leaw $0, %A
+movw (%A), %A
 movw %D,(%A)
 
 
-leaw $R1,%A   ; carrega linha
-movw (%A),%D
-movw %D,%A    ; aumenta triangulo
-addw %A,%D,%D
-incw %D
-leaw $R1,%A   ; salva nova linha do triangulo
+movw %A, %D
+leaw $32,%A
+addw %A, %D, %A
+movw %A, %D
+leaw $0, %A
+movw %D, (%A)
+leaw $8191, %A
+movw %A,%D
+leaw $1,%A
+movw %D,(%A)
+leaw $0, %A
+movw (%A), %A
 movw %D,(%A)
 
-leaw $LOOP,%A
-jg
-nop
+movw %A, %D
+leaw $32,%A
+addw %A, %D, %A
+movw %A, %D
+leaw $0, %A
+movw %D, (%A)
+leaw $4095, %A
+movw %A,%D
+leaw $1,%A
+movw %D,(%A)
+leaw $0, %A
+movw (%A), %A
+movw %D,(%A)
 
-; ultima linha
-leaw $R1,%A   ; pixels
-movw (%A),%D
-leaw $R0,%A   ; local
-movw (%A),%A
-movw %D,(%A)  ; desenha
+movw %A, %D
+leaw $32,%A
+addw %A, %D, %A
+movw %A, %D
+leaw $0, %A
+movw %D, (%A)
+leaw $2047, %A
+movw %A,%D
+leaw $1,%A
+movw %D,(%A)
+leaw $0, %A
+movw (%A), %A
+movw %D,(%A)
 
-; loop infinito para parar
-END:
-leaw $END,%A
-jmp
-nop
+movw %A, %D
+leaw $32,%A
+addw %A, %D, %A
+movw %A, %D
+leaw $0, %A
+movw %D, (%A)
+leaw $1023, %A
+movw %A,%D
+leaw $1,%A
+movw %D,(%A)
+leaw $0, %A
+movw (%A), %A
+movw %D,(%A)
+
+movw %A, %D
+leaw $32,%A
+addw %A, %D, %A
+movw %A, %D
+leaw $0, %A
+movw %D, (%A)
+leaw $511, %A
+movw %A,%D
+leaw $1,%A
+movw %D,(%A)
+leaw $0, %A
+movw (%A), %A
+movw %D,(%A)
+
+movw %A, %D
+leaw $32,%A
+addw %A, %D, %A
+movw %A, %D
+leaw $0, %A
+movw %D, (%A)
+leaw $255, %A
+movw %A,%D
+leaw $1,%A
+movw %D,(%A)
+leaw $0, %A
+movw (%A), %A
+movw %D,(%A)
+
+movw %A, %D
+leaw $32,%A
+addw %A, %D, %A
+movw %A, %D
+leaw $0, %A
+movw %D, (%A)
+leaw $127, %A
+movw %A,%D
+leaw $1,%A
+movw %D,(%A)
+leaw $0, %A
+movw (%A), %A
+movw %D,(%A)
+
+movw %A, %D
+leaw $32,%A
+addw %A, %D, %A
+movw %A, %D
+leaw $0, %A
+movw %D, (%A)
+leaw $63, %A
+movw %A,%D
+leaw $1,%A
+movw %D,(%A)
+leaw $0, %A
+movw (%A), %A
+movw %D,(%A)
+
+movw %A, %D
+leaw $32,%A
+addw %A, %D, %A
+movw %A, %D
+leaw $0, %A
+movw %D, (%A)
+leaw $31, %A
+movw %A,%D
+leaw $1,%A
+movw %D,(%A)
+leaw $0, %A
+movw (%A), %A
+movw %D,(%A)
+
+movw %A, %D
+leaw $32,%A
+addw %A, %D, %A
+movw %A, %D
+leaw $0, %A
+movw %D, (%A)
+leaw $15, %A
+movw %A,%D
+leaw $1,%A
+movw %D,(%A)
+leaw $0, %A
+movw (%A), %A
+movw %D,(%A)
+
+movw %A, %D
+leaw $32,%A
+addw %A, %D, %A
+movw %A, %D
+leaw $0, %A
+movw %D, (%A)
+leaw $7, %A
+movw %A,%D
+leaw $1,%A
+movw %D,(%A)
+leaw $0, %A
+movw (%A), %A
+movw %D,(%A)
+
+movw %A, %D
+leaw $32,%A
+addw %A, %D, %A
+movw %A, %D
+leaw $0, %A
+movw %D, (%A)
+leaw $3, %A
+movw %A,%D
+leaw $1,%A
+movw %D,(%A)
+leaw $0, %A
+movw (%A), %A
+movw %D,(%A)
+
+movw %A, %D
+leaw $32,%A
+addw %A, %D, %A
+movw %A, %D
+leaw $0, %A
+movw %D, (%A)
+leaw $1, %A
+movw %A,%D
+leaw $1,%A
+movw %D,(%A)
+leaw $0, %A
+movw (%A), %A
+movw %D,(%A)

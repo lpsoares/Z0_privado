@@ -10,18 +10,25 @@ package elemulator;
 import java.io.*;
 import java.util.Scanner;
 
+
 public class RAM {
+
+    public static final int RAM_SIZE = 32768;
+
     private Register[] ram;
     private Converter converter = new Converter();
     private DisplayDriver displayDriver;
 
     public RAM (DisplayDriver displayDriver) {
-        this.ram = new Register[32768];
+        this.ram = new Register[RAM_SIZE];
         this.displayDriver = displayDriver;
     }
 
     public boolean[] getSelectedValue (boolean[] index) {
         int decIndex = converter.booleanToInt(index);
+        if(decIndex<0 || decIndex>=RAM_SIZE) {
+            Error.error("Tentando acessar um endereço de memória RAM inválido: "+decIndex);
+        }
         if (this.ram[decIndex] == null) {
             //this.ram[decIndex] = new Register();
             return new boolean[16];
@@ -78,7 +85,9 @@ public class RAM {
 
     public void setSelectedValue(boolean[] register, boolean[] index, boolean load) { //o q vc quer gaurdar, onde e confirma
         int decIndex = converter.booleanToInt(index);
-
+        if(decIndex<0 || decIndex>=RAM_SIZE) {
+            Error.error("Tentando acessar um endereço de memória RAM inválido: "+decIndex);
+        }
         if (load) {
             Log.print(String.format("MEM(%5d)",decIndex),register);
             if (this.ram[decIndex] == null) this.ram[decIndex] = new Register();

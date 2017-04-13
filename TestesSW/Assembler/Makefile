@@ -20,6 +20,7 @@ manifest = src/MANIFEST.MF
 all: $(classfile) $(jarfile)
 
 $(classfile) : $(javafile) $(sources)
+	mkdir -p bin
 	$(JAVAC) $(JAVA_FLAGS) $^
 
 $(jarfile): $(classes) $(sources) $(manifest)
