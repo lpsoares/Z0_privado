@@ -8,6 +8,9 @@ import time
 
 def emulate():
 	
+	out_dir = "TestesSW/machine_code/"
+	in_dir = "TestesSW/testesAssembly/"
+
 	start_time = time.time()
 
 	nomes_testes = loadTestes.testes("TestesSW/testes.txt")
@@ -21,19 +24,19 @@ def emulate():
 		if int(nome[1]) > 0:
 			for i in range(int(nome[1])):
 				error = subprocess.call(['java', '-jar', 'TestesSW/Elemulator/Elemulator.jar',
-					"TestesSW/machine_code/{0}.hack".format(nome[0]),
-					"-i","TestesSW/testesAssembly/{0}{1}_in.mif".format(nome[0],i),
-					"-o","TestesSW/machine_code/{0}{1}_out.mif".format(nome[0],i),"-c",nome[2]])
+					out_dir+"{0}.hack".format(nome[0]),
+					"-i",in_dir+"{0}{1}_in.mif".format(nome[0],i),
+					"-o",out_dir+"{0}{1}_out.mif".format(nome[0],i),"-c",nome[2]])
 				if(error!=0):
 					error_code += error
 				else:
 					done += 1
 		else:
 			error = subprocess.call(['java', '-jar', 'TestesSW/Elemulator/Elemulator.jar',
-				"TestesSW/machine_code/{0}.hack".format(nome[0]),
-				"-p","TestesSW/machine_code/{0}.pbm".format(nome[0],i),
-				"-i","TestesSW/testesAssembly/{0}_in.mif".format(nome[0],i),
-				"-o","TestesSW/machine_code/{0}_out.mif".format(nome[0],i),"-c",nome[2]])
+				out_dir+"{0}.hack".format(nome[0]),
+				"-p",out_dir+"{0}.pbm".format(nome[0],i),
+				"-i",in_dir+"{0}_in.mif".format(nome[0],i),
+				"-o",out_dir+"{0}_out.mif".format(nome[0],i),"-c",nome[2]])
 			if(error!=0):
 				error_code += error
 			else:
