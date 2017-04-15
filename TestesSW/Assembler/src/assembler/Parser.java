@@ -75,7 +75,7 @@ public class Parser {
     }
         
     // identifica o tipo de instrução C e salva no arquivo
-    public String C() {
+    public String C()  throws InvalidAssemblyException {
         String comp = "";
         String dest = "";
         String jump = "";
@@ -150,26 +150,30 @@ public class Parser {
           if (array[0].startsWith("nop")) {
             comp = "$0";
           } else {
-            System.out.println("OPERAÇÃO NÃO IDENTIFICADA");
+            Error.error("Instrução não identificada", inputFile, lineNumber, currentLine);
+            throw new InvalidAssemblyException();
           }
 
           String val = "111" + Code.comp(comp) + Code.dest(dest) + Code.jump(jump);
 
           if( (!this.simulator) && val.charAt(3)=='1' && val.charAt(12)=='1' ) {
             Error.error("Uma instrução não pode ler e gravar na memória RAM ao mesmo tempo", inputFile, lineNumber, currentLine);
+            throw new InvalidAssemblyException();
           }
 
           return(val);  // salva no arquivo a instrução
 
         } catch (InvalidDestException ex) {
-            Error.error("Tentando salvar em um local inválido", inputFile, lineNumber, currentLine);
+            Error.error("Tentando salvar dados em um local inválido da CPU", inputFile, lineNumber, currentLine);
+            throw new InvalidAssemblyException();
         } catch (InvalidCompException ex) {
-            Error.error("Cálculo inválido", inputFile, lineNumber, currentLine);
+            Error.error("Instrução inválida", inputFile, lineNumber, currentLine);
+            throw new InvalidAssemblyException();
         } catch (InvalidJumpException ex) {
             Error.error("Instrução de jump inválida", inputFile, lineNumber, currentLine);
+            throw new InvalidAssemblyException();
         }
 
-        return(null);
     }
 
     // fecha o arquivo de leitura

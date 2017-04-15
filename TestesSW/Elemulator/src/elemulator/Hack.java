@@ -32,7 +32,11 @@ public class Hack {
         Scanner s = new Scanner(file);
 
         while (s.hasNext()){
-            boolean[] instruction = converter.stringToBoolean(s.next());
+            String nextValue = s.next();
+            if(nextValue.length() != 16) {
+                Error.error("Tamanho da instrução diferente de 16 bits : "+nextValue.length());
+            }
+            boolean[] instruction = converter.stringToBoolean(nextValue);
             rom.setSelectedInstruction(instruction, current_line);
             current_line++;
         }

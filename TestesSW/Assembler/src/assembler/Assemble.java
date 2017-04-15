@@ -15,8 +15,16 @@ public class Assemble {
     public static final int START_RAM_ADDRESS = 16;
 
     private String inputFile;   // arquivo de entrada
+    
+    String outputFileHack = null;
+    String outputFileMif = null;
+
+    File hackFile = null;
+    File mifFile = null;
+
     private PrintWriter outHACK = null;    // grava saida do código de máquina em Hack
     private PrintWriter outMIF = null;    // grava saida do código de máquina em MIF
+
     boolean debug;              // flag que especifica se mensagens de debug são impressas
     boolean simulator;          // Testa se é para simulador e descarta limitações do hardware do Z0
     private SymbolTable table;  // tabela de símbolos (variáveis e marcadores)
@@ -28,20 +36,22 @@ public class Assemble {
 
         if(hack) {
             if(outFileHack==null) {
-                String outputFileHack = inputFile.substring(0, inputFile.lastIndexOf('.')) + ".hack";
-                outHACK = new PrintWriter(new FileWriter(outputFileHack));
+                outputFileHack = inputFile.substring(0, inputFile.lastIndexOf('.')) + ".hack";
             } else {
-                outHACK = new PrintWriter(new FileWriter(outFileHack));
+                outputFileHack = outFileHack;
             }
+            hackFile = new File(outputFileHack);
+            outHACK = new PrintWriter(new FileWriter(hackFile));
         }
         
         if(mif) {
             if(outFileMif==null) {
-                String outputFileMif = inputFile.substring(0, inputFile.lastIndexOf('.')) + ".mif";
-                outMIF = new PrintWriter(new FileWriter(outputFileMif));
+                outputFileMif = inputFile.substring(0, inputFile.lastIndexOf('.')) + ".mif";
             } else {
-                outMIF = new PrintWriter(new FileWriter(outFileMif));
+                outputFileMif = outFileMif;
             }
+            mifFile = new File(outputFileMif);
+            outMIF = new PrintWriter(new FileWriter(mifFile));
         }
 
         table = new SymbolTable(); 
@@ -87,6 +97,8 @@ public class Assemble {
         int line = 0;
 
         boolean flagNOP = false;    // para ser usado no teste de NOP depois um JUMP
+
+        try {
 
         while (parser.advance()){
             if(this.debug) {
@@ -144,6 +156,12 @@ public class Assemble {
                
         }
 
+        } catch (InvalidAssemblyException ex) {
+            close();
+            delete();
+            System.exit(1);
+        }
+
         if(outMIF!=null) {
             outMIF.println("END;\n");
         }
@@ -159,6 +177,20 @@ public class Assemble {
         if(outMIF!=null) {
            outMIF.close();
         } 
+    }
+
+    // remove o arquivo de código para casos de erros
+    public void delete() {
+        try{
+            if(hackFile!=null) {
+               hackFile.delete();
+            } 
+            if(mifFile!=null) {
+               mifFile.delete();
+            } 
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }
