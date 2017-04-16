@@ -160,7 +160,9 @@ public class Code {
             case "%D-%A": c = "010011"; break;
             case "%A-%D": c = "000111"; break;
             case "%D&%A": c = "000000"; break;
+            case "%A&%D": c = "000000"; break;
             case "%D|%A": c = "010101"; break;
+            case "%A|%D": c = "010101"; break;
             default: throw new InvalidCompException();
         }
 

@@ -5,34 +5,29 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 /**
- * Unit test for simple App.
+ * Unit test for Assmbler.
  */
-public class AppTest 
-    extends TestCase
-{
+public class AssemblerTest extends TestCase {
     /**
      * Create the test case
      *
      * @param testName name of the test case
      */
-    public AppTest( String testName )
-    {
+    public AssemblerTest( String testName ) {
         super( testName );
     }
 
     /**
      * @return the suite of tests being tested
      */
-    public static Test suite()
-    {
-        return new TestSuite( AppTest.class );
+    public static Test suite() {
+        return new TestSuite( AssemblerTest.class );
     }
 
     /**
      * Rigourous Test :-)
      */
-    public void testApp()
-    {
+    public void testAssembler() {
         assertTrue( true );
     }
 }
