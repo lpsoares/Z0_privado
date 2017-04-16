@@ -30,11 +30,11 @@ class AssemblerZ0 {
                 if (args[i].charAt(1) == 'h') {
                     System.out.println("Opções");
                     System.out.println("<arquivo> : programa em linguagem de máquina a ser carregado");
-                    System.out.println("-d : Mostra informações de debug na tela");
-                    System.out.println("-o <arquivo> : salva arquivo com dados da memória RAM (tipo HACK)");
-                    System.out.println("-f <arquivo> : salva arquivo com dados da memória RAM (tipo MIF)");
-                    System.out.println("-hack : gera arquivo hack com dados da memória RAM");
-                    System.out.println("-mif : gera arquivo mif com dados da memória RAM");
+                    System.out.println("-d : Mostra informações de debug");
+                    System.out.println("-o <arquivo> : nome do arquivo para salvar no formto HACK)");
+                    System.out.println("-f <arquivo> : nome do arquivo para salvar no formato MIF)");
+                    System.out.println("-hack : gera arquivo hack");
+                    System.out.println("-mif : gera arquivo mif");
                     System.out.println("-simulator : não testa limitações do hardware Z0");
                 } else
                 if (args[i].charAt(1) == 'd') {

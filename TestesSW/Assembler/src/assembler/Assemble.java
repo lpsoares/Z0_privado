@@ -56,22 +56,29 @@ public class Assemble {
 
         table = new SymbolTable(); 
         table.initialize();  // Inicializa a tabela de simbolos
+
+
     }
 
     // primeiro passo para a construção da tabela de símbolos de marcadores (labels)
     public void assemble1() throws FileNotFoundException, IOException {
-        Parser parser = new Parser(inputFile,this.simulator);
+        Parser parser = new Parser(inputFile);
+        parser.setSimulator(this.simulator);
+
         int romAddress = 0;
         String symbol;
         while (parser.advance()) {
-            if (parser.commandType() == Parser.CommandType.L_COMMAND) {
-                symbol = parser.symbol();
+            if (parser.commandType(parser.command()) == Parser.CommandType.L_COMMAND) {
+                symbol = parser.label(parser.command());
                 if (!table.contains(symbol))
                     table.addEntry(symbol, romAddress);
+                else {
+                    Error.error("Mesmo símbolo aparece mais de uma vezes no programa : "+symbol);
+                }
             } else {
                 romAddress++;
                 if (romAddress > 32768)    // aviso caso a memoria ROM tenha acabado
-                    System.err.println("Aviso: toda a ROM disponível do Z0 foi usada");
+                    Error.error("Aviso: toda a ROM disponível do Z0 foi usada");
             }
         }
 
@@ -89,7 +96,10 @@ public class Assemble {
 
     // Segundo passo para a geração do código de máquina
     public void assemble2() throws FileNotFoundException, IOException{
-        Parser parser = new Parser(inputFile,this.simulator);
+
+        Parser parser = new Parser(inputFile);  // abre novamente o arquivo
+        parser.setSimulator(this.simulator);
+
         String dest, comp, jump;
         String symbol, value;
         int ramAddress = START_RAM_ADDRESS; // endereço de início das variáveis
@@ -104,10 +114,31 @@ public class Assemble {
             if(this.debug) {
                 System.out.println(parser.command());
             }
-            if (parser.commandType() == Parser.CommandType.C_COMMAND) {
-                value = parser.C();
-            } else if (parser.commandType() == Parser.CommandType.A_COMMAND) {
-                symbol = parser.symbol();
+            if (parser.commandType(parser.command()) == Parser.CommandType.C_COMMAND) {
+                
+
+                try {
+
+                    String[] array = parser.instruction(parser.command());
+                    value = "111" + Code.comp(array) + Code.dest(array) + Code.jump(array);
+
+                } catch (InvalidDestException ex) {
+                    //Error.error("Tentando salvar dados em um local inválido da CPU", inputFile, lineNumber, currentLine);
+                    Error.error("Tentando salvar dados em um local inválido da CPU");
+                    throw new InvalidAssemblyException();
+                } catch (InvalidCompException ex) {
+                    //Error.error("Instrução inválida", inputFile, lineNumber, currentLine);
+                    Error.error("Instrução inválida");
+                    throw new InvalidAssemblyException();
+                } catch (InvalidJumpException ex) {
+                    //Error.error("Instrução de jump inválida", inputFile, lineNumber, currentLine);
+                    Error.error("Instrução de jump inválida");
+                    throw new InvalidAssemblyException();
+                }
+
+
+            } else if (parser.commandType(parser.command()) == Parser.CommandType.A_COMMAND) {
+                symbol = parser.symbol(parser.command());
                 value = Code.toBinary("0");
                 if (Character.isDigit(symbol.charAt(0)) || 
                     (symbol.charAt(0) == '+' && Character.isDigit(symbol.charAt(1)) ) ){

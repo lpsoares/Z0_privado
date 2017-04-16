@@ -26,14 +26,22 @@ public class Parser {
     }
 
     // abre arquivo NASM
-    public Parser(String file, boolean testSimulator) throws FileNotFoundException {
-        inputFile = file;
-        fileReader = new BufferedReader(new FileReader(file));
-        lineNumber = 0;
-        this.simulator = testSimulator;
+    public Parser(String file) throws FileNotFoundException {
+        this.inputFile = file;
+        this.fileReader = new BufferedReader(new FileReader(file));
+        this.lineNumber = 0;
+        this.simulator = false;
     }
 
+    // Em caso de simulação, vai permitir certas operações
+    public void setSimulator(boolean testSimulator) {
+      this.simulator = testSimulator;
+    }
     
+    public boolean getSimulator() {
+      return this.simulator;
+    }
+
     // carrega proximo comando e faz ele o comando atual
     public boolean advance() throws IOException {
         while(true){
@@ -49,8 +57,8 @@ public class Parser {
     }
 
     // informa qual o tipo do comando atual
-    public CommandType commandType() {
-        if (currentCommand.startsWith("lea")) {
+    public CommandType commandType(String command) {
+        if (command.startsWith("lea")) {
             return CommandType.A_COMMAND;  // A_COMMAND for lea xxx
         } else if (currentCommand.endsWith(":")) {
             return CommandType.L_COMMAND;  // L_COMMAND for a label, xxx:
@@ -65,115 +73,19 @@ public class Parser {
     }
 
     // retorna o simbolo ou valor decimal do comando atual
-    public String symbol() {
-	    if (currentCommand.startsWith("lea")) {
-	        String[] array = currentCommand.split("[ ,]+");
-            return array[1].substring(1);
-        } else {
-        	return currentCommand.replace(":", "");
-        }
+    public String label(String command) {
+      return command.replace(":", "");
     }
-        
+
+    // retorna o simbolo ou valor decimal do comando atual
+    public String symbol(String command) {
+        String[] array = command.split("[ ,]+");
+        return array[1].substring(1);
+    }
+
     // identifica o tipo de instrução C e salva no arquivo
-    public String C()  throws InvalidAssemblyException {
-        String comp = "";
-        String dest = "";
-        String jump = "";
-        String[] array = currentCommand.split("[ ,]+");
-        try {
-          if (array[0].startsWith("mov")) {
-            comp = array[1];
-            dest = array[2];
-            if(array.length==4) dest += " "+array[3];
-            if(array.length==5) dest += " "+array[4];
-          } else
-          if (array[0].startsWith("add")) {
-            comp = array[1]+"+"+array[2];
-            dest = array[3];
-            if(array.length==5) dest += " "+array[4];
-            if(array.length==6) dest += " "+array[5];
-          } else
-          if (array[0].startsWith("sub")) {
-            comp = array[1]+"-"+array[2];
-            dest = array[3];
-            if(array.length==5) dest += " "+array[4];
-            if(array.length==6) dest += " "+array[5];
-          } else
-          if (array[0].startsWith("rsub")) {
-            comp = array[2]+"-"+array[1];
-            dest = array[3];
-            if(array.length==5) dest += " "+array[4];
-            if(array.length==6) dest += " "+array[5];
-          } else
-          if (array[0].startsWith("inc")) {
-            comp = array[1]+"+1";
-            dest = array[1];
-          } else
-          if (array[0].startsWith("dec")) {
-            comp = array[1]+"-1";
-            dest = array[1];
-          } else
-          if (array[0].startsWith("not")) {
-            comp = "!"+array[1];
-            dest = array[1];
-          } else
-          if (array[0].startsWith("neg")) {
-            comp = "-"+array[1];
-            dest = array[1];
-          } else
-          if (array[0].startsWith("and")) {
-            comp = array[1]+"&"+array[2];
-            dest = array[3];
-            if(array.length==5) dest += " "+array[4];
-            if(array.length==6) dest += " "+array[5];
-          } else
-          if (array[0].startsWith("or")) {
-            comp = array[1]+"|"+array[2];
-            dest = array[3];
-            if(array.length==5) dest += " "+array[4];
-            if(array.length==6) dest += " "+array[5];
-          } else
-          if ( array[0].startsWith("jg")  ||
-               array[0].startsWith("je")  ||
-               array[0].startsWith("jge") ||
-               array[0].startsWith("jl")  ||
-               array[0].startsWith("jne") ||
-               array[0].startsWith("jle")
-               ) {
-            comp = "%D";
-            jump = array[0];
-          } else
-          if (array[0].startsWith("jmp") ) {
-            comp = "$0";
-            jump = array[0];
-          } else
-          if (array[0].startsWith("nop")) {
-            comp = "$0";
-          } else {
-            Error.error("Instrução não identificada", inputFile, lineNumber, currentLine);
-            throw new InvalidAssemblyException();
-          }
-
-          String val = "111" + Code.comp(comp) + Code.dest(dest) + Code.jump(jump);
-
-          if( (!this.simulator) && val.charAt(3)=='1' && val.charAt(12)=='1' ) {
-            Error.error("Uma instrução não pode ler e gravar na memória RAM ao mesmo tempo", inputFile, lineNumber, currentLine);
-            throw new InvalidAssemblyException();
-          }
-
-          return(val);  // salva no arquivo a instrução
-
-        } catch (InvalidDestException ex) {
-            Error.error("Tentando salvar dados em um local inválido da CPU", inputFile, lineNumber, currentLine);
-            throw new InvalidAssemblyException();
-        } catch (InvalidCompException ex) {
-            Error.error("Instrução inválida", inputFile, lineNumber, currentLine);
-            throw new InvalidAssemblyException();
-        } catch (InvalidJumpException ex) {
-            Error.error("Instrução de jump inválida", inputFile, lineNumber, currentLine);
-            throw new InvalidAssemblyException();
-        }
-
+    public String[] instruction(String command)  throws InvalidCompException,InvalidAssemblyException,InvalidDestException,InvalidJumpException {
+        return command.split("[ ,]+");
     }
 
     // fecha o arquivo de leitura
