@@ -19,7 +19,7 @@ public class Parser {
     private BufferedReader fileReader;  // leitor de arquivo
 
     // tipos de comandos
-    enum CommandType {
+    public enum CommandType {
         A_COMMAND,      // comandos LEA, que armazenam no registrador A
         C_COMMAND,      // comandos de calculos
         L_COMMAND       // simbolos (tags)
@@ -60,7 +60,7 @@ public class Parser {
     public CommandType commandType(String command) {
         if (command.startsWith("lea")) {
             return CommandType.A_COMMAND;  // A_COMMAND for lea xxx
-        } else if (currentCommand.endsWith(":")) {
+        } else if (command.endsWith(":")) {
             return CommandType.L_COMMAND;  // L_COMMAND for a label, xxx:
         } else {
             return CommandType.C_COMMAND;  // C_COMMAND for mov, etc...
