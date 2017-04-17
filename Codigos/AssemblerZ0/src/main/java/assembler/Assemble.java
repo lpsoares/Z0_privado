@@ -65,29 +65,35 @@ public class Assemble {
         Parser parser = new Parser(inputFile);
         parser.setSimulator(this.simulator);
 
-        int romAddress = 0;
-        String symbol;
-        while (parser.advance()) {
-            if (parser.commandType(parser.command()) == Parser.CommandType.L_COMMAND) {
-                symbol = parser.label(parser.command());
-                if (!table.contains(symbol))
-                    table.addEntry(symbol, romAddress);
-                else {
-                    Error.error("Mesmo símbolo aparece mais de uma vezes no programa : "+symbol);
-                }
-            } else {
-                romAddress++;
-                if (romAddress > 32768)    // aviso caso a memoria ROM tenha acabado
-                    Error.error("Aviso: toda a ROM disponível do Z0 foi usada");
-            }
-        }
+        try {
 
-        if(outMIF!=null) {
-            outMIF.println("\nWIDTH=16;");
-            outMIF.println("DEPTH="+romAddress+";");
-            outMIF.println("\nADDRESS_RADIX=UNS;");
-            outMIF.println("DATA_RADIX=BIN;");
-            outMIF.println("\nCONTENT BEGIN");
+            int romAddress = 0;
+            String symbol;
+            while (parser.advance()) {
+                if (parser.commandType(parser.command()) == Parser.CommandType.L_COMMAND) {
+                    symbol = parser.label(parser.command());
+                    if (!table.contains(symbol))
+                        table.addEntry(symbol, romAddress);
+                    else {
+                        Error.error("Mesmo símbolo aparece mais de uma vezes no programa : "+symbol);
+                    }
+                } else {
+                    romAddress++;
+                    if (romAddress > 32768)    // aviso caso a memoria ROM tenha acabado
+                        Error.error("Aviso: toda a ROM disponível do Z0 foi usada");
+                }
+            }
+
+            if(outMIF!=null) {
+                outMIF.println("\nWIDTH=16;");
+                outMIF.println("DEPTH="+romAddress+";");
+                outMIF.println("\nADDRESS_RADIX=UNS;");
+                outMIF.println("DATA_RADIX=BIN;");
+                outMIF.println("\nCONTENT BEGIN");
+            }
+
+        } catch (InvalidAssemblyException ex) {
+
         }
 
         parser.close();

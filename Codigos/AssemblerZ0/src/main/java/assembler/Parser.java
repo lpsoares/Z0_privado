@@ -73,14 +73,22 @@ public class Parser {
     }
 
     // retorna o simbolo ou valor decimal do comando atual
-    public String label(String command) {
-      return command.replace(":", "");
+    public String label(String command) throws InvalidAssemblyException {
+        if (command.endsWith(":")) {
+            return command.replace(":", "");
+        } else {
+            throw new InvalidAssemblyException();
+        }
     }
 
     // retorna o simbolo ou valor decimal do comando atual
-    public String symbol(String command) {
+    public String symbol(String command) throws InvalidAssemblyException {
         String[] array = command.split("[ ,]+");
-        return array[1].substring(1);
+        //if(array[0].startsWith("lea")) {
+            return array[1].substring(1);
+        //} else {
+        //    throw new InvalidAssemblyException();
+        //}
     }
 
     // identifica o tipo de instrução C e salva no arquivo

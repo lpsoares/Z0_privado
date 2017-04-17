@@ -1,6 +1,6 @@
 /**
  * Curso: Elementos de Sistemas
- * Arquivo: AssemblerTest.java
+ * Arquivo: SymbolTableTest.java
  * Created by Luciano Soares <lpsoares@insper.edu.br> 
  * Date: 16/04/2017
  */
@@ -11,16 +11,16 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-/**
- * Unit test for Assmbler.
- */
-public class AssemblerTest extends TestCase {
+import assembler.SymbolTable;
+
+public class SymbolTableTest extends TestCase  {
+
     /**
      * Create the test case
      *
      * @param testName name of the test case
      */
-    public AssemblerTest( String testName ) {
+    public SymbolTableTest( String testName ) {
         super( testName );
     }
 
@@ -28,19 +28,19 @@ public class AssemblerTest extends TestCase {
      * @return the suite of tests being tested
      */
     public static Test suite() {
-        return new TestSuite( AssemblerTest.class );
+        return new TestSuite( SymbolTableTest.class );
     }
 
     /**
-     * Rigourous Test :-)
+     * Teste para conversão para binário
      */
-    public void testAssembler() {
+    public void testSymbolTable_toBinary() {
 
         try {
-            assertTrue( true );
+            assertTrue(Code.toBinary("32767").equals("111111111111111"));
         } catch(Exception e) {
             e.printStackTrace();
         }
-        
     }
+
 }

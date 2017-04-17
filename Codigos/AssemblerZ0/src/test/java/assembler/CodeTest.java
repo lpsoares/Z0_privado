@@ -1,3 +1,10 @@
+/**
+ * Curso: Elementos de Sistemas
+ * Arquivo: CodeTest.java
+ * Created by Luciano Soares <lpsoares@insper.edu.br> 
+ * Date: 16/04/2017
+ */
+
 package assembler;
 
 import junit.framework.Test;
@@ -28,13 +35,18 @@ public class CodeTest extends TestCase  {
      * Teste para conversão para binário
      */
     public void testCode_toBinary() {
-        assertTrue(Code.toBinary(    "0").equals("000000000000000"));
-        assertTrue(Code.toBinary(    "1").equals("000000000000001"));
-        assertTrue(Code.toBinary(   "10").equals("000000000001010"));
-        assertTrue(Code.toBinary(  "100").equals("000000001100100"));
-        assertTrue(Code.toBinary( "1000").equals("000001111101000"));
-        assertTrue(Code.toBinary("21845").equals("101010101010101"));
-        assertTrue(Code.toBinary("32767").equals("111111111111111"));
+
+        try {
+            assertTrue(Code.toBinary(    "0").equals("000000000000000"));
+            assertTrue(Code.toBinary(    "1").equals("000000000000001"));
+            assertTrue(Code.toBinary(   "10").equals("000000000001010"));
+            assertTrue(Code.toBinary(  "100").equals("000000001100100"));
+            assertTrue(Code.toBinary( "1000").equals("000001111101000"));
+            assertTrue(Code.toBinary("21845").equals("101010101010101"));
+            assertTrue(Code.toBinary("32767").equals("111111111111111"));
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 
 	/**
@@ -70,7 +82,7 @@ public class CodeTest extends TestCase  {
         	assertTrue("jge",Code.dest(new String[] {"jge"}).equals("000"));
         	assertTrue("jl",Code.dest(new String[] {"jl"}).equals("000"));
         	assertTrue("jle",Code.dest(new String[] {"jle"}).equals("000"));
-		} catch(InvalidDestException e) {
+		} catch(Exception e) {
 		  	e.printStackTrace();
 		}
     	
@@ -109,7 +121,7 @@ public class CodeTest extends TestCase  {
         	assertTrue("jge",Code.comp(new String[] {"jge"}).equals("0001100"));
         	assertTrue("jl",Code.comp(new String[] {"jl"}).equals("0001100"));
         	assertTrue("jle",Code.comp(new String[] {"jle"}).equals("0001100"));
-		} catch(InvalidCompException e) {
+		} catch(Exception e) {
 		  	e.printStackTrace();
 		}
     	
@@ -148,7 +160,7 @@ public class CodeTest extends TestCase  {
         	assertTrue("jge",Code.jump(new String[] {"jge"}).equals("011"));
         	assertTrue("jl",Code.jump(new String[] {"jl"}).equals("100"));
         	assertTrue("jle",Code.jump(new String[] {"jle"}).equals("110"));
-		} catch(InvalidJumpException e) {
+		} catch(Exception e) {
 		  	e.printStackTrace();
 		}
     	
