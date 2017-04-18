@@ -1,5 +1,5 @@
-# Testador de emulação
-# Arquivo: testComp.nasm
+# Testador do Assembler
+# Arquivo: testAssembler.py
 # Criado por: Luciano Soares <lpsoares@insper.edu.br>
 # Data: 16/03/2017
 

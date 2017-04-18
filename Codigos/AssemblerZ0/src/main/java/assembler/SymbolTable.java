@@ -1,6 +1,6 @@
 /**
  * Curso: Elementos de Sistemas
- * Arquivo: MainActivity.java
+ * Arquivo: SymbolTable.java
  * Created by Luciano Soares <lpsoares@insper.edu.br> 
  * Date: 04/02/2017
  */
