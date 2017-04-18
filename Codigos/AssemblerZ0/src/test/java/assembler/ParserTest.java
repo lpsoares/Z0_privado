@@ -176,6 +176,48 @@ public class ParserTest extends TestCase  {
             assertTrue("Parser jmp",parser_testJump.command().equals("jmp"));
             assertFalse("Parser advance()",parser_testJump.advance());
 
+            Parser parser_testComp = new Parser("src/test/resources/testComp.nasm");
+            assertTrue("Parser advance()",parser_testComp.advance());
+            assertTrue("Parser movw %A,%D",parser_testComp.command().equals("movw %A,%D"));
+            assertTrue("Parser advance()",parser_testComp.advance());
+            assertTrue("Parser addw %A,%D,%D",parser_testComp.command().equals("addw %A,%D,%D"));
+            assertTrue("Parser advance()",parser_testComp.advance());
+            assertTrue("Parser movw %D,%A",parser_testComp.command().equals("movw %D,%A"));
+            assertTrue("Parser advance()",parser_testComp.advance());
+            assertTrue("Parser movw %D,(%A)",parser_testComp.command().equals("movw %D,(%A)"));
+            assertTrue("Parser advance()",parser_testComp.advance());
+            assertTrue("Parser incw %D",parser_testComp.command().equals("incw %D"));
+            assertTrue("Parser advance()",parser_testComp.advance());
+            assertTrue("Parser nop",parser_testComp.command().equals("nop"));
+            assertTrue("Parser advance()",parser_testComp.advance());
+            assertTrue("Parser movw (%A),%D",parser_testComp.command().equals("movw (%A),%D"));
+            assertTrue("Parser advance()",parser_testComp.advance());
+            assertTrue("Parser addw (%A),%D,%D",parser_testComp.command().equals("addw (%A),%D,%D"));
+            assertTrue("Parser advance()",parser_testComp.advance());
+            assertTrue("Parser subw %D,(%A),%A",parser_testComp.command().equals("subw %D,(%A),%A"));
+            assertTrue("Parser advance()",parser_testComp.advance());
+            assertTrue("Parser rsubw %D,(%A),%A",parser_testComp.command().equals("rsubw %D,(%A),%A"));
+            assertTrue("Parser advance()",parser_testComp.advance());
+            assertTrue("Parser decw %A",parser_testComp.command().equals("decw %A"));
+            assertTrue("Parser advance()",parser_testComp.advance());
+            assertTrue("Parser decw %D",parser_testComp.command().equals("decw %D"));
+            assertTrue("Parser advance()",parser_testComp.advance());
+            assertTrue("Parser notw %A",parser_testComp.command().equals("notw %A"));
+            assertTrue("Parser advance()",parser_testComp.advance());
+            assertTrue("Parser notw %D",parser_testComp.command().equals("notw %D"));
+            assertTrue("Parser advance()",parser_testComp.advance());
+            assertTrue("Parser negw %A",parser_testComp.command().equals("negw %A"));
+            assertTrue("Parser advance()",parser_testComp.advance());
+            assertTrue("Parser negw %D",parser_testComp.command().equals("negw %D"));
+            assertTrue("Parser advance()",parser_testComp.advance());
+            assertTrue("Parser andw (%A),%D,%D",parser_testComp.command().equals("andw (%A),%D,%D"));
+            assertTrue("Parser advance()",parser_testComp.advance());
+            assertTrue("Parser andw %D,%A,%A",parser_testComp.command().equals("andw %D,%A,%A"));
+            assertTrue("Parser advance()",parser_testComp.advance());
+            assertTrue("Parser orw (%A),%D,%D",parser_testComp.command().equals("orw (%A),%D,%D"));
+            assertTrue("Parser advance()",parser_testComp.advance());
+            assertTrue("Parser orw %D,%A,%A",parser_testComp.command().equals("orw %D,%A,%A"));
+
         } catch(Exception e) {
             e.printStackTrace();
         }

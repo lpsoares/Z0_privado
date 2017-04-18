@@ -19,7 +19,7 @@ class AssemblerZ0 {
         String inputFile = null;
         String outputFileHack = null;
         String outputFileMif = null;
-        boolean geraHack = true;
+        boolean geraHack = false;
         boolean geraMif = false;
         boolean simulator = false;
         boolean debug = false;
@@ -66,6 +66,10 @@ class AssemblerZ0 {
                 inputFile = args[i];
                 break;
             }
+        }
+
+        if(!(geraMif||geraHack)) {
+            geraMif = true;
         }
 
         try {

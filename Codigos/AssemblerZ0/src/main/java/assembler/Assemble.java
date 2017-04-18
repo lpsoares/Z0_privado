@@ -54,8 +54,7 @@ public class Assemble {
             outMIF = new PrintWriter(new FileWriter(mifFile));
         }
 
-        table = new SymbolTable(); 
-        table.initialize();  // Inicializa a tabela de simbolos
+        table = new SymbolTable(); // Cria e inicializa a tabela de simbolos
 
 
     }

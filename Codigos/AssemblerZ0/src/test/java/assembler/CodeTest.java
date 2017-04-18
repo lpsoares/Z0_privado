@@ -133,26 +133,26 @@ public class CodeTest extends TestCase  {
     public void testCode_Jump() {
 
 		try {
-        	assertTrue("movw %A %D",Code.jump(new String[] {"movw","%A","%D"}).equals("000"));
-        	assertTrue("addw %A %D %D",Code.jump(new String[] {"addw","%A","%D","%D"}).equals("000"));
-        	assertTrue("movw %D %A",Code.jump(new String[] {"movw","%D","%A"}).equals("000"));
-        	assertTrue("movw %D (%A)",Code.jump(new String[] {"movw","%D","(%A)"}).equals("000"));
+        	assertTrue("movw %A,%D",Code.jump(new String[] {"movw","%A","%D"}).equals("000"));
+        	assertTrue("addw %A,%D,%D",Code.jump(new String[] {"addw","%A","%D","%D"}).equals("000"));
+        	assertTrue("movw %D,%A",Code.jump(new String[] {"movw","%D","%A"}).equals("000"));
+        	assertTrue("movw %D,(%A)",Code.jump(new String[] {"movw","%D","(%A)"}).equals("000"));
         	assertTrue("incw %D",Code.jump(new String[] {"incw","%D"}).equals("000"));
         	assertTrue("nop",Code.jump(new String[] {"nop"}).equals("000"));
-        	assertTrue("movw (%A) %D",Code.jump(new String[] {"movw","(%A)","%D"}).equals("000"));
-        	assertTrue("addw (%A) %D %D",Code.jump(new String[] {"addw","(%A)","%D","%D"}).equals("000"));
-			assertTrue("subw %D (%A) %A",Code.jump(new String[] {"subw","%D","(%A)","%A"}).equals("000"));
-			assertTrue("rsubw %D (%A) %A",Code.jump(new String[] {"rsubw","%D","(%A)","%A"}).equals("000"));
+        	assertTrue("movw (%A),%D",Code.jump(new String[] {"movw","(%A)","%D"}).equals("000"));
+        	assertTrue("addw (%A),%D,%D",Code.jump(new String[] {"addw","(%A)","%D","%D"}).equals("000"));
+			assertTrue("subw %D,(%A),%A",Code.jump(new String[] {"subw","%D","(%A)","%A"}).equals("000"));
+			assertTrue("rsubw %D,(%A),%A",Code.jump(new String[] {"rsubw","%D","(%A)","%A"}).equals("000"));
         	assertTrue("decw %A",Code.jump(new String[] {"decw","%A"}).equals("000"));
         	assertTrue("decw %D",Code.jump(new String[] {"decw","%D"}).equals("000"));
         	assertTrue("notw %A",Code.jump(new String[] {"notw","%A"}).equals("000"));
         	assertTrue("notw %D",Code.jump(new String[] {"notw","%D"}).equals("000"));
         	assertTrue("negw %A",Code.jump(new String[] {"negw","%A"}).equals("000"));
         	assertTrue("negw %D",Code.jump(new String[] {"negw","%D"}).equals("000"));
-        	assertTrue("andw (%A) %D %D",Code.jump(new String[] {"andw","(%A)","%D","%D"}).equals("000"));
-        	assertTrue("andw %D %A %A",Code.jump(new String[] {"andw","%D","%A","%A"}).equals("000"));
-        	assertTrue("orw (%A) %D %D",Code.jump(new String[] {"orw","(%A)","%D","%D"}).equals("000"));
-        	assertTrue("orw %D %A %A",Code.jump(new String[] {"orw","%D","%A","%A"}).equals("000"));
+        	assertTrue("andw (%A),%D,%D",Code.jump(new String[] {"andw","(%A)","%D","%D"}).equals("000"));
+        	assertTrue("andw %D,%A,%A",Code.jump(new String[] {"andw","%D","%A","%A"}).equals("000"));
+        	assertTrue("orw (%A),%D,%D",Code.jump(new String[] {"orw","(%A)","%D","%D"}).equals("000"));
+        	assertTrue("orw %D,%A,%A",Code.jump(new String[] {"orw","%D","%A","%A"}).equals("000"));
         	assertTrue("jmp",Code.jump(new String[] {"jmp"}).equals("111"));
         	assertTrue("je",Code.jump(new String[] {"je"}).equals("010"));
         	assertTrue("jne",Code.jump(new String[] {"jne"}).equals("101"));
