@@ -7,75 +7,67 @@
 
 package assembler;
 
-
+/** 
+ * Traduz mnemônicos da linguagem assembly para códigos binários da arquitetura Z0.
+ */
 public class Code {
 
-    // Identifica o destino
-    private static int checkDest(String s) throws InvalidDestException {
-        if (s.equals("%A"))
-            return(0);
-        else if (s.equals("%D"))
-            return(1);
-        else if (s.equals("(%A)"))
-            return(2);
-        else {
-            Error.error("Instrução invalida");
-            throw new InvalidDestException();
-        }
-    }
+    /**
+     * Retorna o código binário do(s) registrador(es) que vão receber o valor da instrução.
+     * @param  mnemnonic vetor de mnemônicos "instrução" a ser analisada.
+     * @return Opcode (String de 3 bits) com código em linguagem de máquina para a instrução.
+     */
+    public static String dest(String[] mnemnonic) throws InvalidDestException {
 
-    // retorna o opcode (3 bits) a partir do mnemonico de destino
-    public static String dest(String[] array) throws InvalidDestException {
-
-        if ( array.length == 0 || array[0].equals("")) {
+        if ( mnemnonic.length == 0 || mnemnonic[0].equals("")) {
             Error.error("Instrução invalida");
             throw new InvalidDestException();
         }
 
         char[] dests = "000".toCharArray();
 
-        if (array[0].startsWith("mov")) {
-            if(array.length==3) dests[checkDest(array[2])]='1';
-            if(array.length==4) dests[checkDest(array[3])]='1';
-            if(array.length==5) dests[checkDest(array[4])]='1';
-            if(array.length > 5) Error.error("Mais de três destinos em MOV");
-        } else if (array[0].startsWith("add")) {
-            if(array.length==4) dests[checkDest(array[3])]='1';
-            if(array.length==5) dests[checkDest(array[4])]='1';
-            if(array.length==6) dests[checkDest(array[5])]='1';
-            if(array.length > 6) Error.error("Mais de três destinos em ADD");
-        } else if (array[0].startsWith("sub")) {
-            if(array.length==4) dests[checkDest(array[3])]='1';
-            if(array.length==5) dests[checkDest(array[4])]='1';
-            if(array.length==6) dests[checkDest(array[5])]='1';
-            if(array.length > 6) Error.error("Mais de três destinos em SUB");
-        } else if (array[0].startsWith("rsub")) {
-            if(array.length==4) dests[checkDest(array[3])]='1';
-            if(array.length==5) dests[checkDest(array[4])]='1';
-            if(array.length==6) dests[checkDest(array[5])]='1';
-            if(array.length > 6) Error.error("Mais de três destinos em RSUB");
-        } else if (array[0].startsWith("inc")) {
-            if(array.length==2) dests[checkDest(array[1])]='1';
-            if(array.length > 2) Error.error("Mais de um destino em INC");
-        } else if (array[0].startsWith("dec")) {
-            if(array.length==2) dests[checkDest(array[1])]='1';
-            if(array.length > 2) Error.error("Mais de um destino em DEC");
-        } else if (array[0].startsWith("not")) {
-            if(array.length==2) dests[checkDest(array[1])]='1';
-            if(array.length > 2) Error.error("Mais de um destino em NOT");
-        } else if (array[0].startsWith("neg")) {
-            if(array.length==2) dests[checkDest(array[1])]='1';
-            if(array.length > 2) Error.error("Mais de um destino em NEG");
-        } else if (array[0].startsWith("and")) {
-            if(array.length==4) dests[checkDest(array[3])]='1';
-            if(array.length==5) dests[checkDest(array[4])]='1';
-            if(array.length==6) dests[checkDest(array[5])]='1';
-            if(array.length > 6) Error.error("Mais de três destinos em AND");
-        } else if (array[0].startsWith("or")) {
-            if(array.length==4) dests[checkDest(array[3])]='1';
-            if(array.length==5) dests[checkDest(array[4])]='1';
-            if(array.length==6) dests[checkDest(array[5])]='1';
-            if(array.length > 6) Error.error("Mais de três destinos em OR");
+        if (mnemnonic[0].startsWith("mov")) {
+            if(mnemnonic.length==3) dests[checkDest(mnemnonic[2])]='1';
+            if(mnemnonic.length==4) dests[checkDest(mnemnonic[3])]='1';
+            if(mnemnonic.length==5) dests[checkDest(mnemnonic[4])]='1';
+            if(mnemnonic.length > 5) Error.error("Mais de três destinos em MOV");
+        } else if (mnemnonic[0].startsWith("add")) {
+            if(mnemnonic.length==4) dests[checkDest(mnemnonic[3])]='1';
+            if(mnemnonic.length==5) dests[checkDest(mnemnonic[4])]='1';
+            if(mnemnonic.length==6) dests[checkDest(mnemnonic[5])]='1';
+            if(mnemnonic.length > 6) Error.error("Mais de três destinos em ADD");
+        } else if (mnemnonic[0].startsWith("sub")) {
+            if(mnemnonic.length==4) dests[checkDest(mnemnonic[3])]='1';
+            if(mnemnonic.length==5) dests[checkDest(mnemnonic[4])]='1';
+            if(mnemnonic.length==6) dests[checkDest(mnemnonic[5])]='1';
+            if(mnemnonic.length > 6) Error.error("Mais de três destinos em SUB");
+        } else if (mnemnonic[0].startsWith("rsub")) {
+            if(mnemnonic.length==4) dests[checkDest(mnemnonic[3])]='1';
+            if(mnemnonic.length==5) dests[checkDest(mnemnonic[4])]='1';
+            if(mnemnonic.length==6) dests[checkDest(mnemnonic[5])]='1';
+            if(mnemnonic.length > 6) Error.error("Mais de três destinos em RSUB");
+        } else if (mnemnonic[0].startsWith("inc")) {
+            if(mnemnonic.length==2) dests[checkDest(mnemnonic[1])]='1';
+            if(mnemnonic.length > 2) Error.error("Mais de um destino em INC");
+        } else if (mnemnonic[0].startsWith("dec")) {
+            if(mnemnonic.length==2) dests[checkDest(mnemnonic[1])]='1';
+            if(mnemnonic.length > 2) Error.error("Mais de um destino em DEC");
+        } else if (mnemnonic[0].startsWith("not")) {
+            if(mnemnonic.length==2) dests[checkDest(mnemnonic[1])]='1';
+            if(mnemnonic.length > 2) Error.error("Mais de um destino em NOT");
+        } else if (mnemnonic[0].startsWith("neg")) {
+            if(mnemnonic.length==2) dests[checkDest(mnemnonic[1])]='1';
+            if(mnemnonic.length > 2) Error.error("Mais de um destino em NEG");
+        } else if (mnemnonic[0].startsWith("and")) {
+            if(mnemnonic.length==4) dests[checkDest(mnemnonic[3])]='1';
+            if(mnemnonic.length==5) dests[checkDest(mnemnonic[4])]='1';
+            if(mnemnonic.length==6) dests[checkDest(mnemnonic[5])]='1';
+            if(mnemnonic.length > 6) Error.error("Mais de três destinos em AND");
+        } else if (mnemnonic[0].startsWith("or")) {
+            if(mnemnonic.length==4) dests[checkDest(mnemnonic[3])]='1';
+            if(mnemnonic.length==5) dests[checkDest(mnemnonic[4])]='1';
+            if(mnemnonic.length==6) dests[checkDest(mnemnonic[5])]='1';
+            if(mnemnonic.length > 6) Error.error("Mais de três destinos em OR");
         } else {
             // instrução não possui destino
         }
@@ -85,7 +77,11 @@ public class Code {
         return value_dest;
     }
 
-    // retorna o opcode (7 bits) a partir do mnemonico de cálculo
+    /**
+     * Retorna o código binário do mnemônico para realizar uma operação de cálculo.
+     * @param  mnemnonic vetor de mnemônicos "instrução" a ser analisada.
+     * @return Opcode (String de 7 bits) com código em linguagem de máquina para a instrução.
+     */
     public static String comp(String[] mnemnonic) throws InvalidCompException {
 
         if ( mnemnonic.length == 0 || mnemnonic[0].equals("")) {
@@ -170,7 +166,11 @@ public class Code {
 
     }
 
-    // retorna o opcode (3 bits) a partir do mnemonico de jump (salto)
+    /**
+     * Retorna o código binário do mnemônico para realizar uma operação de jump (salto).
+     * @param  mnemnonic vetor de mnemônicos "instrução" a ser analisada.
+     * @return Opcode (String de 3 bits) com código em linguagem de máquina para a instrução.
+     */
     public static String jump(String[] mnemnonic) throws InvalidJumpException {
         
         if ( mnemnonic.length == 0 || mnemnonic[0].equals("")) {
@@ -191,10 +191,29 @@ public class Code {
 
     }
 
-    // converte um simbolo numerico para binario de 15 bits
+    /**
+     * Retorna o código binário de um valor decimal armazenado numa String.
+     * @param  symbol valor numérico decimal armazenado em uma String.
+     * @return Valor em binário (String de 15 bits) representado com 0s e 1s.
+     */
     public static String toBinary(String symbol) {
         int value = Integer.valueOf(symbol);
         String binary = Integer.toBinaryString(value);
         return String.format("%1$15s", binary).replace(" ", "0");
     }
+
+    // Identifica o destino
+    private static int checkDest(String s) throws InvalidDestException {
+        if (s.equals("%A"))
+            return(0);
+        else if (s.equals("%D"))
+            return(1);
+        else if (s.equals("(%A)"))
+            return(2);
+        else {
+            Error.error("Instrução invalida");
+            throw new InvalidDestException();
+        }
+    }
+
 }

@@ -9,23 +9,31 @@ package assembler;
 
 import java.io.*;
 
+/**
+ * Encapsula o código de leitura. Carrega as instruções na linguagem assembly,
+ * analisa, e oferece acesso as partes da instrução  (campos e símbolos).
+ * Além disso, remove todos os espaços em branco e comentários.
+ */
 public class Parser {
 
     public String currentCommand = "";  // comando atual
-    public String inputFile;				    // arquivo de leitura
-    public int lineNumber = 0;				  // linha atual do arquivo (nao do codigo gerado)
-    public String currentLine;				  // linha de codigo atual
+    public String inputFile;		    // arquivo de leitura
+    public int lineNumber = 0;			// linha atual do arquivo (nao do codigo gerado)
+    public String currentLine;			// linha de codigo atual
     boolean simulator;                  // Testa se é para simulador e descarta limitações do hardware do Z0
     private BufferedReader fileReader;  // leitor de arquivo
 
-    // tipos de comandos
+    /** Enumerator para os tipos de comandos do Assembler. */
     public enum CommandType {
         A_COMMAND,      // comandos LEA, que armazenam no registrador A
         C_COMMAND,      // comandos de calculos
-        L_COMMAND       // simbolos (tags)
+        L_COMMAND       // comandos de Label (símbolos)
     }
 
-    // abre arquivo NASM
+    /** 
+     * Abre o arquivo de entrada NASM e se prepara para analisá-lo.
+     * @param file arquivo NASM que será feito o parser.
+     */
     public Parser(String file) throws FileNotFoundException {
         this.inputFile = file;
         this.fileReader = new BufferedReader(new FileReader(file));
@@ -33,16 +41,12 @@ public class Parser {
         this.simulator = false;
     }
 
-    // Em caso de simulação, vai permitir certas operações
-    public void setSimulator(boolean testSimulator) {
-      this.simulator = testSimulator;
-    }
-    
-    public boolean getSimulator() {
-      return this.simulator;
-    }
-
-    // carrega proximo comando e faz ele o comando atual
+    /**
+     * Carrega uma instrução e avança seu apontador interno para o próxima
+     * linha do arquivo de entrada. Caso não haja mais linhas no arquivo de
+     * entrada o método retorna "Falso", senão retorna "Verdadeiro".
+     * @return Verdadeiro se ainda há instruções, Falso se as instruções terminaram.
+     */
     public boolean advance() throws IOException {
         while(true){
             currentLine = fileReader.readLine();
@@ -56,7 +60,22 @@ public class Parser {
         }
     }
 
-    // informa qual o tipo do comando atual
+    /**
+     * Retorna o comando "intrução" atual (sem o avanço)
+     * @return a instrução atual para ser analilisada
+     */
+    public String command() {
+      return currentCommand;
+    }
+
+    /**
+     * Retorna o tipo da instrução passada no argumento:
+     *  A_COMMAND para leaw, por exemplo leaw $1,%A
+     *  L_COMMAND para labels, por exemplo Xyz: , onde Xyz é um símbolo.
+     *  C_COMMAND para todos os outros comandos
+     * @param  command instrução a ser analisada.
+     * @return o tipo da instrução.
+     */
     public CommandType commandType(String command) {
         if (command.startsWith("lea")) {
             return CommandType.A_COMMAND;  // A_COMMAND for lea xxx
@@ -67,12 +86,23 @@ public class Parser {
         }
     }
 
-    // somente retorna o comando atual
-    public String command() {
-      return currentCommand;
+    /**
+     * Retorna o símbolo ou valor numérico da instrução passada no argumento.
+     * Deve ser chamado somente quando commandType() é A_COMMAND.
+     * @param  command instrução a ser analisada.
+     * @return somente o símbolo ou o valor número da instrução.
+     */
+    public String symbol(String command) throws InvalidAssemblyException {
+        String[] array = command.split("[ ,]+");
+        return array[1].substring(1);
     }
 
-    // retorna o simbolo ou valor decimal do comando atual
+    /**
+     * Retorna o símbolo da instrução passada no argumento.
+     * Deve ser chamado somente quando commandType() é L_COMMAND.
+     * @param  command instrução a ser analisada.
+     * @return o símbolo da instrução (sem os dois pontos).
+     */
     public String label(String command) throws InvalidAssemblyException {
         if (command.endsWith(":")) {
             return command.replace(":", "");
@@ -81,17 +111,12 @@ public class Parser {
         }
     }
 
-    // retorna o simbolo ou valor decimal do comando atual
-    public String symbol(String command) throws InvalidAssemblyException {
-        String[] array = command.split("[ ,]+");
-        //if(array[0].startsWith("lea")) {
-            return array[1].substring(1);
-        //} else {
-        //    throw new InvalidAssemblyException();
-        //}
-    }
-
-    // identifica o tipo de instrução C e salva no arquivo
+    /**
+     * Separa os mnemônicos da instrução fornecida em tokens em um vetor de Strings.
+     * Deve ser chamado somente quando CommandType () é C_COMMAND.
+     * @param  command instrução a ser analisada.
+     * @return um vetor de string contento os tokens da instrução (as partes do comando).
+     */
     public String[] instruction(String command)  throws InvalidCompException,InvalidAssemblyException,InvalidDestException,InvalidJumpException {
         return command.split("[ ,]+");
     }
@@ -100,4 +125,15 @@ public class Parser {
     public void close() throws IOException {
         fileReader.close();
     }
+
+    // Em caso de simulação, vai permitir certas operações
+    public void setSimulator(boolean testSimulator) {
+      this.simulator = testSimulator;
+    }
+    
+    // Pega o valor da flag de simulador
+    public boolean getSimulator() {
+      return this.simulator;
+    }
+
 }
