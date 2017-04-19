@@ -1,6 +1,6 @@
 /**
  * Curso: Elementos de Sistemas
- * Arquivo: MainActivity.java
+ * Arquivo: Code.java
  * Created by Luciano Soares <lpsoares@insper.edu.br> 
  * Date: 04/02/2017
  */
