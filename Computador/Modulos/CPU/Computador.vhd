@@ -151,6 +151,14 @@ ARCHITECTURE logic OF Computador IS
 	SIGNAL S_key_code    : STD_LOGIC_VECTOR(6 downto 0);
 	SIGNAL S_key_new     : STD_LOGIC;
 
+	TYPE   STATE_TYPE IS (
+	   s0, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14,
+		t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14,
+		c0, c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14,
+		d0, d1, d2, d3, d4, d5, d6, d7, d8, d9, d10, d11, d12, d13, d14
+		);
+   SIGNAL state   : STATE_TYPE;
+	
 BEGIN
 
 	MAIN_CPU : CPU PORT MAP (
@@ -230,15 +238,282 @@ BEGIN
 		-- Inicializacao	
 		if(rising_edge(CLK_2KHZ)) then
 			if(RST = '1') then
-				if(aguarda > 4800) then
+				if(aguarda > 6800) then   --if(aguarda > 4800) then
 					RST_INTERNAL <= '0';
+					
+				elsif(aguarda > 6768) then
+					aguarda := aguarda + 1;
+					CASE state IS
+					
+						-- APAGA Z
+						WHEN c0 => 
+							INPUT <= "0000000000000000";
+							ADDRESS <= "100100000101001";
+							state <= c1;
+						WHEN c1 => 
+							INPUT <= "0000000000000000";
+							ADDRESS <= "100100000111101";
+							state <= c2;
+						WHEN c2 => 
+							INPUT <= "0000000000000000";
+							ADDRESS <= "100100001010001";
+							state <= c3;
+						WHEN c3 => 
+							INPUT <= "0000000000000000";
+							ADDRESS <= "100100001100101";
+							state <= c4;
+						WHEN c4 => 
+							INPUT <= "0000000000000000";
+							ADDRESS <= "100100001111001";
+							state <= c5;
+						WHEN c5 => 
+							INPUT <= "0000000000000000";
+							ADDRESS <= "100100010001101";
+							state <= c6;
+						WHEN c6 => 
+							INPUT <= "0000000000000000";
+							ADDRESS <= "100100010100001";
+							state <= c7;
+						WHEN c7 => 
+							INPUT <= "0000000000000000";
+							ADDRESS <= "100100010110101";
+							state <= c8;
+						WHEN c8 => 
+							INPUT <= "0000000000000000";
+							ADDRESS <= "100100011001001";
+							state <= c9;
+						WHEN c9 => 
+							INPUT <= "0000000000000000";
+							ADDRESS <= "100100011011101";
+							state <= c10;
+						WHEN c10 => 
+							INPUT <= "0000000000000000";
+							ADDRESS <= "100100011110001";
+							state <= c11;
+						WHEN c11 => 
+							INPUT <= "0000000000000000";
+							ADDRESS <= "100100100000101";
+							state <= c12;
+						WHEN c12 => 
+							INPUT <= "0000000000000000";
+							ADDRESS <= "100100100011001";
+							state <= c13;
+						WHEN c13 => 
+							INPUT <= "0000000000000000";
+							ADDRESS <= "100100100101101";
+							state <= c14;
+						WHEN c14 => 
+							INPUT <= "0000000000000000";
+							ADDRESS <= "100100101000001";
+							state <= d0;
+							
+						-- APAGA 0
+						WHEN d0 => 
+							INPUT <= "0000000000000000";
+							ADDRESS <= "100100000101010";
+							state <= d1;
+						WHEN d1 => 
+							INPUT <= "0000000000000000";
+							ADDRESS <= "100100000111110";
+							state <= d2;
+						WHEN d2 => 
+							INPUT <= "0000000000000000";
+							ADDRESS <= "100100001010010";
+							state <= d3;
+						WHEN d3 => 
+							INPUT <= "0000000000000000";
+							ADDRESS <= "100100001100110";
+							state <= d4;
+						WHEN d4 => 
+							INPUT <= "0000000000000000";
+							ADDRESS <= "100100001111010";
+							state <= d5;
+						WHEN d5 => 
+							INPUT <= "0000000000000000";
+							ADDRESS <= "100100010001110";
+							state <= d6;
+						WHEN d6 => 
+							INPUT <= "0000000000000000";
+							ADDRESS <= "100100010100010";
+							state <= d7;
+						WHEN d7 => 
+							INPUT <= "0000000000000000";
+							ADDRESS <= "100100010110110";
+							state <= d8;
+						WHEN d8 => 
+							INPUT <= "0000000000000000";
+							ADDRESS <= "100100011001010";
+							state <= d9;
+						WHEN d9 => 
+							INPUT <= "0000000000000000";
+							ADDRESS <= "100100011011110";
+							state <= d10;
+						WHEN d10 => 
+							INPUT <= "0000000000000000";
+							ADDRESS <= "100100011110010";
+							state <= d11;
+						WHEN d11 => 
+							INPUT <= "0000000000000000";
+							ADDRESS <= "100100100000110";
+							state <= d12;
+						WHEN d12 => 
+							INPUT <= "0000000000000000";
+							ADDRESS <= "100100100011010";
+							state <= d13;
+						WHEN d13 => 
+							INPUT <= "0000000000000000";
+							ADDRESS <= "100100100101110";
+							state <= d14;
+						WHEN d14 => 
+							INPUT <= "0000000000000000";
+							ADDRESS <= "100100101000010";
+							state <= s0;
+
+						WHEN OTHERS =>
+							state <= c0;
+					END CASE;
+					
+					
+				elsif(aguarda > 4800) then
 					LCD_ON <= '1';
+					aguarda := aguarda + 1;
+					CASE state IS
+					
+					   -- ESCREVE Z
+						WHEN s0 => 
+							INPUT <= "0111111111111110";
+							ADDRESS <= "100100000101001";
+							state <= s1;
+						WHEN s1 => 
+							INPUT <= "0111111111111110";
+							ADDRESS <= "100100000111101";
+							state <= s2;
+						WHEN s2 => 
+							INPUT <= "0111100000000000";
+							ADDRESS <= "100100001010001";
+							state <= s3;
+						WHEN s3 => 
+							INPUT <= "0011110000000000";
+							ADDRESS <= "100100001100101";
+							state <= s4;
+						WHEN s4 => 
+							INPUT <= "0001111000000000";
+							ADDRESS <= "100100001111001";
+							state <= s5;
+						WHEN s5 => 
+							INPUT <= "0000111100000000";
+							ADDRESS <= "100100010001101";
+							state <= s6;
+						WHEN s6 => 
+							INPUT <= "0000011110000000";
+							ADDRESS <= "100100010100001";
+							state <= s7;
+						WHEN s7 => 
+							INPUT <= "0000001111000000";
+							ADDRESS <= "100100010110101";
+							state <= s8;
+						WHEN s8 => 
+							INPUT <= "0000000111100000";
+							ADDRESS <= "100100011001001";
+							state <= s9;
+						WHEN s9 => 
+							INPUT <= "0000000011110000";
+							ADDRESS <= "100100011011101";
+							state <= s10;
+						WHEN s10 => 
+							INPUT <= "0000000001111000";
+							ADDRESS <= "100100011110001";
+							state <= s11;
+						WHEN s11 => 
+							INPUT <= "0000000000111100";
+							ADDRESS <= "100100100000101";
+							state <= s12;
+						WHEN s12 => 
+							INPUT <= "0000000000011110";
+							ADDRESS <= "100100100011001";
+							state <= s13;
+						WHEN s13 => 
+							INPUT <= "0111111111111110";
+							ADDRESS <= "100100100101101";
+							state <= s14;
+						WHEN s14 => 
+							INPUT <= "0111111111111110";
+							ADDRESS <= "100100101000001";
+							state <= t0;
+							
+							
+					   -- ESCREVE 0
+						WHEN t0 => 
+							INPUT <= "0001111111111000";
+							ADDRESS <= "100100000101010";
+							state <= t1;
+						WHEN t1 => 
+							INPUT <= "0011111111111100";
+							ADDRESS <= "100100000111110";
+							state <= t2;
+						WHEN t2 => 
+							INPUT <= "0111000000000110";
+							ADDRESS <= "100100001010010";
+							state <= t3;
+						WHEN t3 => 
+							INPUT <= "0111100000000110";
+							ADDRESS <= "100100001100110";
+							state <= t4;
+						WHEN t4 => 
+							INPUT <= "0110110000000110";
+							ADDRESS <= "100100001111010";
+							state <= t5;
+						WHEN t5 => 
+							INPUT <= "0110011000000110";
+							ADDRESS <= "100100010001110";
+							state <= t6;
+						WHEN t6 => 
+							INPUT <= "0110001100000110";
+							ADDRESS <= "100100010100010";
+							state <= t7;
+						WHEN t7 => 
+							INPUT <= "0110000110000110";
+							ADDRESS <= "100100010110110";
+							state <= t8;
+						WHEN t8 => 
+							INPUT <= "0110000011000110";
+							ADDRESS <= "100100011001010";
+							state <= t9;
+						WHEN t9 => 
+							INPUT <= "0110000001100110";
+							ADDRESS <= "100100011011110";
+							state <= t10;
+						WHEN t10 => 
+							INPUT <= "0110000000110110";
+							ADDRESS <= "100100011110010";
+							state <= t11;
+						WHEN t11 => 
+							INPUT <= "0110000000011110";
+							ADDRESS <= "100100100000110";
+							state <= t12;
+						WHEN t12 => 
+							INPUT <= "0110000000001110";
+							ADDRESS <= "100100100011010";
+							state <= t13;
+						WHEN t13 => 
+							INPUT <= "0011111111111100";
+							ADDRESS <= "100100100101110";
+							state <= t14;
+						WHEN t14 => 
+							INPUT <= "0001111111111000";
+							ADDRESS <= "100100101000010";
+							state <= c0;
+							
+						WHEN OTHERS =>
+							state <= s0;
+					END CASE;
 				else
 					aguarda := aguarda + 1;
 					INPUT <= "0000000000000000";  -- apaga as linhas
 					ADDRESS <= std_logic_vector(to_unsigned( aguarda + 16384,15));  -- apaga as linhas
 				end if;
 			else
+				state <= s0;
 				RST_INTERNAL <= '1';
 				aguarda := 0;
 				LCD_ON <= '0';
