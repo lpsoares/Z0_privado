@@ -166,48 +166,6 @@ set_location_assignment PIN_B5 -to key_clk
 set_location_assignment PIN_A4 -to key_data
 
 
-set_global_assignment -name QIP_FILE Modulos/dispositivos/RAM_fpga/RAM16K.qip
-set_global_assignment -name QIP_FILE Modulos/dispositivos/ROM/ROM32K.qip
-set_global_assignment -name VHDL_FILE Modulos/dispositivos/Display/Screen.vhd
-set_global_assignment -name VHDL_FILE Modulos/dispositivos/Display/ILI9341.vhd
-set_global_assignment -name VHDL_FILE Modulos/CPU/Computador.vhd
-set_global_assignment -name VHDL_FILE Modulos/CPU/MemoryIO.vhd
-set_global_assignment -name VHDL_FILE Modulos/CPU/ControlUnit.vhd
-set_global_assignment -name VHDL_FILE Modulos/CPU/PC.vhd
-set_global_assignment -name VHDL_FILE Modulos/CPU/CPU.vhd
-set_global_assignment -name VHDL_FILE Modulos/CircuitosSequenciais/BinaryDigit.vhd
-set_global_assignment -name VHDL_FILE Modulos/CircuitosSequenciais/FlipFlopD.vhd
-set_global_assignment -name VHDL_FILE Modulos/CircuitosSequenciais/Register16.vhd
-set_global_assignment -name VHDL_FILE Modulos/UnidadeLogicaAritmetica/zerador16.vhd
-set_global_assignment -name VHDL_FILE Modulos/UnidadeLogicaAritmetica/inversor16.vhd
-set_global_assignment -name VHDL_FILE Modulos/UnidadeLogicaAritmetica/Inc16.vhd
-set_global_assignment -name VHDL_FILE Modulos/UnidadeLogicaAritmetica/HalfAdder.vhd
-set_global_assignment -name VHDL_FILE Modulos/UnidadeLogicaAritmetica/FullAdder.vhd
-set_global_assignment -name VHDL_FILE Modulos/UnidadeLogicaAritmetica/comparador16.vhd
-set_global_assignment -name VHDL_FILE Modulos/UnidadeLogicaAritmetica/ALU.vhd
-set_global_assignment -name VHDL_FILE Modulos/UnidadeLogicaAritmetica/Add16.vhd
-set_global_assignment -name VHDL_FILE Modulos/PortasLogicas/Or16.vhd
-set_global_assignment -name VHDL_FILE Modulos/PortasLogicas/Or8Way.vhd
-set_global_assignment -name VHDL_FILE Modulos/PortasLogicas/Not16.vhd
-set_global_assignment -name VHDL_FILE Modulos/PortasLogicas/Nor8Way.vhd
-set_global_assignment -name VHDL_FILE Modulos/PortasLogicas/Mux16.vhd
-set_global_assignment -name VHDL_FILE Modulos/PortasLogicas/Mux8Way16.vhd
-set_global_assignment -name VHDL_FILE Modulos/PortasLogicas/Mux8Way.vhd
-set_global_assignment -name VHDL_FILE Modulos/PortasLogicas/Mux4Way16.vhd
-set_global_assignment -name VHDL_FILE Modulos/PortasLogicas/Mux4Way.vhd
-set_global_assignment -name VHDL_FILE Modulos/PortasLogicas/Mux2Way.vhd
-set_global_assignment -name VHDL_FILE Modulos/PortasLogicas/DMux8Way.vhd
-set_global_assignment -name VHDL_FILE Modulos/PortasLogicas/DMux4Way.vhd
-set_global_assignment -name VHDL_FILE Modulos/PortasLogicas/DMux2Way.vhd
-set_global_assignment -name VHDL_FILE Modulos/PortasLogicas/BarrelShifter16.vhd
-set_global_assignment -name VHDL_FILE Modulos/PortasLogicas/BarrelShifter8.vhd
-set_global_assignment -name VHDL_FILE Modulos/PortasLogicas/And16.vhd
-set_global_assignment -name VHDL_FILE Modulos/dispositivos/Teclado/ps2_keyboard_to_ascii.vhd
-set_global_assignment -name VHDL_FILE Modulos/dispositivos/Teclado/ps2_keyboard.vhd
-set_global_assignment -name VHDL_FILE Modulos/dispositivos/Teclado/debounce.vhd
-set_global_assignment -name QIP_FILE Modulos/dispositivos/PLL/PLL.qip
-set_global_assignment -name CDF_FILE output_files/Chain18.cdf
-set_global_assignment -name CDF_FILE Computador.cdf
 set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
 set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
 set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
@@ -292,4 +250,60 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to LCD_RS
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to LCD_WR_N
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to key_clk
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to key_data
+
+
+set_global_assignment -name VHDL_FILE Modulos/CPU/CPU.vhd
+set_global_assignment -name VHDL_FILE Modulos/CPU/PC.vhd
+set_global_assignment -name VHDL_FILE Modulos/CPU/ControlUnit.vhd
+set_global_assignment -name VHDL_FILE Modulos/CPU/Computador.vhd
+set_global_assignment -name VHDL_FILE Modulos/CPU/MemoryIO.vhd
+set_global_assignment -name VHDL_FILE Modulos/CircuitosSequenciais/Register8.vhd
+set_global_assignment -name VHDL_FILE Modulos/CircuitosSequenciais/Register16.vhd
+set_global_assignment -name VHDL_FILE Modulos/CircuitosSequenciais/Register32.vhd
+set_global_assignment -name VHDL_FILE Modulos/CircuitosSequenciais/Register64.vhd
+set_global_assignment -name VHDL_FILE Modulos/CircuitosSequenciais/Ram8.vhd
+set_global_assignment -name VHDL_FILE Modulos/CircuitosSequenciais/Ram64.vhd
+set_global_assignment -name VHDL_FILE Modulos/CircuitosSequenciais/Ram512.vhd
+set_global_assignment -name VHDL_FILE Modulos/CircuitosSequenciais/Ram4K.vhd
+set_global_assignment -name VHDL_FILE Modulos/CircuitosSequenciais/ShiftRegisterSISO16.vhd
+set_global_assignment -name VHDL_FILE Modulos/CircuitosSequenciais/ShiftRegisterSIPO16.vhd
+set_global_assignment -name VHDL_FILE Modulos/CircuitosSequenciais/ShiftRegisterPISO16.vhd
+set_global_assignment -name VHDL_FILE Modulos/CircuitosSequenciais/ShiftRegisterPIPO16.vhd
+set_global_assignment -name VHDL_FILE Modulos/CircuitosSequenciais/BinaryDigit.vhd
+set_global_assignment -name VHDL_FILE Modulos/CircuitosSequenciais/FlipFlopD.vhd
+set_global_assignment -name VHDL_FILE Modulos/UnidadeLogicaAritmetica/zerador16.vhd
+set_global_assignment -name VHDL_FILE Modulos/UnidadeLogicaAritmetica/inversor16.vhd
+set_global_assignment -name VHDL_FILE Modulos/UnidadeLogicaAritmetica/Inc16.vhd
+set_global_assignment -name VHDL_FILE Modulos/UnidadeLogicaAritmetica/HalfAdder.vhd
+set_global_assignment -name VHDL_FILE Modulos/UnidadeLogicaAritmetica/FullAdder.vhd
+set_global_assignment -name VHDL_FILE Modulos/UnidadeLogicaAritmetica/comparador16.vhd
+set_global_assignment -name VHDL_FILE Modulos/UnidadeLogicaAritmetica/ALU.vhd
+set_global_assignment -name VHDL_FILE Modulos/UnidadeLogicaAritmetica/Add16.vhd
+set_global_assignment -name VHDL_FILE Modulos/PortasLogicas/Or16.vhd
+set_global_assignment -name VHDL_FILE Modulos/PortasLogicas/Or8Way.vhd
+set_global_assignment -name VHDL_FILE Modulos/PortasLogicas/Not16.vhd
+set_global_assignment -name VHDL_FILE Modulos/PortasLogicas/Nor8Way.vhd
+set_global_assignment -name VHDL_FILE Modulos/PortasLogicas/Mux16.vhd
+set_global_assignment -name VHDL_FILE Modulos/PortasLogicas/Mux8Way16.vhd
+set_global_assignment -name VHDL_FILE Modulos/PortasLogicas/Mux8Way.vhd
+set_global_assignment -name VHDL_FILE Modulos/PortasLogicas/Mux4Way16.vhd
+set_global_assignment -name VHDL_FILE Modulos/PortasLogicas/Mux4Way.vhd
+set_global_assignment -name VHDL_FILE Modulos/PortasLogicas/Mux2Way.vhd
+set_global_assignment -name VHDL_FILE Modulos/PortasLogicas/DMux8Way.vhd
+set_global_assignment -name VHDL_FILE Modulos/PortasLogicas/DMux4Way.vhd
+set_global_assignment -name VHDL_FILE Modulos/PortasLogicas/DMux2Way.vhd
+set_global_assignment -name VHDL_FILE Modulos/PortasLogicas/DMux8Way16.vhd
+set_global_assignment -name VHDL_FILE Modulos/PortasLogicas/nand_vhdl.vhd
+set_global_assignment -name VHDL_FILE Modulos/PortasLogicas/BarrelShifter16.vhd
+set_global_assignment -name VHDL_FILE Modulos/PortasLogicas/BarrelShifter8.vhd
+set_global_assignment -name VHDL_FILE Modulos/PortasLogicas/And16.vhd
+set_global_assignment -name VHDL_FILE Modulos/dispositivos/Display/Screen.vhd
+set_global_assignment -name VHDL_FILE Modulos/dispositivos/Display/ILI9341.vhd
+set_global_assignment -name VHDL_FILE Modulos/dispositivos/Teclado/ps2_keyboard_to_ascii.vhd
+set_global_assignment -name VHDL_FILE Modulos/dispositivos/Teclado/ps2_keyboard.vhd
+set_global_assignment -name VHDL_FILE Modulos/dispositivos/Teclado/debounce.vhd
+set_global_assignment -name QIP_FILE Modulos/dispositivos/RAM_fpga/RAM16K.qip
+set_global_assignment -name QIP_FILE Modulos/dispositivos/ROM/ROM32K.qip
+set_global_assignment -name QIP_FILE Modulos/dispositivos/PLL/PLL.qip
+set_global_assignment -name CDF_FILE Computador.cdf
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
