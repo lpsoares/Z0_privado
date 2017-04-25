@@ -8,7 +8,6 @@
 package assembler;
 
 import java.io.*;
-import java.util.*;
 
 public class Assemble {
 
