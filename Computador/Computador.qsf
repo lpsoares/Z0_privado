@@ -84,9 +84,9 @@ set_location_assignment PIN_E1 -to CYCLE
 #============================================================
 # DIP SWITCH
 #============================================================
-set_location_assignment PIN_M1  -to DIP_SW[0]
-set_location_assignment PIN_T8  -to DIP_SW[1]
-set_location_assignment PIN_B9  -to DIP_SW[2]
+set_location_assignment PIN_M1 -to DIP_SW[0]
+set_location_assignment PIN_T8 -to DIP_SW[1]
+set_location_assignment PIN_B9 -to DIP_SW[2]
 set_location_assignment PIN_M15 -to DIP_SW[3]
 
 #============================================================
