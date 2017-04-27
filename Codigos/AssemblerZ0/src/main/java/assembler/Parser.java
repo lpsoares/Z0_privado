@@ -47,7 +47,7 @@ public class Parser {
      * entrada o método retorna "Falso", senão retorna "Verdadeiro".
      * @return Verdadeiro se ainda há instruções, Falso se as instruções terminaram.
      */
-    public boolean advance() throws IOException {
+    public Boolean advance() throws IOException {
         while(true){
             currentLine = fileReader.readLine();
             lineNumber++;

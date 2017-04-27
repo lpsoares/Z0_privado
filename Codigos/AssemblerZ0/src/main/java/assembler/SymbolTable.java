@@ -39,7 +39,7 @@ public class SymbolTable {
      * @param  symbol símbolo a ser procurado na tabela de símbolos.
      * @return Verdadeiro se símbolo está na tabela de símbolos, Falso se não está na tabela de símbolos.
      */
-    public boolean contains(String symbol) {
+    public Boolean contains(String symbol) {
         return symbolTable.containsKey(symbol);
     }
 
@@ -48,7 +48,7 @@ public class SymbolTable {
      * @param  symbol símbolo a ser procurado na tabela de símbolos.
      * @return valor numérico associado ao símbolo procurado.
      */
-    public int getAddress(String symbol) {
+    public Integer getAddress(String symbol) {
         return symbolTable.get(symbol);
     }
 
