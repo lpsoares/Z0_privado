@@ -37,7 +37,7 @@ public class SymbolTableTest {
         assertNotNull("Falha a criar o SymbolTable",table);
 
         try {
-        	org.junit.Assume.assumeTrue( table.contains("X") != null );		// ignora test
+        	org.junit.Assume.assumeNotNull( table.contains("X") );		// ignora test
         } catch(Exception e) { 
         	org.junit.Assume.assumeNoException(e);
         }
@@ -126,7 +126,7 @@ public class SymbolTableTest {
 
     	try {
     		table.addEntry("X",0);
-    		org.junit.Assume.assumeTrue( table.contains("X") != null );		// ignora test
+    		org.junit.Assume.assumeNotNull( table.contains("X") );		// ignora test
         } catch(Exception e) { 
         	org.junit.Assume.assumeNoException(e);
         }
@@ -172,7 +172,7 @@ public class SymbolTableTest {
 
     	try {
     		table.addEntry("X",0);
-    		org.junit.Assume.assumeTrue( table.contains("X") != null );		// ignora test
+    		org.junit.Assume.assumeNotNull( table.contains("X") );		// ignora test
         } catch(Exception e) { 
         	org.junit.Assume.assumeNoException(e);
         }
