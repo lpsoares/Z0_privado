@@ -2,12 +2,14 @@
  * Curso: Elementos de Sistemas
  * Arquivo: VMTranslator.java
  * Created by Luciano Soares <lpsoares@insper.edu.br> 
- * Date: 30/04/2017
+ * Date: 2/05/2017
  */
 
 //package vmtranslator;
 
 import java.io.*;
+import java.nio.file.*;
+import java.util.ArrayList;
 
 /**
  * Classe principal que orquestra a tradução do arquivo em linguagem de máquina virtual à pilha.
@@ -49,33 +51,94 @@ class VMTranslator {
 
         try {
 
-            if(outputFilename==null) {
-                outputFilename = inputFilename.substring(0, inputFilename.lastIndexOf('.')) + ".asm";
+            Path path = new File(inputFilename).toPath().toAbsolutePath();
+
+            ArrayList<String> files = new ArrayList<String>();
+
+            // Cria um arquivo de saída dependendo se diretório.
+            if(Files.isDirectory(path)) {
+                int indexName = path.getNameCount()-1;
+                if(path.getName(indexName).toString().equals(".")) {
+                    indexName--;
+                }
+                outputFilename = path.toString()+
+                                 File.separator+
+                                 path.getName(indexName).toString()+".asm";
+
+                DirectoryStream<Path> directoryStream = Files.newDirectoryStream(path);
+                for (Path p : directoryStream) {
+
+                    String extension = "";
+                    int i = p.toString().lastIndexOf('.');
+                    if (i > 0) {
+                        extension = p.toString().substring(i+1);
+                    }
+                    if(extension.equals("vm")) {
+                        files.add(p.toString());
+                    }
+                }
+            } else {
+                files.add(inputFilename);
+                if(outputFilename==null) {
+                    outputFilename = inputFilename.substring(0, inputFilename.lastIndexOf('.')) + ".asm";
+                }
             }
 
-            Parser parser = new Parser(inputFilename);
             Code code = new Code(outputFilename);
 
-            // Avança enquanto houver linhas para traduzir
-            while (parser.advance()){
-                if(debug) {System.out.println(parser.command());}
-                
-                
-                if( parser.commandType(parser.command())==Parser.CommandType.C_PUSH ||
-                    parser.commandType(parser.command())==Parser.CommandType.C_POP
-                ) {
-                    code.writePushPop(parser.commandType(parser.command()),
-                                                  parser.arg1(parser.command()),
-                                                  parser.arg2(parser.command())
-                                                  );
-                } else if( parser.commandType(parser.command())==Parser.CommandType.C_ARITHMETIC) {
-                    code.writeArithmetic(parser.command());
-                } else {
-                    Error.error("Comando não reconhecido");
-                }
-
+            // Crazy problem to pass on tests
+            boolean witeInitFlag = false;
+            for (String file : files) {
+                if(file.toLowerCase().contains("sys.vm")) witeInitFlag=true;
             }
-            parser.close();
+            if(witeInitFlag) {
+              code.writeInit();  
+            }
+
+            for (String file : files) {
+
+                Parser parser = new Parser(file);
+
+                code.vmfile(file);
+
+                // Avança enquanto houver linhas para traduzir
+                while (parser.advance()){
+                    if(debug) {System.out.println(parser.command());}
+                    
+                    if( parser.commandType(parser.command())==Parser.CommandType.C_PUSH ||
+                        parser.commandType(parser.command())==Parser.CommandType.C_POP
+                    ) {
+                        code.writePushPop(parser.commandType(parser.command()),
+                                                      parser.arg1(parser.command()),
+                                                      parser.arg2(parser.command())
+                                                      );
+                    } else if( parser.commandType(parser.command())==Parser.CommandType.C_LABEL) {
+                        code.writeLabel(parser.arg1(parser.command()));
+
+                    } else if( parser.commandType(parser.command())==Parser.CommandType.C_GOTO) {
+                        code.writeGoto(parser.arg1(parser.command()));
+                    
+                    } else if( parser.commandType(parser.command())==Parser.CommandType.C_IF) {
+                        code.writeIf(parser.arg1(parser.command()));
+
+                    } else if( parser.commandType(parser.command())==Parser.CommandType.C_FUNCTION) {
+                        code.writeFunction(parser.arg1(parser.command()),parser.arg2(parser.command()));
+
+                    } else if( parser.commandType(parser.command())==Parser.CommandType.C_RETURN) {
+                        code.writeReturn();
+                    
+                    } else if( parser.commandType(parser.command())==Parser.CommandType.C_CALL) {
+                        code.writeCall(parser.arg1(parser.command()),parser.arg2(parser.command()));
+                    
+                    } else if( parser.commandType(parser.command())==Parser.CommandType.C_ARITHMETIC) {
+                        code.writeArithmetic(parser.command());
+                    } else {
+                        Error.error("Comando não reconhecido");
+                    }
+
+                }
+                parser.close();
+            }
             code.close();
 
         } catch (FileNotFoundException e){

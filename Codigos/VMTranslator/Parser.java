@@ -2,7 +2,7 @@
  * Curso: Elementos de Sistemas
  * Arquivo: Parser.java
  * Created by Luciano Soares <lpsoares@insper.edu.br> 
- * Date: 30/04/2017
+ * Date: 2/05/2017
  */
 
 //package vmtranslator;
@@ -78,10 +78,21 @@ public class Parser {
             return CommandType.C_PUSH;  // comandos de PUSH
         } else if (command.startsWith("pop")) {
             return CommandType.C_POP;  //  comandos de POP
+        } else if (command.startsWith("label")) {
+            return CommandType.C_LABEL;  //  comandos de label
+        } else if (command.startsWith("goto")) {
+            return CommandType.C_GOTO;  //  comandos de goto
+        } else if (command.startsWith("if-goto")) {
+            return CommandType.C_IF;  //  comandos de if-goto
+        } else if (command.startsWith("function")) {
+            return CommandType.C_FUNCTION;  //  comandos de function
+        } else if (command.startsWith("return")) {
+            return CommandType.C_RETURN;  //  comandos de return
+        } else if (command.startsWith("call")) {
+            return CommandType.C_CALL;  //  comandos de call
         } else {
             return CommandType.C_ARITHMETIC;  // C_ARITHMETIC for add, sub, etc...
         }
-        //TODO: C_LABEL, C_GOTO, C_IF, C_FUNCTION, C_RETURN, C_CALL
     }
     
 

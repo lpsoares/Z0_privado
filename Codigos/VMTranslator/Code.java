@@ -2,14 +2,14 @@
  * Curso: Elementos de Sistemas
  * Arquivo: Code.java
  * Created by Luciano Soares <lpsoares@insper.edu.br> 
- * Date: 30/04/2017
+ * Date: 2/05/2017
  */
 
 //package vmtranslator;
 
 import java.util.*;
 import java.io.*;
-
+import java.nio.file.*;
 
 /** 
  * Traduz da linguagem vm para códigos assembly.
@@ -18,7 +18,10 @@ public class Code {
 
     PrintWriter outputFile = null;
     String outputFilename = null;
+    String filename = null;
     Integer labelCounter;
+    Map<String, Integer> retHash;
+
 
     /** 
      * Abre o arquivo de entrada VM e se prepara para analisá-lo.
@@ -29,6 +32,9 @@ public class Code {
         File file = new File(filename);
         this.outputFile = new PrintWriter(new FileWriter(file));
         labelCounter = 0;
+
+        retHash = new HashMap<String, Integer>();
+
     }
 
     /**
@@ -324,7 +330,7 @@ public class Code {
                 commands.add( "M=M-1" );
                 commands.add( "A=M" );
                 commands.add( "D=M" );
-                commands.add( "@"+outputFilename+"."+String.valueOf(index) );
+                commands.add( "@"+filename+"."+String.valueOf(index) );
                 commands.add( "M=D" );
             } else if (segment.equals("temp")) {
                 commands.add( "@SP" );
@@ -405,7 +411,7 @@ public class Code {
                 commands.add( "@SP" );
                 commands.add( "M=M+1" );
             } else if (segment.equals("static")) {
-                commands.add( "@"+outputFilename+"."+String.valueOf(index) );
+                commands.add( "@"+filename+"."+String.valueOf(index) );
                 commands.add( "D=M" );
                 commands.add( "@SP" );
                 commands.add( "A=M" );
@@ -444,6 +450,301 @@ public class Code {
         String[] stringArray = new String[ commands.size() ];
         commands.toArray( stringArray );
         write(stringArray);
+
+    }
+
+    /**
+     * Grava no arquivo de saida as instruções em Assembly para inicializar o processo da VM (bootstrap).
+     * Também prepara a chamada para a função Sys.init
+     * O código deve ser colocado no início do arquivo de saída.
+     */
+    public void writeInit() {
+
+        List<String> commands = new ArrayList<String>();
+        commands.add( "// Inicialização para VM" );
+
+        commands.add( "@256" );
+        commands.add( "D=A" );
+        commands.add( "@SP" );
+        commands.add( "M=D");
+
+        String[] stringArray = new String[ commands.size() ];
+        commands.toArray( stringArray );
+        write(stringArray);
+
+        writeCall("Sys.init",0);
+
+    }
+
+    /**
+     * Grava no arquivo de saida as instruções em Assembly para gerar o labels (marcadores de jump).
+     * @param  label define nome do label (marcador) a ser escrito.
+     */
+    public void writeLabel(String label) {
+
+        List<String> commands = new ArrayList<String>();
+        commands.add( "// Label (marcador)" );
+
+        commands.add( "("+label+")" );
+
+        String[] stringArray = new String[ commands.size() ];
+        commands.toArray( stringArray );
+        write(stringArray);
+
+    }
+
+    /**
+     * Grava no arquivo de saida as instruções em Assembly para gerar as instruções de goto (jumps).
+     * Realiza um jump incondicional para o label informado.
+     * @param  label define jump a ser realizado para um label (marcador).
+     */
+    public void writeGoto(String label) {
+
+        List<String> commands = new ArrayList<String>();
+        commands.add( "// Goto incondicional (JMP)" );
+
+        commands.add( "@"+label );
+        commands.add( "0;JMP" );
+
+        String[] stringArray = new String[ commands.size() ];
+        commands.toArray( stringArray );
+        write(stringArray);
+
+    }
+
+    /**
+     * Grava no arquivo de saida as instruções em Assembly para gerar as instruções de goto condicional (jumps condicionais).
+     * Realiza um jump condicional para o label informado.
+     * @param  label define jump a ser realizado para um label (marcador).
+     */
+    public void writeIf(String label) {
+
+        List<String> commands = new ArrayList<String>();
+        commands.add( "// Goto condicional (outros Jumps)" );
+
+        commands.add( "@SP" );
+        commands.add( "M=M-1" );
+        commands.add( "A=M" );
+        commands.add( "D=M" );
+        
+        commands.add( "@"+label );
+        commands.add( "D;JNE" );
+
+        String[] stringArray = new String[ commands.size() ];
+        commands.toArray( stringArray );
+        write(stringArray);
+
+    }
+
+    /**
+     * Grava no arquivo de saida as instruções em Assembly para uma chamada de função (Call).
+     * @param  functionName nome da função a ser "chamada" pelo call.
+     * @param  numArgs número de argumentos a serem passados na função call.
+     */
+    public void writeCall(String functionName, Integer numArgs) {
+        List<String> commands = new ArrayList<String>();
+        commands.add( "// Chamando função "+functionName );
+
+        retHash.put(functionName, retHash.containsKey(functionName) ? (retHash.get(functionName) + 1) : 1);
+
+        //push return-address
+        commands.add( "@"+functionName+"$ret."+retHash.get(functionName) );
+        commands.add( "D=A" );
+        commands.add( "@SP");
+        commands.add( "A=M" );
+        commands.add( "M=D" );
+        commands.add( "@SP" );
+        commands.add( "M=M+1" );
+        
+        //push LCL
+        commands.add( "@LCL" );
+        commands.add( "D=M" );
+        commands.add( "@SP");
+        commands.add( "A=M" );
+        commands.add( "M=D" );
+        commands.add( "@SP" );
+        commands.add( "M=M+1" );
+
+        //push ARG
+        commands.add( "@ARG" );
+        commands.add( "D=M" );
+        commands.add( "@SP");
+        commands.add( "A=M" );
+        commands.add( "M=D" );
+        commands.add( "@SP" );
+        commands.add( "M=M+1" );
+
+        //push THIS
+        commands.add( "@THIS" );
+        commands.add( "D=M" );
+        commands.add( "@SP");
+        commands.add( "A=M" );
+        commands.add( "M=D" );
+        commands.add( "@SP" );
+        commands.add( "M=M+1" );
+
+        //push THAT
+        commands.add( "@THAT" );
+        commands.add( "D=M" );
+        commands.add( "@SP");
+        commands.add( "A=M" );
+        commands.add( "M=D" );
+        commands.add( "@SP" );
+        commands.add( "M=M+1" );
+
+        //ARG = SP-n-5
+        commands.add( "@"+String.valueOf(numArgs+5) );
+        commands.add( "D=A" );
+        commands.add( "@SP");
+        commands.add( "A=M" );
+        commands.add( "D=A-D" );
+        commands.add( "@ARG" );
+        commands.add( "M=D" );
+
+        //LCL = SP
+        commands.add( "@SP");
+        commands.add( "D=M" );
+        commands.add( "@LCL" );
+        commands.add( "M=D" );
+
+        //goto f
+        commands.add( "@"+functionName);
+        commands.add( "0;JMP" );
+
+        //(return-address)
+        commands.add( "("+functionName+"$ret."+retHash.get(functionName)+")" );
+
+        String[] stringArray = new String[ commands.size() ];
+        commands.toArray( stringArray );
+        write(stringArray);
+    }
+
+    /**
+     * Grava no arquivo de saida as instruções em Assembly para o retorno de uma sub rotina.
+     */
+    public void writeReturn() {
+
+        List<String> commands = new ArrayList<String>();
+        commands.add( "// Retorno de função " );
+
+        //FRAME = LCL
+        commands.add( "@LCL" );
+        commands.add( "D=M" );
+        commands.add( "@R13" ); //guarda FRAME
+        commands.add( "M=D" );
+
+        //RET = *(FRAME-5)
+        commands.add( "@5" );
+        commands.add( "A=D-A" ); 
+        commands.add( "D=M" );
+        commands.add( "@R14" ); //guarda RET
+        commands.add( "M=D" );        
+
+        //*ARG = pop()
+        commands.add( "@ARG" );
+        commands.add( "D=M" );
+        commands.add( "@R15");
+        commands.add( "M=D" );
+        commands.add( "@SP" );
+        commands.add( "AM=M-1" );
+        commands.add( "D=M" );
+        commands.add( "@R15");
+        commands.add( "A=M" );
+        commands.add( "M=D" );
+
+        //SP = ARG+1
+        commands.add( "@ARG");
+        commands.add( "D=M" );
+        commands.add( "@SP" );
+        commands.add( "M=D+1");
+
+        //THAT = *(FRAME-1)
+        commands.add( "@R13");
+        commands.add( "D=M-1" );
+        commands.add( "M=D" ); // faz FRAME--
+        commands.add( "A=D" );        
+        commands.add( "D=M");
+        commands.add( "@THAT");
+        commands.add( "M=D");
+
+        //THIS = *(FRAME-2)
+        commands.add( "@R13");
+        commands.add( "D=M-1" );
+        commands.add( "M=D" ); // faz FRAME--
+        commands.add( "A=D" );        
+        commands.add( "D=M");
+        commands.add( "@THIS");
+        commands.add( "M=D");
+
+        //ARG = *(FRAME-3)
+        commands.add( "@R13");
+        commands.add( "D=M-1" );
+        commands.add( "M=D" ); // faz FRAME--
+        commands.add( "A=D" );        
+        commands.add( "D=M");
+        commands.add( "@ARG");
+        commands.add( "M=D");
+
+        //LCL = *(FRAME-4)
+        commands.add( "@R13");
+        commands.add( "D=M-1" );
+        commands.add( "M=D" ); // faz FRAME--
+        commands.add( "A=D" );        
+        commands.add( "D=M");
+        commands.add( "@LCL");
+        commands.add( "M=D");
+
+        //goto RET
+        commands.add( "@14");
+        commands.add( "A=M");
+        commands.add( "0;JMP");
+
+        String[] stringArray = new String[ commands.size() ];
+        commands.toArray( stringArray );
+        write(stringArray);
+
+    }
+
+    /**
+     * Grava no arquivo de saida as instruções em Assembly para a declaração de uma função.
+     * @param  functionName nome da função a ser criada.
+     * @param  numLocals número de argumentos a serem passados na função call.
+     */
+    public void writeFunction(String functionName, Integer numLocals) {
+
+        List<String> commands = new ArrayList<String>();
+        commands.add( "// Declarando função "+functionName );
+
+        //(f)
+        commands.add( "("+functionName+")" );
+
+        //repeat k times:
+        for(int i=0;i<numLocals;i++) {
+            //PUSH 0
+            commands.add( "@0" );
+            commands.add( "D=A" );
+            commands.add( "@SP" );
+            commands.add( "A=M" );
+            commands.add( "M=D" );
+            commands.add( "@SP" );
+            commands.add( "M=M+1" );
+        }
+   
+        String[] stringArray = new String[ commands.size() ];
+        commands.toArray( stringArray );
+        write(stringArray);
+    }
+
+    /**
+     * Armazena o nome do arquivo vm de origem.
+     * Usado para definir os dados estáticos do código (por arquivo).
+     * @param  filename nome do arquivo sendo tratado.
+     */
+    public void vmfile(String file) {
+
+        int i = file.lastIndexOf(File.separator);
+        int j = file.lastIndexOf('.');
+        this.filename = file.substring(i+1,j);
 
     }
 
