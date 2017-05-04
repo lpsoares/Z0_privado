@@ -51,7 +51,7 @@ public class Code {
 
         if(command.equals("add")) {
 
-            commands.add( "// ADD" );
+            commands.add( "; ADD" );
 
             commands.add( "leaw $SP,%A" );
             commands.add( "movw (%A),%D" );
@@ -70,7 +70,7 @@ public class Code {
             
         } else if (command.equals("sub")) {
 
-            commands.add( "// SUB" );
+            commands.add( "; SUB" );
 
             commands.add( "leaw $SP,%A" );
             commands.add( "movw (%A),%D" );
@@ -89,7 +89,7 @@ public class Code {
 
         } else if (command.equals("neg")) {
 
-            commands.add( "// NEG" );
+            commands.add( "; NEG" );
 
             commands.add( "leaw $SP,%A" );
             commands.add( "subw (%A),$1,%A" );
@@ -100,7 +100,7 @@ public class Code {
 
         } else if (command.equals("eq")) {
 
-            commands.add( "// EQ" );
+            commands.add( "; EQ" );
 
             commands.add( "leaw $SP,%A" );
             commands.add( "movw (%A),%D" );
@@ -131,7 +131,7 @@ public class Code {
 
         } else if (command.equals("gt")) {
 
-            commands.add( "// GT" );
+            commands.add( "; GT" );
 
             commands.add( "leaw $SP,%A" );
             commands.add( "movw (%A),%D" );
@@ -162,7 +162,7 @@ public class Code {
 
         } else if (command.equals("lt")) {
 
-            commands.add( "// LT" );
+            commands.add( "; LT" );
 
             commands.add( "leaw $SP,%A" );
             commands.add( "movw (%A),%D" );
@@ -193,7 +193,7 @@ public class Code {
 
         } else if (command.equals("and")) {
 
-            commands.add( "// AND" );
+            commands.add( "; AND" );
 
             commands.add( "leaw $SP,%A" );
             commands.add( "movw (%A),%D" );
@@ -212,7 +212,7 @@ public class Code {
 
         } else if (command.equals("or")) {
 
-            commands.add( "// OR" );
+            commands.add( "; OR" );
 
             commands.add( "leaw $SP,%A" );
             commands.add( "movw (%A),%D" );
@@ -231,7 +231,7 @@ public class Code {
 
         } else if (command.equals("not")) {
 
-            commands.add( "// NOT" );
+            commands.add( "; NOT" );
 
             commands.add( "leaw $SP,%A" );
             commands.add( "subw (%A),$1,%A" );
@@ -263,7 +263,7 @@ public class Code {
         List<String> commands = new ArrayList<String>();
 
         if(command == Parser.CommandType.C_POP) {
-            commands.add( "// POP "+segment+" "+String.valueOf(index));
+            commands.add( "; POP "+segment+" "+String.valueOf(index));
             if (segment.equals("constant")) {
                 Error.error("Não faz sentido POP com constant");
             } else if (segment.equals("local")) {
@@ -394,7 +394,7 @@ public class Code {
                 }
             }
         } else if (command == Parser.CommandType.C_PUSH) {
-            commands.add( "// PUSH "+segment+" "+String.valueOf(index));
+            commands.add( "; PUSH "+segment+" "+String.valueOf(index));
             if (segment.equals("constant")) {
                 commands.add( "leaw $"+String.valueOf(index)+",%A" );
                 commands.add( "movw %A,%D" );
@@ -516,7 +516,7 @@ public class Code {
     public void writeInit() {
 
         List<String> commands = new ArrayList<String>();
-        commands.add( "// Inicialização para VM" );
+        commands.add( "; Inicialização para VM" );
 
         commands.add( "leaw $256,%A" );
         commands.add( "movw %A,%D" );
@@ -538,7 +538,7 @@ public class Code {
     public void writeLabel(String label) {
 
         List<String> commands = new ArrayList<String>();
-        commands.add( "// Label (marcador)" );
+        commands.add( "; Label (marcador)" );
 
         commands.add( label+":" );
 
@@ -556,7 +556,7 @@ public class Code {
     public void writeGoto(String label) {
 
         List<String> commands = new ArrayList<String>();
-        commands.add( "// Goto incondicional (JMP)" );
+        commands.add( "; Goto incondicional (JMP)" );
 
         commands.add( "leaw $"+label+",%A" );
         commands.add( "jmp" );
@@ -575,7 +575,7 @@ public class Code {
     public void writeIf(String label) {
 
         List<String> commands = new ArrayList<String>();
-        commands.add( "// Goto condicional (outros Jumps)" );
+        commands.add( "; Goto condicional (outros Jumps)" );
 
         commands.add( "leaw $SP,%A" );
         commands.add( "movw (%A),%D" );
@@ -600,7 +600,7 @@ public class Code {
      */
     public void writeCall(String functionName, Integer numArgs) {
         List<String> commands = new ArrayList<String>();
-        commands.add( "// Chamando função "+functionName );
+        commands.add( "; Chamando função "+functionName );
 
         retHash.put(functionName, retHash.containsKey(functionName) ? (retHash.get(functionName) + 1) : 1);
 
@@ -692,7 +692,7 @@ public class Code {
     public void writeReturn() {
 
         List<String> commands = new ArrayList<String>();
-        commands.add( "// Retorno de função " );
+        commands.add( "; Retorno de função " );
 
         //FRAME = LCL
         commands.add( "leaw $LCL,%A" );
@@ -783,10 +783,10 @@ public class Code {
     public void writeFunction(String functionName, Integer numLocals) {
 
         List<String> commands = new ArrayList<String>();
-        commands.add( "// Declarando função "+functionName );
+        commands.add( "; Declarando função "+functionName );
 
         //(f)
-        commands.add( "("+functionName+")" );
+        commands.add( functionName+":" );
 
         //repeat k times:
         for(int i=0;i<numLocals;i++) {

@@ -28,7 +28,7 @@ class VMTranslator {
         String inputFilename = null;
         String outputFilename = null;
         boolean debug = false;
-        boolean no_bootstrap = false;
+        boolean bootstrap = true;
 
         for (int i = 0; i < args.length; i++) {
             switch (args[i].charAt(0)) {
@@ -45,7 +45,7 @@ class VMTranslator {
                     i++;
                 } else
                 if (args[i].charAt(1) == 'n') {
-                    no_bootstrap = true; // não insere rotina de bootstrap
+                    bootstrap = false; // não insere rotina de bootstrap
                 } else {
                     Error.error("Argumento não reconhecido: "+args[i]);
                 }
@@ -94,11 +94,16 @@ class VMTranslator {
             Code code = new Code(outputFilename);
 
             // Crazy problem to pass on tests
+            /*
             boolean witeInitFlag = false;
             for (String file : files) {
                 if(file.toLowerCase().contains("sys.vm")) witeInitFlag=true;
             }
             if(witeInitFlag) {
+              code.writeInit();  
+            }
+            */
+            if(bootstrap) {
               code.writeInit();  
             }
 
