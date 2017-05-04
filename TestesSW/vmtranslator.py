@@ -1,13 +1,13 @@
 # Curso de Elementos de Sistemas
 # Desenvolvido por: Luciano Soares <lpsoares@insper.edu.br>
-# Data de criação: 30/03/2017
+# Data de criação: 4/05/2017
 	
 import subprocess
 import loadTestes
 import time
 import argparse
 
-def assembler(testes,in_dir,out_dir,processos):
+def vmtranslator(testes,in_dir,out_dir,processos):
 	
 	start_time = time.time()
 
@@ -21,17 +21,16 @@ def assembler(testes,in_dir,out_dir,processos):
 	for i in nomes_testes:
 
 		nome = i.split()
-		error = subprocess.call(['java', '-jar', 'TestesSW/Assembler/AssemblerZ0.jar',
-			in_dir+"{0}.nasm".format(nome[0]),"-s",
-			"-o",out_dir+"{0}.hack".format(nome[0]),
-			"-f",out_dir+"{0}.mif".format(nome[0])])
+		error = subprocess.call(['java', '-jar', 'Codigos/VMTranslator/target/VMTranslator-1.0.jar',
+			in_dir+"{0}.vm".format(nome[0]),
+			"-o",out_dir+"{0}.nasm".format(nome[0]),"-n"])
 		if(error!=0):
 			error_code += error
 		else:
 			done += 1
 
 	elapsed_time = time.time() - start_time
-	print('\033[92m'+"Assembled {0} file(s) in {1:.2f} seconds".format(done,elapsed_time)+'\033[0m') 
+	print('\033[92m'+"VM Translated {0} file(s) in {1:.2f} seconds".format(done,elapsed_time)+'\033[0m') 
 
 	if(error_code!=0):
 		print('\033[91m'+"Failed {0} file(s)".format(len(nomes_testes)-done)+'\033[0m') 
@@ -45,5 +44,6 @@ if __name__ == "__main__":
 	ap.add_argument("-out", "--out_dir", required=True,help="caminho para salvar resultado de testes")
 	ap.add_argument("-p", "--processos", required=True,help="numero de threads a se paralelizar")
 	args = vars(ap.parse_args())
-	assembler(testes=args["tests"],in_dir=args["in_dir"],out_dir=args["out_dir"],processos=int(args["processos"]))
+	vmtranslator(testes=args["tests"],in_dir=args["in_dir"],out_dir=args["out_dir"],processos=int(args["processos"]))
 	
+

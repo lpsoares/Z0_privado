@@ -1,0 +1,3 @@
+# Arquivo que define as rotinas de testes
+# Criado por Luciano Soares <lpsoares@insper.edu.br>
+SimpleAdd 0 256

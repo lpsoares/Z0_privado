@@ -820,12 +820,10 @@ public class Code {
 
     }
 
-
     // grava as instruções em Assembly no arquivo de saída
     public void write(String[] stringArray) {
         // gravando comandos no arquivos
         for (String s: stringArray) {  
-            System.out.println(s);
             this.outputFile.println(s);
         }
     }

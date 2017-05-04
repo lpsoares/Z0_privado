@@ -70,7 +70,7 @@ class VMTranslator {
                 }
                 outputFilename = path.toString()+
                                  File.separator+
-                                 path.getName(indexName).toString()+".asm";
+                                 path.getName(indexName).toString()+".nasm";
 
                 DirectoryStream<Path> directoryStream = Files.newDirectoryStream(path);
                 for (Path p : directoryStream) {
