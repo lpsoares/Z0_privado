@@ -17,228 +17,132 @@ import vmtranslator.Parser;
 
 public class ParserTest {
 
-    Parser parser = null;
+	Parser parser = null;
 
-    /**
-     * Create the test case
-     *
-     */
-    public ParserTest() {
-        try {
-            parser = new Parser("src/test/resources/testEmpty.nasm");
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-    }
+	/**
+	 * Create the test case
+	 *
+	 */
+	public ParserTest() {
+		try {
+			parser = new Parser("src/test/resources/SimpleAdd.vm");
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
 
-    /**
-     * Teste para a instrução commandType
-     */
-    @Test
-    public void testParser_commandType() {
+	/**
+	 * Teste para a instrução commandType
+	 */
+	@Test
+	public void testParser_commandType() {
 
-    	try {
-    		org.junit.Assume.assumeNotNull( parser.commandType("nop") );		// ignora test
-        } catch(Exception e) { 
-        	org.junit.Assume.assumeNoException(e);
-        }
-    	
-        try {
-        	
-            assertTrue("leaw $0,%A",parser.commandType("leaw $0,%A")==Parser.CommandType.A_COMMAND);
-            assertTrue("abc:",parser.commandType("abc:")==Parser.CommandType.L_COMMAND);
-            assertTrue("movw %A,%D",parser.commandType("movw %A,%D")==Parser.CommandType.C_COMMAND);
-            assertTrue("TESTE:",parser.commandType("TESTE:")==Parser.CommandType.L_COMMAND);
-            assertTrue("leaw $100,%A",parser.commandType("leaw $100,%A")==Parser.CommandType.A_COMMAND);
-            assertTrue("Z0:",parser.commandType("Z0:")==Parser.CommandType.L_COMMAND);
-            assertTrue("movw %D,%A",parser.commandType("movw %D,%A")==Parser.CommandType.C_COMMAND);
-            assertTrue("jmp",parser.commandType("jmp")==Parser.CommandType.C_COMMAND);
-            assertTrue("nop",parser.commandType("nop")==Parser.CommandType.C_COMMAND);
-            assertTrue("addw %D,%A,%D",parser.commandType("addw %D,%A,%D")==Parser.CommandType.C_COMMAND);
-            
-	    } catch(Exception e) {
-            e.printStackTrace();
-        }
-    }
+		try {
+			org.junit.Assume.assumeNotNull( parser.commandType("nop") );		// ignora test
+		} catch(Exception e) { 
+			org.junit.Assume.assumeNoException(e);
+		}
+		
+		try {
+			
+			assertTrue("add",parser.commandType("add")==Parser.CommandType.C_ARITHMETIC);
+			assertTrue("push constant 0",parser.commandType("push constant 0")==Parser.CommandType.C_PUSH);
+			assertTrue("pop temp 0",parser.commandType("pop temp 0")==Parser.CommandType.C_POP);
+			assertTrue("label LOOP",parser.commandType("label LOOP")==Parser.CommandType.C_LABEL);
+			assertTrue("goto LOOP",parser.commandType("goto LOOP")==Parser.CommandType.C_GOTO);
+			assertTrue("if-goto LOOP",parser.commandType("if-goto LOOP")==Parser.CommandType.C_IF);
+			assertTrue("function Sys.init 0",parser.commandType("function Sys.init 0")==Parser.CommandType.C_FUNCTION);
+			assertTrue("return",parser.commandType("return")==Parser.CommandType.C_RETURN);
+			assertTrue("call Sys.init 0",parser.commandType("call Sys.init 0")==Parser.CommandType.C_CALL);
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
 
-    /**
-     * Teste para a instrução label
-     */
-    @Test
-    public void testParser_label() {
-    	
-    	try {
-    		org.junit.Assume.assumeNotNull( parser.label("x:") );		// ignora test
-        } catch(Exception e) { 
-        	org.junit.Assume.assumeNoException(e);
-        }
-    	
-        try {
+	/**
+	 * Teste para a instrução arg1
+	 */
+	@Test
+	public void testParser_arg1() {
+		
+		try {
+			org.junit.Assume.assumeNotNull( parser.arg1("push constant 0") );		// ignora test
+		} catch(Exception e) { 
+			org.junit.Assume.assumeNoException(e);
+		}
+		
+		try {
 
-            assertTrue("abc:",parser.label("abc:").equals("abc"));
-            assertTrue("TESTE:",parser.label("TESTE:").equals("TESTE"));
-            assertTrue("Z0:",parser.label("Z0:").equals("Z0"));
-	    	
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-    }
-     
-    /**
-     * Teste para a instrução symbol
-     */
-    @Test
-    public void testParser_symbol() {
+			assertTrue("add",parser.arg1("add").equals("add"));
+			assertTrue("sub",parser.arg1("sub").equals("sub"));
+			assertTrue("neg",parser.arg1("neg").equals("neg"));
+			assertTrue("eq",parser.arg1("eq").equals("eq"));
+			assertTrue("gt",parser.arg1("gt").equals("gt"));
+			assertTrue("lt",parser.arg1("lt").equals("lt"));
+			assertTrue("and",parser.arg1("and").equals("and"));
+			assertTrue("or",parser.arg1("or").equals("or"));
+			assertTrue("not",parser.arg1("not").equals("not"));
 
-    	try {
-    		org.junit.Assume.assumeNotNull( parser.symbol("leaw $0,%A") );		// ignora test
-        } catch(Exception e) { 
-        	org.junit.Assume.assumeNoException(e);
-        }
-        try {
+			assertTrue("push constant 0",parser.arg1("push constant 0").equals("constant"));
+			assertTrue("push constant 1234",parser.arg1("push constant 1234").equals("constant"));
+			assertTrue("push local 2",parser.arg1("push local 2").equals("local"));
+			assertTrue("pop temp 3",parser.arg1("pop temp 3").equals("temp"));
+			assertTrue("pop argument 5",parser.arg1("pop argument 5").equals("argument"));
+			assertTrue("pop this 100",parser.arg1("pop this 100").equals("this"));
+			assertTrue("push that 200",parser.arg1("push that 200").equals("that"));
+			assertTrue("push pointer 0",parser.arg1("push pointer 0").equals("pointer"));
+			assertTrue("push pointer 1",parser.arg1("push pointer 1").equals("pointer"));
+			assertTrue("pop pointer 0",parser.arg1("pop pointer 0").equals("pointer"));
+			assertTrue("pop pointer 1",parser.arg1("pop pointer 1").equals("pointer"));
+			assertTrue("pop static 1",parser.arg1("pop static 1").equals("static"));
+			assertTrue("push static 3",parser.arg1("push static 3").equals("static"));
 
-	            assertTrue("leaw $0,%A",parser.symbol("leaw $0,%A").equals("0"));
-	            assertTrue("leaw $i,%A",parser.symbol("leaw $i,%A").equals("i"));
-	            assertTrue("leaw $LOOP,%A",parser.symbol("leaw $LOOP,%A").equals("LOOP"));
-	            assertTrue("leaw $12345,%A",parser.symbol("leaw $12345,%A").equals("12345"));
-	        
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-    }       
+			assertTrue("function Sys.init 0",parser.arg1("function Sys.init 0").equals("Sys.init"));
+			assertTrue("call Sys.init 0",parser.arg1("call Sys.init 0").equals("Sys.init"));
+			assertTrue("function Soma 2",parser.arg1("function Soma 2").equals("Soma"));
+			assertTrue("call Soma 2",parser.arg1("call Soma 2").equals("Soma"));
 
-    /**
-     * Teste para a instrução instruction
-     */
-    @Test
-    public void testParser_instruction() {
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	 
+	/**
+	 * Teste para a instrução arg2
+	 */
+	@Test
+	public void testParser_arg2() {
 
-    	try {
-    		org.junit.Assume.assumeTrue( parser.instruction("nop") != null );		// ignora test
-        } catch(Exception e) { 
-        	org.junit.Assume.assumeNoException(e);
-        }
-    	
-        try {
-    	
-            assertTrue("leaw $0,%A",Arrays.equals(parser.instruction("leaw $0,%A"),new String[] {"leaw","$0","%A"}));
-            assertTrue("leaw $i,%A",Arrays.equals(parser.instruction("leaw $i,%A"),new String[] {"leaw","$i","%A"}));
-            assertTrue("leaw $LOOP,%A",Arrays.equals(parser.instruction("leaw $LOOP,%A"),new String[] {"leaw","$LOOP","%A"}));
-            assertTrue("leaw $12345,%A",Arrays.equals(parser.instruction("leaw $12345,%A"),new String[] {"leaw","$12345","%A"}));
-            assertTrue("movw %A,%D",Arrays.equals(parser.instruction("movw %A,%D"),new String[] {"movw","%A","%D"}));
-            assertTrue("movw %D,%A",Arrays.equals(parser.instruction("movw %D,%A"),new String[] {"movw","%D","%A"}));
-            assertTrue("jmp",Arrays.equals(parser.instruction("jmp"),new String[] {"jmp"}));
-            assertTrue("nop",Arrays.equals(parser.instruction("nop"),new String[] {"nop"}));
-            assertTrue("addw %D,%A,%D",Arrays.equals(parser.instruction("addw %D,%A,%D"),new String[] {"addw","%D","%A","%D"}));
-            assertTrue("decw %A",Arrays.equals(parser.instruction("decw %A"),new String[] {"decw","%A"}));
-            assertTrue("decw %D",Arrays.equals(parser.instruction("decw %D"),new String[] {"decw","%D"}));
-            assertTrue("notw %A",Arrays.equals(parser.instruction("notw %A"),new String[] {"notw","%A"}));
-            assertTrue("notw %D",Arrays.equals(parser.instruction("notw %D"),new String[] {"notw","%D"}));
-            assertTrue("negw %A",Arrays.equals(parser.instruction("negw %A"),new String[] {"negw","%A"}));
-            assertTrue("negw %D",Arrays.equals(parser.instruction("negw %D"),new String[] {"negw","%D"}));
-          
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
+		try {
+			org.junit.Assume.assumeNotNull( parser.arg2("push constant 0") );		// ignora test
+		} catch(Exception e) { 
+			org.junit.Assume.assumeNoException(e);
+		}
+		try {
 
-    }  
+			assertTrue("push constant 0",parser.arg2("push constant 0") == 0 );
+			assertTrue("push constant 1234",parser.arg2("push constant 1234") == 1234 );
+			assertTrue("push local 2",parser.arg2("push local 2") == 2 );
+			assertTrue("pop temp 3",parser.arg2("pop temp 3") == 3 );
+			assertTrue("pop argument 5",parser.arg2("pop argument 5") == 5 );
+			assertTrue("pop this 100",parser.arg2("pop this 100") == 100 );
+			assertTrue("push that 200",parser.arg2("push that 200") == 200 );
+			assertTrue("push pointer 0",parser.arg2("push pointer 0") == 0 );
+			assertTrue("push pointer 1",parser.arg2("push pointer 1") == 1 );
+			assertTrue("pop pointer 0",parser.arg2("pop pointer 0") == 0 );
+			assertTrue("pop pointer 1",parser.arg2("pop pointer 1") == 1 );
+			assertTrue("pop static 1",parser.arg2("pop static 1") == 1 );
+			assertTrue("push static 3",parser.arg2("push static 3") == 3 );
 
-    /**
-     * Teste para a instrução instruction
-     */
-    @Test
-    public void testParser_advance() {
-    	
-    	try {
-    		Parser parser_testEmpty = new Parser("src/test/resources/testEmpty.nasm");
-    		org.junit.Assume.assumeNotNull( parser_testEmpty.advance() );		// ignora test
-        } catch(Exception e) { 
-        	org.junit.Assume.assumeNoException(e);
-        }
-    	
-        try {
-    	
-            Parser parser_testLeaw = new Parser("src/test/resources/testLeaw.nasm");
-            assertTrue("Parser advance()",parser_testLeaw.advance());
-            assertTrue("Parser leaw $0,%A",parser_testLeaw.command().equals("leaw $0,%A"));
-            assertTrue("Parser advance()",parser_testLeaw.advance());
-            assertTrue("Parser leaw $1,%A",parser_testLeaw.command().equals("leaw $1,%A"));
-            assertTrue("Parser advance()",parser_testLeaw.advance());
-            assertTrue("Parser leaw $2,%A",parser_testLeaw.command().equals("leaw $2,%A"));
-            assertTrue("Parser advance()",parser_testLeaw.advance());
-            assertTrue("Parser leaw $R0,%A",parser_testLeaw.command().equals("leaw $R0,%A"));
-            assertTrue("Parser advance()",parser_testLeaw.advance());
-            assertTrue("Parser leaw $R1,%A",parser_testLeaw.command().equals("leaw $R1,%A"));
-            assertTrue("Parser advance()",parser_testLeaw.advance());
-            assertTrue("Parser leaw $R2,%A",parser_testLeaw.command().equals("leaw $R2,%A"));
-            assertFalse("Parser advance()",parser_testLeaw.advance());
-
-
-            Parser parser_testJump = new Parser("src/test/resources/testJump.nasm");
-            assertTrue("Parser advance()",parser_testJump.advance());
-            assertTrue("Parser jmp",parser_testJump.command().equals("jmp"));
-            assertTrue("Parser advance()",parser_testJump.advance());
-            assertTrue("Parser jne",parser_testJump.command().equals("jne"));
-            assertTrue("Parser advance()",parser_testJump.advance());
-            assertTrue("Parser je",parser_testJump.command().equals("je"));
-            assertTrue("Parser advance()",parser_testJump.advance());
-            assertTrue("Parser jge",parser_testJump.command().equals("jge"));
-            assertTrue("Parser advance()",parser_testJump.advance());
-            assertTrue("Parser jg",parser_testJump.command().equals("jg"));
-            assertTrue("Parser advance()",parser_testJump.advance());
-            assertTrue("Parser jle",parser_testJump.command().equals("jle"));
-            assertTrue("Parser advance()",parser_testJump.advance());
-            assertTrue("Parser jl",parser_testJump.command().equals("jl"));
-            assertTrue("Parser advance()",parser_testJump.advance());
-            assertTrue("Parser jmp",parser_testJump.command().equals("jmp"));
-            assertFalse("Parser advance()",parser_testJump.advance());
-
-            Parser parser_testComp = new Parser("src/test/resources/testComp.nasm");
-            assertTrue("Parser advance()",parser_testComp.advance());
-            assertTrue("Parser movw %A,%D",parser_testComp.command().equals("movw %A,%D"));
-            assertTrue("Parser advance()",parser_testComp.advance());
-            assertTrue("Parser addw %A,%D,%D",parser_testComp.command().equals("addw %A,%D,%D"));
-            assertTrue("Parser advance()",parser_testComp.advance());
-            assertTrue("Parser movw %D,%A",parser_testComp.command().equals("movw %D,%A"));
-            assertTrue("Parser advance()",parser_testComp.advance());
-            assertTrue("Parser movw %D,(%A)",parser_testComp.command().equals("movw %D,(%A)"));
-            assertTrue("Parser advance()",parser_testComp.advance());
-            assertTrue("Parser incw %D",parser_testComp.command().equals("incw %D"));
-            assertTrue("Parser advance()",parser_testComp.advance());
-            assertTrue("Parser nop",parser_testComp.command().equals("nop"));
-            assertTrue("Parser advance()",parser_testComp.advance());
-            assertTrue("Parser movw (%A),%D",parser_testComp.command().equals("movw (%A),%D"));
-            assertTrue("Parser advance()",parser_testComp.advance());
-            assertTrue("Parser addw (%A),%D,%D",parser_testComp.command().equals("addw (%A),%D,%D"));
-            assertTrue("Parser advance()",parser_testComp.advance());
-            assertTrue("Parser subw %D,(%A),%A",parser_testComp.command().equals("subw %D,(%A),%A"));
-            assertTrue("Parser advance()",parser_testComp.advance());
-            assertTrue("Parser rsubw %D,(%A),%A",parser_testComp.command().equals("rsubw %D,(%A),%A"));
-            assertTrue("Parser advance()",parser_testComp.advance());
-            assertTrue("Parser decw %A",parser_testComp.command().equals("decw %A"));
-            assertTrue("Parser advance()",parser_testComp.advance());
-            assertTrue("Parser decw %D",parser_testComp.command().equals("decw %D"));
-            assertTrue("Parser advance()",parser_testComp.advance());
-            assertTrue("Parser notw %A",parser_testComp.command().equals("notw %A"));
-            assertTrue("Parser advance()",parser_testComp.advance());
-            assertTrue("Parser notw %D",parser_testComp.command().equals("notw %D"));
-            assertTrue("Parser advance()",parser_testComp.advance());
-            assertTrue("Parser negw %A",parser_testComp.command().equals("negw %A"));
-            assertTrue("Parser advance()",parser_testComp.advance());
-            assertTrue("Parser negw %D",parser_testComp.command().equals("negw %D"));
-            assertTrue("Parser advance()",parser_testComp.advance());
-            assertTrue("Parser andw (%A),%D,%D",parser_testComp.command().equals("andw (%A),%D,%D"));
-            assertTrue("Parser advance()",parser_testComp.advance());
-            assertTrue("Parser andw %D,%A,%A",parser_testComp.command().equals("andw %D,%A,%A"));
-            assertTrue("Parser advance()",parser_testComp.advance());
-            assertTrue("Parser orw (%A),%D,%D",parser_testComp.command().equals("orw (%A),%D,%D"));
-            assertTrue("Parser advance()",parser_testComp.advance());
-            assertTrue("Parser orw %D,%A,%A",parser_testComp.command().equals("orw %D,%A,%A"));
-
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-
-    }  
+			assertTrue("function Sys.init 0",parser.arg2("function Sys.init 0") == 0 );
+			assertTrue("call Sys.init 0",parser.arg2("call Sys.init 0") == 0 );
+			assertTrue("function Soma 2",parser.arg2("function Soma 2") == 2 );
+			assertTrue("call Soma 2",parser.arg2("call Soma 2") == 2 );
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}       
 
 }

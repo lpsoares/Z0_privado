@@ -104,11 +104,11 @@ public class Parser {
      * @return somente o símbolo ou o valor número da instrução.
      */
     public String arg1(String command) {
-        if(commandType(command()) == Parser.CommandType.C_ARITHMETIC) {
-            return(command());
+        if(commandType(command) == Parser.CommandType.C_ARITHMETIC) {
+            return(command);
         } else { 
             String[] array = command.split(" ");
-            return array[1];
+            return array[1].replaceAll("\\s+","");
         }
     }
 
