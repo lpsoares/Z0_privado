@@ -53,171 +53,192 @@ public class Code {
 
             commands.add( "// ADD" );
 
-            commands.add( "@SP" );
-            commands.add( "M=M-1" );
+            commands.add( "leaw $SP,%A" );
+            commands.add( "movw (%A),%D" );
+            commands.add( "decw %D" );
+            commands.add( "movw %D,(%A)" );
 
-            commands.add( "A=M" );
-            commands.add( "D=M");
+            commands.add( "movw (%A),%A" );
+            commands.add( "movw (%A),%D");
 
-            commands.add( "@SP" );
-            commands.add( "A=M-1" );
+            commands.add( "leaw $SP,%A" );
+            commands.add( "subw (%A),$1,%A" );
             
-            commands.add( "D=M+D" );
+            commands.add( "addw (%A),%D,%D" );
             
-            commands.add( "M=D" );
+            commands.add( "movw %D,(%A)" );
             
         } else if (command.equals("sub")) {
 
             commands.add( "// SUB" );
 
-            commands.add( "@SP" );
-            commands.add( "M=M-1" );
+            commands.add( "leaw $SP,%A" );
+            commands.add( "movw (%A),%D" );
+            commands.add( "decw %D" );
+            commands.add( "movw %D,(%A)" );
 
-            commands.add( "A=M" );
-            commands.add( "D=M");
+            commands.add( "movw (%A),%A" );
+            commands.add( "movw (%A),%D");
 
-            commands.add( "@SP" );
-            commands.add( "A=M-1" );
+            commands.add( "leaw $SP,%A" );
+            commands.add( "subw (%A),$1,%A" );
             
-            commands.add( "D=M-D" );
+            commands.add( "subw (%A),%D,%D" );
             
-            commands.add( "M=D" );
+            commands.add( "movw %D,(%A)" );
 
         } else if (command.equals("neg")) {
 
             commands.add( "// NEG" );
 
-            commands.add( "@SP" );
-            commands.add( "A=M-1" );
+            commands.add( "leaw $SP,%A" );
+            commands.add( "subw (%A),$1,%A" );
 
-            commands.add( "M=-M" );
+            commands.add( "movw (%A),%D" );
+            commands.add( "negw %D" );
+            commands.add( "movw %D,(%A)" );
 
         } else if (command.equals("eq")) {
 
             commands.add( "// EQ" );
-            commands.add( "@SP" );
-            commands.add( "M=M-1" );
 
-            commands.add( "A=M" );
-            commands.add( "D=M");
+            commands.add( "leaw $SP,%A" );
+            commands.add( "movw (%A),%D" );
+            commands.add( "decw %D" );
+            commands.add( "movw %D,(%A)" );
 
-            commands.add( "@SP" );
-            commands.add( "A=M-1" );
+            commands.add( "movw (%A),%A" );
+            commands.add( "movw (%A),%D");
+
+            commands.add( "leaw $SP,%A" );
+            commands.add( "subw (%A),$1,%A" );
             
-            commands.add( "D=M-D" );
+            commands.add( "subw (%A),%D,%D" );
 
-            commands.add("@EQ"+outputFilename+labelCounter);
-            commands.add("D; JEQ");
-            commands.add("@SP");
-            commands.add("A=M-1");
-            commands.add("M=0");
-            commands.add("@EQ2"+outputFilename+labelCounter);
-            commands.add("0; JMP");
-            commands.add("(EQ"+outputFilename+labelCounter+")");
-            commands.add("@SP");
-            commands.add("A=M-1");
-            commands.add("M=-1");
-            commands.add("(EQ2"+outputFilename+labelCounter+")");
+            commands.add("leaw $EQ"+filename+labelCounter+",%A");
+            commands.add("je");
+            commands.add("leaw $SP,%A");
+            commands.add("subw (%A),$1,%A");
+            commands.add("movw $0,(%A)");
+            commands.add("leaw $EQ2"+filename+labelCounter+",%A");
+            commands.add("jmp");
+            commands.add("EQ"+filename+labelCounter+":");
+            commands.add("leaw $SP,%A");
+            commands.add("subw (%A),$1,%A");
+            commands.add("movw $-1,(%A)");
+            commands.add("EQ2"+filename+labelCounter+":");
             labelCounter += 1;
 
         } else if (command.equals("gt")) {
 
             commands.add( "// GT" );
-            commands.add( "@SP" );
-            commands.add( "M=M-1" );
 
-            commands.add( "A=M" );
-            commands.add( "D=M");
+            commands.add( "leaw $SP,%A" );
+            commands.add( "movw (%A),%D" );
+            commands.add( "decw %D" );
+            commands.add( "movw %D,(%A)" );
 
-            commands.add( "@SP" );
-            commands.add( "A=M-1" );
+            commands.add( "movw (%A),%A" );
+            commands.add( "movw (%A),%D");
+
+            commands.add( "leaw $SP,%A" );
+            commands.add( "subw (%A),$1,%A" );
             
-            commands.add( "D=M-D" );
+            commands.add( "subw (%A),%D,%D" );
 
-            commands.add("@GT"+outputFilename+labelCounter);
-            commands.add("D; JGT");
-            commands.add("@SP");
-            commands.add("A=M-1");
-            commands.add("M=0");
-            commands.add("@GT2"+outputFilename+labelCounter);
-            commands.add("0; JMP");
-            commands.add("(GT"+outputFilename+labelCounter+")");
-            commands.add("@SP");
-            commands.add("A=M-1");
-            commands.add("M=-1");
-            commands.add("(GT2"+outputFilename+labelCounter+")");
+            commands.add("leaw $GT"+filename+labelCounter+":");
+            commands.add("jg");
+            commands.add("leaw $SP,%A");
+            commands.add("subw (%A),$1,%A");
+            commands.add("movw $0,(%A)");
+            commands.add("leaw $GT2"+filename+labelCounter+":");
+            commands.add("jmp");
+            commands.add("GT"+filename+labelCounter+":");
+            commands.add("leaw $SP,%A");
+            commands.add("subw (%A),$1,%A");
+            commands.add("movw $-1,(%A)");
+            commands.add("GT2"+filename+labelCounter+":");
             labelCounter += 1;
 
         } else if (command.equals("lt")) {
 
-            commands.add( "// GT" );
-            commands.add( "@SP" );
-            commands.add( "M=M-1" );
+            commands.add( "// LT" );
 
-            commands.add( "A=M" );
-            commands.add( "D=M");
+            commands.add( "leaw $SP,%A" );
+            commands.add( "movw (%A),%D" );
+            commands.add( "decw %D" );
+            commands.add( "movw %D,(%A)" );
 
-            commands.add( "@SP" );
-            commands.add( "A=M-1" );
+            commands.add( "movw (%A),%A" );
+            commands.add( "movw (%A),%D");
+
+            commands.add( "leaw $SP,%A" );
+            commands.add( "subw (%A),$1,%A" );
             
-            commands.add( "D=M-D" );
+            commands.add( "subw (%A),%D,%D" );
 
-            commands.add("@LT"+outputFilename+labelCounter);
-            commands.add("D; JLT");
-            commands.add("@SP");
-            commands.add("A=M-1");
-            commands.add("M=0");
-            commands.add("@LT2"+outputFilename+labelCounter);
-            commands.add("0; JMP");
-            commands.add("(LT"+outputFilename+labelCounter+")");
-            commands.add("@SP");
-            commands.add("A=M-1");
-            commands.add("M=-1");
-            commands.add("(LT2"+outputFilename+labelCounter+")");
+            commands.add("leaw $LT"+filename+labelCounter+":");
+            commands.add("jl");
+            commands.add("leaw $SP,%A");
+            commands.add("subw (%A),$1,%A");
+            commands.add("movw $0,(%A)");
+            commands.add("leaw $LT2"+filename+labelCounter+":");
+            commands.add("jmp");
+            commands.add("LT"+filename+labelCounter+":");
+            commands.add("leaw $SP,%A");
+            commands.add("subw (%A),$1,%A");
+            commands.add("movw $-1,(%A)");
+            commands.add("LT2"+filename+labelCounter+":");
             labelCounter += 1;
 
         } else if (command.equals("and")) {
 
             commands.add( "// AND" );
 
-            commands.add( "@SP" );
-            commands.add( "M=M-1" );
+            commands.add( "leaw $SP,%A" );
+            commands.add( "movw (%A),%D" );
+            commands.add( "decw %D" );
+            commands.add( "movw %D,(%A)" );
 
-            commands.add( "A=M" );
-            commands.add( "D=M");
+            commands.add( "movw (%A),%A" );
+            commands.add( "movw (%A),%D");
 
-            commands.add( "@SP" );
-            commands.add( "A=M-1" );
+            commands.add( "leaw $SP,%A" );
+            commands.add( "subw (%A),$1,%A" );
             
-            commands.add( "D=M&D" );
+            commands.add( "andw (%A),%D,%D" );
             
-            commands.add( "M=D" );
+            commands.add( "movw %D,(%A)" );
 
         } else if (command.equals("or")) {
 
             commands.add( "// OR" );
 
-            commands.add( "@SP" );
-            commands.add( "M=M-1" );
+            commands.add( "leaw $SP,%A" );
+            commands.add( "movw (%A),%D" );
+            commands.add( "decw %D" );
+            commands.add( "movw %D,(%A)" );
 
-            commands.add( "A=M" );
-            commands.add( "D=M");
+            commands.add( "movw (%A),%A" );
+            commands.add( "movw (%A),%D");
 
-            commands.add( "@SP" );
-            commands.add( "A=M-1" );
+            commands.add( "leaw $SP,%A" );
+            commands.add( "subw (%A),$1,%A" );
             
-            commands.add( "D=M|D" );
+            commands.add( "orw (%A),%D,%D" );
             
-            commands.add( "M=D" );
+            commands.add( "movw %D,(%A)" );
 
         } else if (command.equals("not")) {
 
             commands.add( "// NOT" );
 
-            commands.add( "@SP" );
-            commands.add( "A=M-1" );
+            commands.add( "leaw $SP,%A" );
+            commands.add( "subw (%A),$1,%A" );
 
-            commands.add( "M=!M" );
+            commands.add( "movw (%A),%D" );
+            commands.add( "notw %D" );
+            commands.add( "movw %D,(%A)" );
 
         }
 
@@ -246,203 +267,237 @@ public class Code {
             if (segment.equals("constant")) {
                 Error.error("Não faz sentido POP com constant");
             } else if (segment.equals("local")) {
-                commands.add( "@SP" );
-                commands.add( "M=M-1" );
+                commands.add( "leaw $SP,%A" );
+                commands.add( "movw (%A),%D" );
+                commands.add( "decw %D" );
+                commands.add( "movw %D,(%A)" );
 
-                commands.add( "@"+String.valueOf(index) );
-                commands.add( "D=A" );
-                commands.add( "@LCL");
-                commands.add( "D=M+D" );
+                commands.add( "leaw $"+String.valueOf(index)+",%A" );
+                commands.add( "movw %A,%D" );
+                commands.add( "leaw $LCL,%A");
+                commands.add( "addw (%A),%D,%D" );
 
-                commands.add( "@R15");
-                commands.add( "M=D" );
+                commands.add( "leaw $R15,%A");
+                commands.add( "movw %D,(%A)" );
 
-                commands.add( "@SP" );
-                commands.add( "A=M" );
-                commands.add( "D=M" );
+                commands.add( "leaw $SP,%A" );
+                commands.add( "movw (%A),%A" );
+                commands.add( "movw (%A),%D" );
 
-                commands.add( "@R15");
-                commands.add( "A=M" );
-                commands.add( "M=D" );
+                commands.add( "leaw $R15,%A");
+                commands.add( "movw (%A),%A" );
+                commands.add( "movw %D,(%A)" );
 
             } else if (segment.equals("argument")) {
-                commands.add( "@SP" );
-                commands.add( "M=M-1" );
+                commands.add( "leaw $SP,%A" );
+                commands.add( "movw (%A),%D" );
+                commands.add( "decw %D" );
+                commands.add( "movw %D,(%A)" );
 
-                commands.add( "@"+String.valueOf(index) );
-                commands.add( "D=A" );
-                commands.add( "@ARG");
-                commands.add( "D=M+D" );
+                commands.add( "leaw $"+String.valueOf(index)+",%A" );
+                commands.add( "movw %A,%D" );
+                commands.add( "leaw $ARG,%A");
+                commands.add( "addw (%A),%D,%D" );
 
-                commands.add( "@R15");
-                commands.add( "M=D" );
+                commands.add( "leaw $R15,%A");
+                commands.add( "movw %D,(%A)" );
 
-                commands.add( "@SP" );
-                commands.add( "A=M" );
-                commands.add( "D=M" );
+                commands.add( "leaw $SP,%A" );
+                commands.add( "movw (%A),%A" );
+                commands.add( "movw (%A),%D" );
 
-                commands.add( "@R15");
-                commands.add( "A=M" );
-                commands.add( "M=D" );
+                commands.add( "leaw $R15,%A");
+                commands.add( "movw (%A),%A" );
+                commands.add( "movw %D,(%A)" );
  
             } else if (segment.equals("this")) {
-                commands.add( "@SP" );
-                commands.add( "M=M-1" );
+                commands.add( "leaw $SP,%A" );
+                commands.add( "movw (%A),%D" );
+                commands.add( "decw %D" );
+                commands.add( "movw %D,(%A)" );
 
-                commands.add( "@"+String.valueOf(index) );
-                commands.add( "D=A" );
-                commands.add( "@THIS");
-                commands.add( "D=M+D" );
+                commands.add( "leaw $"+String.valueOf(index)+",%A" );
+                commands.add( "movw %A,%D" );
+                commands.add( "leaw $THIS,%A");
+                commands.add( "addw (%A),%D,%D" );
 
-                commands.add( "@R15");
-                commands.add( "M=D" );
+                commands.add( "leaw $R15,%A");
+                commands.add( "movw %D,(%A)" );
 
-                commands.add( "@SP" );
-                commands.add( "A=M" );
-                commands.add( "D=M" );
+                commands.add( "leaw $SP,%A" );
+                commands.add( "movw (%A),%A" );
+                commands.add( "movw (%A),%D" );
 
-                commands.add( "@R15");
-                commands.add( "A=M" );
-                commands.add( "M=D" );
+                commands.add( "leaw $R15,%A");
+                commands.add( "movw (%A),%A" );
+                commands.add( "movw %D,(%A)" );
 
             } else if (segment.equals("that")) {
-                commands.add( "@SP" );
-                commands.add( "M=M-1" );
+                commands.add( "leaw $SP,%A" );
+                commands.add( "movw (%A),%D" );
+                commands.add( "decw %D" );
+                commands.add( "movw %D,(%A)" );
 
-                commands.add( "@"+String.valueOf(index) );
-                commands.add( "D=A" );
-                commands.add( "@THAT");
-                commands.add( "D=M+D" );
+                commands.add( "leaw $"+String.valueOf(index)+",%A" );
+                commands.add( "movw %A,%D" );
+                commands.add( "leaw $THAT,%A");
+                commands.add( "addw (%A),%D,%D" );
 
-                commands.add( "@R15");
-                commands.add( "M=D" );
+                commands.add( "leaw $R15,%A");
+                commands.add( "movw %D,(%A)" );
 
-                commands.add( "@SP" );
-                commands.add( "A=M" );
-                commands.add( "D=M" );
+                commands.add( "leaw $SP,%A" );
+                commands.add( "movw (%A),%A" );
+                commands.add( "movw (%A),%D" );
 
-                commands.add( "@R15");
-                commands.add( "A=M" );
-                commands.add( "M=D" );
+                commands.add( "leaw $R15,%A");
+                commands.add( "movw (%A),%A" );
+                commands.add( "movw %D,(%A)" );
 
             } else if (segment.equals("static")) {
-                commands.add( "@SP" );
-                commands.add( "M=M-1" );
-                commands.add( "A=M" );
-                commands.add( "D=M" );
-                commands.add( "@"+filename+"."+String.valueOf(index) );
-                commands.add( "M=D" );
+                commands.add( "leaw $SP,%A" );
+                commands.add( "movw (%A),%D" );
+                commands.add( "decw %D" );
+                commands.add( "movw %D,(%A)" );
+                commands.add( "movw (%A),%A" );
+                commands.add( "movw (%A),%D" );
+                commands.add( "leaw $"+filename+"."+String.valueOf(index)+",%A" );
+                commands.add( "movw %D,(%A)" );
             } else if (segment.equals("temp")) {
-                commands.add( "@SP" );
-                commands.add( "M=M-1" );
-                commands.add( "A=M" );
-                commands.add( "D=M" );
-                commands.add( "@"+String.valueOf(index+5) );
-                commands.add( "M=D" );
+                commands.add( "leaw $SP,%A" );
+                commands.add( "movw (%A),%D" );
+                commands.add( "decw %D" );
+                commands.add( "movw %D,(%A)" );
+                commands.add( "movw (%A),%A" );
+                commands.add( "movw (%A),%D" );
+                commands.add( "leaw $"+String.valueOf(index+5)+",%A" );
+                commands.add( "movw %D,(%A)" );
             } else if (segment.equals("pointer")) {
                 if(index==0) {
-                    commands.add( "@SP" );
-                    commands.add( "M=M-1" );
-                    commands.add( "A=M" );
-                    commands.add( "D=M" );
-                    commands.add( "@THIS" );
-                    commands.add( "M=D" );
+                    commands.add( "leaw $SP,%A" );
+                    commands.add( "movw (%A),%D" );
+                    commands.add( "decw %D" );
+                    commands.add( "movw %D,(%A)" );
+                    commands.add( "movw (%A),%A" );
+                    commands.add( "movw (%A),%D" );
+                    commands.add( "leaw $THIS,%A" );
+                    commands.add( "movw %D,(%A)" );
                 } else {
-                    commands.add( "@SP" );
-                    commands.add( "M=M-1" );
-                    commands.add( "A=M" );
-                    commands.add( "D=M" );
-                    commands.add( "@THAT" );
-                    commands.add( "M=D" );
+                    commands.add( "leaw $SP,%A" );
+                    commands.add( "movw (%A),%D" );
+                    commands.add( "decw %D" );
+                    commands.add( "movw %D,(%A)" );
+                    commands.add( "movw (%A),%A" );
+                    commands.add( "movw (%A),%D" );
+                    commands.add( "leaw $THAT,%A" );
+                    commands.add( "movw %D,(%A)" );
                 }
             }
         } else if (command == Parser.CommandType.C_PUSH) {
             commands.add( "// PUSH "+segment+" "+String.valueOf(index));
             if (segment.equals("constant")) {
-                commands.add( "@"+String.valueOf(index) );
-                commands.add( "D=A" );
-                commands.add( "@SP" );
-                commands.add( "A=M" );
-                commands.add( "M=D" );
-                commands.add( "@SP" );
-                commands.add( "M=M+1" );
+                commands.add( "leaw $"+String.valueOf(index)+",%A" );
+                commands.add( "movw %A,%D" );
+                commands.add( "leaw $SP,%A" );
+                commands.add( "movw (%A),%A" );
+                commands.add( "movw %D,(%A)" );
+                commands.add( "leaw $SP,%A" );
+                commands.add( "movw (%A),%D" );
+                commands.add( "incw %D" );
+                commands.add( "movw %D,(%A)" );
             } else if (segment.equals("local")) {
-                commands.add( "@"+String.valueOf(index) );
-                commands.add( "D=A" );
-                commands.add( "@LCL");
-                commands.add( "A=M+D" );
-                commands.add( "D=M" );
-                commands.add( "@SP" );
-                commands.add( "A=M" );
-                commands.add( "M=D" );
-                commands.add( "@SP" );
-                commands.add( "M=M+1" );
+                commands.add( "leaw $"+String.valueOf(index)+",%A" );
+                commands.add( "movw %A,%D" );
+                commands.add( "leaw $LCL,%A");
+                commands.add( "addw (%A),%D,%A" );
+                commands.add( "movw (%A),%D" );
+                commands.add( "leaw $SP,%A" );
+                commands.add( "movw (%A),%A" );
+                commands.add( "movw %D,(%A)" );
+                commands.add( "leaw $SP,%A" );
+                commands.add( "movw (%A),%D" );
+                commands.add( "incw %D" );
+                commands.add( "movw %D,(%A)" );
             } else if (segment.equals("argument")) {
-                commands.add( "@"+String.valueOf(index) );
-                commands.add( "D=A" );
-                commands.add( "@ARG");
-                commands.add( "A=M+D" );
-                commands.add( "D=M" );
-                commands.add( "@SP" );
-                commands.add( "A=M" );
-                commands.add( "M=D" );
-                commands.add( "@SP" );
-                commands.add( "M=M+1" );
+                commands.add( "leaw $"+String.valueOf(index)+",%A" );
+                commands.add( "movw %A,%D" );
+                commands.add( "leaw $ARG,%A");
+                commands.add( "addw (%A),%D,%A" );
+                commands.add( "movw (%A),%D" );
+                commands.add( "leaw $SP,%A" );
+                commands.add( "movw (%A),%A" );
+                commands.add( "movw %D,(%A)" );
+                commands.add( "leaw $SP,%A" );
+                commands.add( "movw (%A),%D" );
+                commands.add( "incw %D" );
+                commands.add( "movw %D,(%A)" );
             } else if (segment.equals("this")) {
-                commands.add( "@"+String.valueOf(index) );
-                commands.add( "D=A" );
-                commands.add( "@THIS");
-                commands.add( "A=M+D" );
-                commands.add( "D=M" );
-                commands.add( "@SP" );
-                commands.add( "A=M" );
-                commands.add( "M=D" );
-                commands.add( "@SP" );
-                commands.add( "M=M+1" );
+                commands.add( "leaw $"+String.valueOf(index)+",%A" );
+                commands.add( "movw %A,%D" );
+                commands.add( "leaw $THIS,%A");
+                commands.add( "addw (%A),%D,%A" );
+                commands.add( "movw (%A),%D" );
+                commands.add( "leaw $SP,%A" );
+                commands.add( "movw (%A),%A" );
+                commands.add( "movw %D,(%A)" );
+                commands.add( "leaw $SP,%A" );
+                commands.add( "movw (%A),%D" );
+                commands.add( "incw %D" );
+                commands.add( "movw %D,(%A)" );
             } else if (segment.equals("that")) {
-                commands.add( "@"+String.valueOf(index) );
-                commands.add( "D=A" );
-                commands.add( "@THAT");
-                commands.add( "A=M+D" );
-                commands.add( "D=M" );
-                commands.add( "@SP" );
-                commands.add( "A=M" );
-                commands.add( "M=D" );
-                commands.add( "@SP" );
-                commands.add( "M=M+1" );
+                commands.add( "leaw $"+String.valueOf(index)+",%A" );
+                commands.add( "movw %A,%D" );
+                commands.add( "leaw $THAT,%A");
+                commands.add( "addw (%A),%D,%A" );
+                commands.add( "movw (%A),%D" );
+                commands.add( "leaw $SP,%A" );
+                commands.add( "movw (%A),%A" );
+                commands.add( "movw %D,(%A)" );
+                commands.add( "leaw $SP,%A" );
+                commands.add( "movw (%A),%D" );
+                commands.add( "incw %D" );
+                commands.add( "movw %D,(%A)" );
             } else if (segment.equals("static")) {
-                commands.add( "@"+filename+"."+String.valueOf(index) );
-                commands.add( "D=M" );
-                commands.add( "@SP" );
-                commands.add( "A=M" );
-                commands.add( "M=D" );
-                commands.add( "@SP" );
-                commands.add( "M=M+1" );
+                commands.add( "leaw $"+filename+"."+String.valueOf(index)+",%A" );
+                commands.add( "movw (%A),%D" );
+                commands.add( "leaw $SP,%A" );
+                commands.add( "movw (%A),%A" );
+                commands.add( "movw %D,(%A)" );
+                commands.add( "leaw $SP,%A" );
+                commands.add( "movw (%A),%D" );
+                commands.add( "incw %D" );
+                commands.add( "movw %D,(%A)" );
             } else if (segment.equals("temp")) {
-                commands.add( "@"+String.valueOf(index+5) );
-                commands.add( "D=M" );
-                commands.add( "@SP" );
-                commands.add( "A=M" );
-                commands.add( "M=D" );
-                commands.add( "@SP" );
-                commands.add( "M=M+1" );
+                commands.add( "leaw $"+String.valueOf(index+5)+",%A" );
+                commands.add( "movw (%A),%D" );
+                commands.add( "leaw $SP,%A" );
+                commands.add( "movw (%A),%A" );
+                commands.add( "movw %D,(%A)" );
+                commands.add( "leaw $SP,%A" );
+                commands.add( "movw (%A),%D" );
+                commands.add( "incw %D" );
+                commands.add( "movw %D,(%A)" );
             } else if (segment.equals("pointer")) {
                 if(index==0) {
-                    commands.add( "@THIS" );
-                    commands.add( "D=M" );
-                    commands.add( "@SP" );
-                    commands.add( "A=M" );
-                    commands.add( "M=D" );
-                    commands.add( "@SP" );
-                    commands.add( "M=M+1" );
+                    commands.add( "leaw $THIS,%A" );
+                    commands.add( "movw (%A),%D" );
+                    commands.add( "leaw $SP,%A" );
+                    commands.add( "movw (%A),%A" );
+                    commands.add( "movw %D,(%A)" );
+                    commands.add( "leaw $SP,%A" );
+                    commands.add( "movw (%A),%D" );
+                    commands.add( "incw %D" );
+                    commands.add( "movw %D,(%A)" );
                 } else {
-                    commands.add( "@THAT" );
-                    commands.add( "D=M" );
-                    commands.add( "@SP" );
-                    commands.add( "A=M" );
-                    commands.add( "M=D" );
-                    commands.add( "@SP" );
-                    commands.add( "M=M+1" );
+                    commands.add( "leaw $THAT,%A" );
+                    commands.add( "movw (%A),%D" );
+                    commands.add( "leaw $SP,%A" );
+                    commands.add( "movw (%A),%A" );
+                    commands.add( "movw %D,(%A)" );
+                    commands.add( "leaw $SP,%A" );
+                    commands.add( "movw (%A),%D" );
+                    commands.add( "incw %D" );
+                    commands.add( "movw %D,(%A)" );
                 }
             }
         }
@@ -463,10 +518,10 @@ public class Code {
         List<String> commands = new ArrayList<String>();
         commands.add( "// Inicialização para VM" );
 
-        commands.add( "@256" );
-        commands.add( "D=A" );
-        commands.add( "@SP" );
-        commands.add( "M=D");
+        commands.add( "leaw $256,%A" );
+        commands.add( "movw %A,%D" );
+        commands.add( "leaw $SP,%A" );
+        commands.add( "movw %D,(%A)");
 
         String[] stringArray = new String[ commands.size() ];
         commands.toArray( stringArray );
@@ -485,7 +540,7 @@ public class Code {
         List<String> commands = new ArrayList<String>();
         commands.add( "// Label (marcador)" );
 
-        commands.add( "("+label+")" );
+        commands.add( label+":" );
 
         String[] stringArray = new String[ commands.size() ];
         commands.toArray( stringArray );
@@ -503,8 +558,8 @@ public class Code {
         List<String> commands = new ArrayList<String>();
         commands.add( "// Goto incondicional (JMP)" );
 
-        commands.add( "@"+label );
-        commands.add( "0;JMP" );
+        commands.add( "leaw $"+label+",%A" );
+        commands.add( "jmp" );
 
         String[] stringArray = new String[ commands.size() ];
         commands.toArray( stringArray );
@@ -522,13 +577,15 @@ public class Code {
         List<String> commands = new ArrayList<String>();
         commands.add( "// Goto condicional (outros Jumps)" );
 
-        commands.add( "@SP" );
-        commands.add( "M=M-1" );
-        commands.add( "A=M" );
-        commands.add( "D=M" );
+        commands.add( "leaw $SP,%A" );
+        commands.add( "movw (%A),%D" );
+        commands.add( "decw %D" );
+        commands.add( "movw %D,(%A)" );
+        commands.add( "movw (%A),%A" );
+        commands.add( "movw (%A),%D" );
         
-        commands.add( "@"+label );
-        commands.add( "D;JNE" );
+        commands.add( "leaw $"+label+",%A" );
+        commands.add( "jne" );
 
         String[] stringArray = new String[ commands.size() ];
         commands.toArray( stringArray );
@@ -548,71 +605,81 @@ public class Code {
         retHash.put(functionName, retHash.containsKey(functionName) ? (retHash.get(functionName) + 1) : 1);
 
         //push return-address
-        commands.add( "@"+functionName+"$ret."+retHash.get(functionName) );
-        commands.add( "D=A" );
-        commands.add( "@SP");
-        commands.add( "A=M" );
-        commands.add( "M=D" );
-        commands.add( "@SP" );
-        commands.add( "M=M+1" );
+        commands.add( "leaw $"+functionName+"$ret."+retHash.get(functionName)+",%A" );
+        commands.add( "movw %A,%D" );
+        commands.add( "leaw $SP,%A");
+        commands.add( "movw (%A),%A" );
+        commands.add( "movw %D,(%A)" );
+        commands.add( "leaw $SP,%A" );
+        commands.add( "movw (%A),%D" );
+        commands.add( "incw %D" );
+        commands.add( "movw %D,(%A)" );
         
         //push LCL
-        commands.add( "@LCL" );
-        commands.add( "D=M" );
-        commands.add( "@SP");
-        commands.add( "A=M" );
-        commands.add( "M=D" );
-        commands.add( "@SP" );
-        commands.add( "M=M+1" );
+        commands.add( "leaw $LCL,%A" );
+        commands.add( "movw (%A),%D" );
+        commands.add( "leaw $SP,%A");
+        commands.add( "movw (%A),%A" );
+        commands.add( "movw %D,(%A)" );
+        commands.add( "leaw $SP,%A" );
+        commands.add( "movw (%A),%D" );
+        commands.add( "incw %D" );
+        commands.add( "movw %D,(%A)" );
 
         //push ARG
-        commands.add( "@ARG" );
-        commands.add( "D=M" );
-        commands.add( "@SP");
-        commands.add( "A=M" );
-        commands.add( "M=D" );
-        commands.add( "@SP" );
-        commands.add( "M=M+1" );
+        commands.add( "leaw $ARG,%A" );
+        commands.add( "movw (%A),%D" );
+        commands.add( "leaw $SP,%A");
+        commands.add( "movw (%A),%A" );
+        commands.add( "movw %D,(%A)" );
+        commands.add( "leaw $SP,%A" );
+        commands.add( "movw (%A),%D" );
+        commands.add( "incw %D" );
+        commands.add( "movw %D,(%A)" );
 
         //push THIS
-        commands.add( "@THIS" );
-        commands.add( "D=M" );
-        commands.add( "@SP");
-        commands.add( "A=M" );
-        commands.add( "M=D" );
-        commands.add( "@SP" );
-        commands.add( "M=M+1" );
+        commands.add( "leaw $THIS,%A" );
+        commands.add( "movw (%A),%D" );
+        commands.add( "leaw $SP,%A");
+        commands.add( "movw (%A),%A" );
+        commands.add( "movw %D,(%A)" );
+        commands.add( "leaw $SP,%A" );
+        commands.add( "movw (%A),%D" );
+        commands.add( "incw %D" );
+        commands.add( "movw %D,(%A)" );
 
         //push THAT
-        commands.add( "@THAT" );
-        commands.add( "D=M" );
-        commands.add( "@SP");
-        commands.add( "A=M" );
-        commands.add( "M=D" );
-        commands.add( "@SP" );
-        commands.add( "M=M+1" );
+        commands.add( "leaw $THAT,%A" );
+        commands.add( "movw (%A),%D" );
+        commands.add( "leaw $SP,%A");
+        commands.add( "movw (%A),%A" );
+        commands.add( "movw %D,(%A)" );
+        commands.add( "leaw $SP,%A" );
+        commands.add( "movw (%A),%D" );
+        commands.add( "incw %D" );
+        commands.add( "movw %D,(%A)" );
 
         //ARG = SP-n-5
-        commands.add( "@"+String.valueOf(numArgs+5) );
-        commands.add( "D=A" );
-        commands.add( "@SP");
-        commands.add( "A=M" );
-        commands.add( "D=A-D" );
-        commands.add( "@ARG" );
-        commands.add( "M=D" );
+        commands.add( "leaw $"+String.valueOf(numArgs+5)+",%A" );
+        commands.add( "movw %A,%D" );
+        commands.add( "leaw $SP,%A");
+        commands.add( "movw (%A),%A" );
+        commands.add( "subw (%A),%D,%D" );
+        commands.add( "leaw $ARG,%A" );
+        commands.add( "movw %D,(%A)" );
 
         //LCL = SP
-        commands.add( "@SP");
-        commands.add( "D=M" );
-        commands.add( "@LCL" );
-        commands.add( "M=D" );
+        commands.add( "leaw $SP,%A");
+        commands.add( "movw (%A),%D" );
+        commands.add( "leaw $LCL,%A" );
+        commands.add( "movw %D,(%A)" );
 
         //goto f
-        commands.add( "@"+functionName);
-        commands.add( "0;JMP" );
+        commands.add( "leaw $"+functionName+",%A");
+        commands.add( "jmp" );
 
         //(return-address)
-        commands.add( "("+functionName+"$ret."+retHash.get(functionName)+")" );
+        commands.add( functionName+"$ret."+retHash.get(functionName)+":" );
 
         String[] stringArray = new String[ commands.size() ];
         commands.toArray( stringArray );
@@ -628,76 +695,79 @@ public class Code {
         commands.add( "// Retorno de função " );
 
         //FRAME = LCL
-        commands.add( "@LCL" );
-        commands.add( "D=M" );
-        commands.add( "@R13" ); //guarda FRAME
-        commands.add( "M=D" );
+        commands.add( "leaw $LCL,%A" );
+        commands.add( "movw (%A),%D" );
+        commands.add( "leaw $R13,%A" ); //guarda FRAME
+        commands.add( "movw %D,(%A)" );
 
         //RET = *(FRAME-5)
-        commands.add( "@5" );
-        commands.add( "A=D-A" ); 
-        commands.add( "D=M" );
-        commands.add( "@R14" ); //guarda RET
-        commands.add( "M=D" );        
+        commands.add( "leaw $5,%A" );
+        commands.add( "subw %D,(%A),%A" ); 
+        commands.add( "movw (%A),%D" );
+        commands.add( "leaw $R14,%A" ); //guarda RET
+        commands.add( "movw %D,(%A)" );        
 
         //*ARG = pop()
-        commands.add( "@ARG" );
-        commands.add( "D=M" );
-        commands.add( "@R15");
-        commands.add( "M=D" );
-        commands.add( "@SP" );
-        commands.add( "AM=M-1" );
-        commands.add( "D=M" );
-        commands.add( "@R15");
-        commands.add( "A=M" );
-        commands.add( "M=D" );
+        commands.add( "leaw $ARG,%A" );
+        commands.add( "movw (%A),%D" );
+        commands.add( "leaw $R15,%A");
+        commands.add( "movw %D,(%A)" );
+        commands.add( "leaw $SP,%A" );
+        commands.add( "movw (%A),%D" );
+        commands.add( "decw %D" );
+        commands.add( "movw %D,(%A)" );
+        commands.add( "movw %D,%A" );
+        commands.add( "movw (%A),%D" );
+        commands.add( "leaw $R15,%A");
+        commands.add( "movw (%A),%A" );
+        commands.add( "movw %D,(%A)" );
 
         //SP = ARG+1
-        commands.add( "@ARG");
-        commands.add( "D=M" );
-        commands.add( "@SP" );
-        commands.add( "M=D+1");
+        commands.add( "leaw $ARG,%A");
+        commands.add( "movw (%A),%D" );
+        commands.add( "leaw $SP,%A" );
+        commands.add( "addw %D,$1,(%A)");
 
         //THAT = *(FRAME-1)
-        commands.add( "@R13");
-        commands.add( "D=M-1" );
-        commands.add( "M=D" ); // faz FRAME--
-        commands.add( "A=D" );        
-        commands.add( "D=M");
-        commands.add( "@THAT");
-        commands.add( "M=D");
+        commands.add( "leaw $R13,%A");
+        commands.add( "subw (%A),$1,%D" );
+        commands.add( "movw %D,(%A)" ); // faz FRAME--
+        commands.add( "movw %D,%A" );        
+        commands.add( "movw (%A),%D");
+        commands.add( "leaw $THAT,%A");
+        commands.add( "movw %D,(%A)");
 
         //THIS = *(FRAME-2)
-        commands.add( "@R13");
-        commands.add( "D=M-1" );
-        commands.add( "M=D" ); // faz FRAME--
-        commands.add( "A=D" );        
-        commands.add( "D=M");
-        commands.add( "@THIS");
-        commands.add( "M=D");
+        commands.add( "leaw $R13,%A");
+        commands.add( "subw (%A),$1,%D" );
+        commands.add( "movw %D,(%A)" ); // faz FRAME--
+        commands.add( "movw %D,%A" );        
+        commands.add( "movw (%A),%D");
+        commands.add( "leaw $THIS,%A");
+        commands.add( "movw %D,(%A)");
 
         //ARG = *(FRAME-3)
-        commands.add( "@R13");
-        commands.add( "D=M-1" );
-        commands.add( "M=D" ); // faz FRAME--
-        commands.add( "A=D" );        
-        commands.add( "D=M");
-        commands.add( "@ARG");
-        commands.add( "M=D");
+        commands.add( "leaw $R13,%A");
+        commands.add( "subw (%A),$1,%D" );
+        commands.add( "movw %D,(%A)" ); // faz FRAME--
+        commands.add( "movw %D,%A" );        
+        commands.add( "movw (%A),%D");
+        commands.add( "leaw $ARG,%A");
+        commands.add( "movw %D,(%A)");
 
         //LCL = *(FRAME-4)
-        commands.add( "@R13");
-        commands.add( "D=M-1" );
-        commands.add( "M=D" ); // faz FRAME--
-        commands.add( "A=D" );        
-        commands.add( "D=M");
-        commands.add( "@LCL");
-        commands.add( "M=D");
+        commands.add( "leaw $R13,%A");
+        commands.add( "subw (%A),$1,%D" );
+        commands.add( "movw %D,(%A)" ); // faz FRAME--
+        commands.add( "movw %D,%A" );        
+        commands.add( "movw (%A),%D");
+        commands.add( "leaw $LCL,%A");
+        commands.add( "movw %D,(%A)");
 
         //goto RET
-        commands.add( "@14");
-        commands.add( "A=M");
-        commands.add( "0;JMP");
+        commands.add( "leaw $14,%A");
+        commands.add( "movw (%A),%A");
+        commands.add( "jmp");
 
         String[] stringArray = new String[ commands.size() ];
         commands.toArray( stringArray );
@@ -721,13 +791,15 @@ public class Code {
         //repeat k times:
         for(int i=0;i<numLocals;i++) {
             //PUSH 0
-            commands.add( "@0" );
-            commands.add( "D=A" );
-            commands.add( "@SP" );
-            commands.add( "A=M" );
-            commands.add( "M=D" );
-            commands.add( "@SP" );
-            commands.add( "M=M+1" );
+            commands.add( "leaw $0,%A" );
+            commands.add( "movw %A,%D" );
+            commands.add( "leaw $SP,%A" );
+            commands.add( "movw (%A),%A" );
+            commands.add( "movw %D,(%A)" );
+            commands.add( "leaw $SP,%A" );
+            commands.add( "movw (%A),%D" );
+            commands.add( "incw %D" );
+            commands.add( "movw %D,(%A)" );
         }
    
         String[] stringArray = new String[ commands.size() ];

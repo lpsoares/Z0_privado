@@ -16,6 +16,7 @@ import java.util.ArrayList;
  * Opções:
  *   <arquivo vm>         primeiro parametro é o nome do arquivo vm a ser aberto 
  *   -o <arquivo nasm>    parametro indica onde será salvo o arquivo gerado .nasm
+ *   -n                   parametro indica não colocar rotina de bootstrap (conveniente para testar)
  */
 class VMTranslator {
 
@@ -27,6 +28,7 @@ class VMTranslator {
         String inputFilename = null;
         String outputFilename = null;
         boolean debug = false;
+        boolean no_bootstrap = false;
 
         for (int i = 0; i < args.length; i++) {
             switch (args[i].charAt(0)) {
@@ -34,11 +36,16 @@ class VMTranslator {
                 if (args[i].charAt(1) == 'h') {
                     System.out.println("Opções");
                     System.out.println("<arquivo> : programa em linguagem de máquina a ser carregado");
-                    System.out.println("-o <arquivo> : nome do arquivo para salvar no formato NASM)");
+                    System.out.println("-o <arquivo> : nome do arquivo para salvar no formato NASM");
+                    System.out.println("-n : não colocar rotina de bootstrap (conveniente para testar)");
+
                 } else
                 if (args[i].charAt(1) == 'o') {
                     outputFilename = args[i+1]; // arquivo output
                     i++;
+                } else
+                if (args[i].charAt(1) == 'n') {
+                    no_bootstrap = true; // não insere rotina de bootstrap
                 } else {
                     Error.error("Argumento não reconhecido: "+args[i]);
                 }
