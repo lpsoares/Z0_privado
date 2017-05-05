@@ -21,9 +21,31 @@ def vmtranslator(testes,in_dir,out_dir,processos):
 	for i in nomes_testes:
 
 		nome = i.split()
-		error = subprocess.call(['java', '-jar', 'Codigos/VMTranslator/target/VMTranslator-1.0.jar',
-			in_dir+"{0}.vm".format(nome[0]),
-			"-o",out_dir+"{0}.nasm".format(nome[0]),"-n"])
+
+		no_bootstrap = False
+		directory = False
+
+		for f in range(3,len(nome)):
+			if(nome[f]=="/"):
+				directory = True
+			if(nome[f]=="n"):
+				no_bootstrap = True
+
+		if directory:
+			entrada = in_dir+"{0}".format(nome[0])
+		else:
+			entrada = in_dir+"{0}.vm".format(nome[0])
+		
+		saida = out_dir+"{0}.nasm".format(nome[0])
+
+		rotina = ['java', '-jar', 'Codigos/VMTranslator/target/VMTranslator-1.0.jar',
+			entrada,"-o",saida]
+		
+		# remove rotina de bootstrap do vmtranslator
+		if no_bootstrap: 
+			rotina.append("-n")
+		
+		error = subprocess.call(rotina)
 		if(error!=0):
 			error_code += error
 		else:

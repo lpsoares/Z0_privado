@@ -146,12 +146,12 @@ public class Code {
             
             commands.add( "subw (%A),%D,%D" );
 
-            commands.add("leaw $GT"+filename+labelCounter+":");
+            commands.add("leaw $GT"+filename+labelCounter+",%A");
             commands.add("jg");
             commands.add("leaw $SP,%A");
             commands.add("subw (%A),$1,%A");
             commands.add("movw $0,(%A)");
-            commands.add("leaw $GT2"+filename+labelCounter+":");
+            commands.add("leaw $GT2"+filename+labelCounter+",%A");
             commands.add("jmp");
             commands.add("GT"+filename+labelCounter+":");
             commands.add("leaw $SP,%A");
@@ -177,12 +177,12 @@ public class Code {
             
             commands.add( "subw (%A),%D,%D" );
 
-            commands.add("leaw $LT"+filename+labelCounter+":");
+            commands.add("leaw $LT"+filename+labelCounter+",%A");
             commands.add("jl");
             commands.add("leaw $SP,%A");
             commands.add("subw (%A),$1,%A");
             commands.add("movw $0,(%A)");
-            commands.add("leaw $LT2"+filename+labelCounter+":");
+            commands.add("leaw $LT2"+filename+labelCounter+",%A");
             commands.add("jmp");
             commands.add("LT"+filename+labelCounter+":");
             commands.add("leaw $SP,%A");
@@ -605,7 +605,7 @@ public class Code {
         retHash.put(functionName, retHash.containsKey(functionName) ? (retHash.get(functionName) + 1) : 1);
 
         //push return-address
-        commands.add( "leaw $"+functionName+"$ret."+retHash.get(functionName)+",%A" );
+        commands.add( "leaw $"+functionName+".ret."+retHash.get(functionName)+",%A" );
         commands.add( "movw %A,%D" );
         commands.add( "leaw $SP,%A");
         commands.add( "movw (%A),%A" );
@@ -664,7 +664,7 @@ public class Code {
         commands.add( "movw %A,%D" );
         commands.add( "leaw $SP,%A");
         commands.add( "movw (%A),%A" );
-        commands.add( "subw (%A),%D,%D" );
+        commands.add( "subw %A,%D,%D" );
         commands.add( "leaw $ARG,%A" );
         commands.add( "movw %D,(%A)" );
 
@@ -679,7 +679,7 @@ public class Code {
         commands.add( "jmp" );
 
         //(return-address)
-        commands.add( functionName+"$ret."+retHash.get(functionName)+":" );
+        commands.add( functionName+".ret."+retHash.get(functionName)+":" );
 
         String[] stringArray = new String[ commands.size() ];
         commands.toArray( stringArray );
@@ -702,7 +702,7 @@ public class Code {
 
         //RET = *(FRAME-5)
         commands.add( "leaw $5,%A" );
-        commands.add( "subw %D,(%A),%A" ); 
+        commands.add( "subw %D,%A,%A" ); 
         commands.add( "movw (%A),%D" );
         commands.add( "leaw $R14,%A" ); //guarda RET
         commands.add( "movw %D,(%A)" );        
@@ -765,7 +765,7 @@ public class Code {
         commands.add( "movw %D,(%A)");
 
         //goto RET
-        commands.add( "leaw $14,%A");
+        commands.add( "leaw $R14,%A");
         commands.add( "movw (%A),%A");
         commands.add( "jmp");
 

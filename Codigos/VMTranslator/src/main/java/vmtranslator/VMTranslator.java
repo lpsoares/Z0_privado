@@ -68,10 +68,13 @@ class VMTranslator {
                 if(path.getName(indexName).toString().equals(".")) {
                     indexName--;
                 }
-                outputFilename = path.toString()+
+
+                if(outputFilename==null) {
+                    outputFilename = path.toString()+
                                  File.separator+
                                  path.getName(indexName).toString()+".nasm";
-
+                }
+                
                 DirectoryStream<Path> directoryStream = Files.newDirectoryStream(path);
                 for (Path p : directoryStream) {
 
@@ -87,22 +90,12 @@ class VMTranslator {
             } else {
                 files.add(inputFilename);
                 if(outputFilename==null) {
-                    outputFilename = inputFilename.substring(0, inputFilename.lastIndexOf('.')) + ".asm";
+                    outputFilename = inputFilename.substring(0, inputFilename.lastIndexOf('.')) + ".nasm";
                 }
             }
 
             Code code = new Code(outputFilename);
 
-            // Crazy problem to pass on tests
-            /*
-            boolean witeInitFlag = false;
-            for (String file : files) {
-                if(file.toLowerCase().contains("sys.vm")) witeInitFlag=true;
-            }
-            if(witeInitFlag) {
-              code.writeInit();  
-            }
-            */
             if(bootstrap) {
               code.writeInit();  
             }
@@ -155,8 +148,10 @@ class VMTranslator {
 
         } catch (FileNotFoundException e){
             Error.error("Arquivo \'" + inputFilename + "\' nao encontrado");
+            System.exit(1);
         } catch (IOException e) {
             Error.error("uma excessao de i/o foi lancada");
+            System.exit(1);
         }
     }
 }
