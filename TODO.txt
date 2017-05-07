@@ -1,0 +1,5 @@
+- Ler dados da framebuffer (display)
+- Criar um assembler, vmtranslator, compilar e códigos SO com otimizações (senão não cabe na memória do Zo)
+- Aumentar velocidade de desenho no display
+- Criar simulador em Javascript (com controle de tamanho de display)
+- Possibilidade de usar SDRAM para gravar dados
