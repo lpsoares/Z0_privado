@@ -8,7 +8,7 @@ import time
 import os
 import argparse
 
-def emulate(testes,in_dir,out_dir,processos):
+def emulate(testes,in_dir,out_dir,processos,resolution):
 	
 	processes = set()
 	max_processes = processos
@@ -19,7 +19,6 @@ def emulate(testes,in_dir,out_dir,processos):
 
 	error = 0
 	done = 0
-
 	count = 0
 
 	for j in nomes_testes:
@@ -55,7 +54,8 @@ def emulate(testes,in_dir,out_dir,processos):
 				out_dir+"{0}.hack".format(nome[0]),
 				"-p",out_dir+"{0}.pbm".format(nome[0],i),
 				"-i",in_dir+"{0}_in.mif".format(nome[0],i),
-				"-o",out_dir+"{0}_out.mif".format(nome[0],i),"-c",nome[2]]))
+				"-o",out_dir+"{0}_out.mif".format(nome[0],i),
+				"-c",nome[2],"-r",resolution[0],resolution[1]]))
 			count += 1
 			while count >= max_processes:
 				count = 0
@@ -85,5 +85,11 @@ if __name__ == "__main__":
 	ap.add_argument("-in", "--in_dir", required=True,help="caminho para codigos")
 	ap.add_argument("-out", "--out_dir", required=True,help="caminho para salvar resultado de testes")
 	ap.add_argument("-p", "--processos", required=True,help="numero de threads a se paralelizar")
+	ap.add_argument("-r", "--resolution", required=False,help="resolução em X e Y")
 	args = vars(ap.parse_args())
-	emulate(testes=args["tests"],in_dir=args["in_dir"],out_dir=args["out_dir"],processos=int(args["processos"]))
+	proc = int(args["processos"])
+	if args["resolution"] != None:
+		res = args["resolution"].split(",")
+	else:
+		res = ['320', '240']	# valor padrão
+	emulate(testes=args["tests"],in_dir=args["in_dir"],out_dir=args["out_dir"],processos=proc,resolution=res)

@@ -42,18 +42,23 @@ mvn-color()
   echo -ne ${RESET_FORMATTING}
 }
 
-
 # Testes para VHDL
 python TestesHW/run.py -p3
 
 # Testes para codigos em Assembly
 python TestesSW/assembler.py -t TestesSW/testesAssembly.txt -in Codigos/Assembly/ -out TestesSW/machine_code/ -p 3
-python TestesSW/emulate.py -t TestesSW/testesAssembly.txt -in TestesSW/testesAssembly/ -out TestesSW/machine_code/ -p 3
+python TestesSW/emulate.py -t TestesSW/testesAssembly.txt -in TestesSW/testesAssembly/ -out TestesSW/machine_code/ -p 3 -r 512,256
 python -m pytest -v TestesSW/testeAssembly.py -rxs
 
 # Testes para AssemblerZ0
 mvn-color -f Codigos/AssemblerZ0 package
 python -m pytest -v TestesSW/testeAssembler.py -rxs
+### O CERTO SERIA COLOCAR NO EMULADOR ###
+
+
+# Testes para codigos VM
+### NÃO FEITO E NEM NO CURSO, FAZER ###
+
 
 # Testes para o VMTranslator
 mvn-color -f Codigos/VMTranslator package
@@ -61,3 +66,20 @@ python TestesSW/vmtranslator.py -t TestesSW/testesVMTranslator.txt -in Codigos/V
 python TestesSW/assembler.py -t TestesSW/testesVMTranslator.txt -in TestesSW/machine_code/ -out TestesSW/machine_code/ -p 3
 python TestesSW/emulate.py -t TestesSW/testesVMTranslator.txt -in TestesSW/testesVMTranslator/ -out TestesSW/machine_code/ -p 3
 python -m pytest -v TestesSW/testeVMTranslator.py -rxs
+
+
+# Testes para codigos em Jack
+#python TestesSW/compiler.py -t TestesSW/testesJack.txt -in Codigos/Jack/ -out TestesSW/machine_code/ -p 3
+#python TestesSW/vmtranslator.py -t TestesSW/testesJack.txt -in TestesSW/machine_code/ -out TestesSW/machine_code/ -p 3
+#python TestesSW/assembler.py -t TestesSW/testesJack.txt -in TestesSW/machine_code/ -out TestesSW/machine_code/ -p 3
+#python TestesSW/emulate.py -t TestesSW/testesJack.txt -in TestesSW/testesAssembly/ -out TestesSW/machine_code/ -p 3
+#python -m pytest -v TestesSW/testeJack.py -rxs
+
+# Testes para o Compiler
+# mvn-color -f Codigos/Compiler package
+#python TestesSW/testeCompiler.py -t TestesSW/testesCompiler.txt -in Codigos/Compiler/src/test/resources/ -out TestesSW/machine_code/ -p 3
+#python TestesSW/vmtranslator.py -t TestesSW/testesCompiler.txt -in Codigos/Compiler/src/test/resources/ -out TestesSW/machine_code/ -p 3
+#python TestesSW/assembler.py -t TestesSW/testesCompiler.txt -in TestesSW/machine_code/ -out TestesSW/machine_code/ -p 3
+#python TestesSW/emulate.py -t TestesSW/testesCompiler.txt -in TestesSW/testesCompiler/ -out TestesSW/machine_code/ -p 3
+#python -m pytest -v TestesSW/testeVMTranslator.py -rxs
+

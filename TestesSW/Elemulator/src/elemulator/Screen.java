@@ -14,10 +14,16 @@ import java.io.FileWriter;
 
 public class Screen {
 
-    boolean image[][] = new boolean[256][512]; //por padrao tudo falso
+    boolean image[][];
+    int[] resolution = null;
 
-    public Screen() {
+    public Screen(int[] resolution ) {
+        this.resolution = resolution;
+        image = new boolean[resolution[1]][resolution[0]]; //por padrao tudo falso
+    }
 
+    public int[] getResolution() {
+        return(resolution);
     }
 
     void saveDisplay(String arquivo) {
@@ -31,7 +37,7 @@ public class Screen {
             BufferedWriter out = new BufferedWriter(fstream);
      
             //we add the header, 128 128 is the width-height and 63 is the max value-1 of ur data
-            out.write("P1\n# CREATOR:Luciano\n512 256\n");
+            out.write("P1\n# CREATOR:Luciano\n"+String.valueOf(resolution[0])+" "+String.valueOf(resolution[1])+"\n");
 
             //2 loops to read the 2d array
             for(int i = 0 ; i<image.length;i++)

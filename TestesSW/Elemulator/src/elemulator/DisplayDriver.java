@@ -20,8 +20,8 @@ public class DisplayDriver {
 
     public void update(boolean[] register, boolean[] index) {
         int cx = converter.booleanToInt(index) - 16384;
-        int x = cx/32;
-        int y = (cx%32)*16;
+        int x = cx/(screen.getResolution()[0]/16);
+        int y = (cx%(screen.getResolution()[0]/16))*16;
 
         screen.markPixel(x,y,register);
 

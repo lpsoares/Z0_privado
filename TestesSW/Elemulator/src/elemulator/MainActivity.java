@@ -20,6 +20,7 @@ public class MainActivity {
         String memory_dump = null;
         String display_dump = null;
         int clocks = 100;
+        int[] resolution = {512,256};
 
         for (int i = 0; i < args.length; i++) {
             switch (args[i].charAt(0)) {
@@ -32,6 +33,7 @@ public class MainActivity {
                     System.out.println("-o <arquivo> : salva arquivo com dados da memória RAM");
                     System.out.println("-p <arquivo> : salva arquivo com dados do display");
                     System.out.println("-c <clocks) : define quantidade de ciclos para rodar programa");
+                    System.out.println("-r <x> <y>) : resolução do display em X e Y");
                 } else
                 if (args[i].charAt(1) == 'd') {
                     Log.debug = true;
@@ -51,6 +53,11 @@ public class MainActivity {
                 if (args[i].charAt(1) == 'c') {
                     clocks = Integer.parseInt(args[i+1]); // tics de clock
                     i++;
+                } else
+                if (args[i].charAt(1) == 'r') {
+                    resolution[0] = Integer.parseInt(args[i+1]); // resolução em X
+                    resolution[1] = Integer.parseInt(args[i+2]); // resolução em Y
+                    i += 2;
                 } else {
                     throw new IllegalArgumentException("Argumento não reconhecido: "+args[i]);
                 }
@@ -66,8 +73,7 @@ public class MainActivity {
             File initialFile = new File(code_file);
             InputStream targetStream = new FileInputStream(initialFile);
 
-            //final Screen screen = new Screen(this);
-            final Screen screen = new Screen();
+            final Screen screen = new Screen(resolution);
             final DisplayDriver dd = new DisplayDriver(screen);
             final Hack hack = new Hack(targetStream, dd);
             final Converter converter = new Converter();
@@ -85,13 +91,6 @@ public class MainActivity {
             if(display_dump!=null) {
                 screen.saveDisplay(display_dump);
             }
-
-            //hack.reset = true;
-            //char kbd = keyboard.getText().toString().charAt(0); //passo 3
-            //int ascii = (int) kbd; //passo 4
-            //hack.ram.setSelectedValue(converter.intToBoolean(ascii),  converter.intToBoolean(256), true); //passo 5
-            //keyboard.setText(""); //passo 6
-            //System.out.println(converter.booleanToInt(hack.ram.getSelectedValue(converter.intToBoolean(256))));
 
         } catch (IOException e) {
             e.printStackTrace();
