@@ -72,6 +72,15 @@ def emulate(testes,in_dir,out_dir,processos,resolution):
 		else:
 			error+=1
 
+
+	# exibe as imagens no terminal
+	for i in nomes_testes:
+		nome = i.split()
+		if int(nome[1]) < 0:
+			subprocess.call(['echo',"\n{0}.pbm".format(nome[0],i)])
+			subprocess.call(['img2txt',out_dir+"{0}.pbm".format(nome[0],i)])
+			
+
 	elapsed_time = time.time() - start_time
 	print('\033[92m'+"Emulated {0} process(es) in {1:.2f} seconds".format(done,elapsed_time)+'\033[0m') 
 
