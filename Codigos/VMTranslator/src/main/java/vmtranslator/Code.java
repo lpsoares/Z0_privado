@@ -21,7 +21,7 @@ public class Code {
     String filename = null;
     Integer labelCounter;
     Map<String, Integer> retHash;
-
+    String currentFunction = "";
 
     /** 
      * Abre o arquivo de entrada VM e se prepara para analisá-lo.
@@ -540,7 +540,7 @@ public class Code {
         List<String> commands = new ArrayList<String>();
         commands.add( "; Label (marcador)" );
 
-        commands.add( label+":" );
+        commands.add( filename+"."+currentFunction+"."+label+":" );
 
         String[] stringArray = new String[ commands.size() ];
         commands.toArray( stringArray );
@@ -558,7 +558,7 @@ public class Code {
         List<String> commands = new ArrayList<String>();
         commands.add( "; Goto incondicional (JMP)" );
 
-        commands.add( "leaw $"+label+",%A" );
+        commands.add( "leaw $"+filename+"."+currentFunction+"."+label+",%A" );
         commands.add( "jmp" );
 
         String[] stringArray = new String[ commands.size() ];
@@ -584,7 +584,7 @@ public class Code {
         commands.add( "movw (%A),%A" );
         commands.add( "movw (%A),%D" );
         
-        commands.add( "leaw $"+label+",%A" );
+        commands.add( "leaw $"+filename+"."+currentFunction+"."+label+",%A" );
         commands.add( "jne" );
 
         String[] stringArray = new String[ commands.size() ];
@@ -781,6 +781,8 @@ public class Code {
      * @param  numLocals número de argumentos a serem passados na função call.
      */
     public void writeFunction(String functionName, Integer numLocals) {
+
+        currentFunction = functionName;
 
         List<String> commands = new ArrayList<String>();
         commands.add( "; Declarando função "+functionName );
