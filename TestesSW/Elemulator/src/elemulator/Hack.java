@@ -19,11 +19,12 @@ public class Hack {
     Converter converter;
     int current_line;
     int pc_value;
+    int bits;
 
-    public Hack(InputStream file, DisplayDriver dd) {
-        this.ram = new RAM(dd);
-        this.rom = new ROM();
-        this.cpu = new CPU();
+    public Hack(InputStream file, DisplayDriver dd, int bits) {
+        this.ram = new RAM(dd,bits);
+        this.rom = new ROM(bits);
+        this.cpu = new CPU(bits);
         this.converter = new Converter();
         this.reset = false;
 
@@ -33,10 +34,10 @@ public class Hack {
 
         while (s.hasNext()){
             String nextValue = s.next();
-            if(nextValue.length() != 16) {
-                Error.error("Tamanho da instrução diferente de 16 bits : "+nextValue.length());
+            if(nextValue.length() != bits) {
+                Error.error("Tamanho da instrução diferente de "+String.valueOf(bits)+" bits : "+nextValue.length());
             }
-            boolean[] instruction = converter.stringToBoolean(nextValue);
+            boolean[] instruction = converter.stringToBoolean(nextValue,bits);
             rom.setSelectedInstruction(instruction, current_line);
             current_line++;
         }
@@ -50,10 +51,12 @@ public class Hack {
         Log.print("\nInstrução ",rom.getSelectedInstruction(cpu.getPcOut()));
 
         cpu.execute(ram.getSelectedValue(cpu.getAddressM(0, 15)), rom.getSelectedInstruction(cpu.getPcOut()), reset);
+
         ram.setSelectedValue(cpu.getOutM(), cpu.getAddressM(0, 15), cpu.isWriteM());
         this.reset = false;
 
         pc_value = converter.booleanToInt(cpu.getPcOut());
+
     }
 
     public void load_ram(String memory_load) {

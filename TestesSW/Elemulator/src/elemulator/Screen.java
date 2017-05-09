@@ -55,7 +55,7 @@ public class Screen {
 
     protected void markPixel(int x, int y, boolean[] register) {
 
-        for(int i=0; i<16; i++) {
+        for(int i=0; i<register.length; i++) {
             image[x][y+i] = register[i];
         }
 

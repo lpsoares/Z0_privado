@@ -20,6 +20,7 @@ public class MainActivity {
         String memory_dump = null;
         String display_dump = null;
         int clocks = 100;
+        int bits = 16;
         int[] resolution = {512,256};
 
         for (int i = 0; i < args.length; i++) {
@@ -34,6 +35,7 @@ public class MainActivity {
                     System.out.println("-p <arquivo> : salva arquivo com dados do display");
                     System.out.println("-c <clocks) : define quantidade de ciclos para rodar programa");
                     System.out.println("-r <x> <y>) : resolução do display em X e Y");
+                    System.out.println("-b <bits>) : define bits da arquitetura, padrão 16");
                 } else
                 if (args[i].charAt(1) == 'd') {
                     Log.debug = true;
@@ -58,6 +60,10 @@ public class MainActivity {
                     resolution[0] = Integer.parseInt(args[i+1]); // resolução em X
                     resolution[1] = Integer.parseInt(args[i+2]); // resolução em Y
                     i += 2;
+                } else
+                if (args[i].charAt(1) == 'b') {
+                    bits = Integer.parseInt(args[i+1]); // resolução em X
+                    i += 1;
                 } else {
                     throw new IllegalArgumentException("Argumento não reconhecido: "+args[i]);
                 }
@@ -75,8 +81,8 @@ public class MainActivity {
 
             final Screen screen = new Screen(resolution);
             final DisplayDriver dd = new DisplayDriver(screen);
-            final Hack hack = new Hack(targetStream, dd);
-            final Converter converter = new Converter();
+            final Hack hack = new Hack(targetStream, dd, bits);
+            //final Converter converter = new Converter();
 
             hack.load_ram(memory_load);
 

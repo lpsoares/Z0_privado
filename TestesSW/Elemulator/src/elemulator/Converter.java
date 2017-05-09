@@ -22,8 +22,8 @@ public class Converter {
         return decimal;
     }
 
-    public static boolean[] intToBoolean(int decimal) {
-        boolean[] a = new boolean[16];
+    public static boolean[] intToBoolean(int decimal, int bits) {
+        boolean[] a = new boolean[bits];
         String s = Integer.toBinaryString(decimal);
 
         for (int j = 0; j<s.length();j++) {
@@ -45,8 +45,8 @@ public class Converter {
         return s;
     }
 
-    public static boolean[] stringToBoolean (String s) {
-        boolean[] a = new boolean[16];
+    public static boolean[] stringToBoolean (String s, int bits) {
+        boolean[] a = new boolean[bits];
 
         for (int j = 0; j<s.length();j++) {
             if (s.charAt(j)=='0') a[s.length()-1-j] = false;

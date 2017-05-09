@@ -19,14 +19,18 @@ public class CPU {
     private ProgramCounter pc;
     private InstruDec id;
     private Mux mux;
+    int bits;
 
-    public CPU () {
-        this.alu = new ALU();
-        this.id = new InstruDec();
-        this.registerA = new Register();
-        this.registerD = new Register();
+    public CPU (int bits) {
+
+        this.bits = bits;
+
+        this.alu = new ALU(bits);
+        this.id = new InstruDec(bits);
+        this.registerA = new Register(bits);
+        this.registerD = new Register(bits);
         this.mux = new Mux();
-        this.pc = new ProgramCounter();
+        this.pc = new ProgramCounter(bits);
 
         this.addressM = registerA.getRegister();
         this.pcOut = pc.getRegister();
@@ -59,6 +63,8 @@ public class CPU {
         id.executeJump(instruction, alu.getZr(), alu.getNg());
         pc.execute(registerA.getRegister(), id.isLoadPC(), reset);
         this.pcOut = pc.getRegister();
+
+        //System.out.println(id.isLoadPC());
 
     }
 

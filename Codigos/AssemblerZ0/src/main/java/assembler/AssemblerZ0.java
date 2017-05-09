@@ -29,6 +29,7 @@ class AssemblerZ0 {
         boolean geraMif = false;
         boolean simulator = false;
         boolean debug = false;
+        int bits = 16;
 
         for (int i = 0; i < args.length; i++) {
             switch (args[i].charAt(0)) {
@@ -39,14 +40,15 @@ class AssemblerZ0 {
                     System.out.println("-d : Mostra informações de debug");
                     System.out.println("-o <arquivo> : nome do arquivo para salvar no formto HACK)");
                     System.out.println("-f <arquivo> : nome do arquivo para salvar no formato MIF)");
-                    System.out.println("-hack : gera arquivo hack");
+                    System.out.println("-a : gera arquivo hack");
                     System.out.println("-mif : gera arquivo mif");
                     System.out.println("-simulator : não testa limitações do hardware Z0");
+                    System.out.println("-b <bits> : define bits da arquitetura, padrão 16 bits");
                 } else
                 if (args[i].charAt(1) == 'd') {
                     debug = true;
                 } else
-                if (args[i].charAt(1) == 'h') {
+                if (args[i].charAt(1) == 'a') {
                     geraHack = true;
                 } else
                 if (args[i].charAt(1) == 's') {
@@ -64,6 +66,10 @@ class AssemblerZ0 {
                     geraMif = true;
                     outputFileMif = args[i+1]; // arquivo output
                     i++;
+                } else
+                if (args[i].charAt(1) == 'b') {
+                    bits = Integer.parseInt(args[i+1]); // bits da arquitetura
+                    i++;
                 } else {
                     throw new IllegalArgumentException("Argumento não reconhecido: "+args[i]);
                 }
@@ -79,7 +85,7 @@ class AssemblerZ0 {
         }
 
         try {
-            Assemble assembler = new Assemble(inputFile, geraHack, outputFileHack, geraMif, outputFileMif, simulator, debug);
+            Assemble assembler = new Assemble(inputFile, geraHack, outputFileHack, geraMif, outputFileMif, simulator, bits, debug);
             assembler.assemble1();
             assembler.assemble2();
             assembler.close();

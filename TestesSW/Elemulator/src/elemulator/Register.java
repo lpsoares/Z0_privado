@@ -13,13 +13,13 @@ public class Register {
 
     protected boolean[] register;
 
-    public Register() {
-        this.register = new boolean[16];
+    public Register(int bits) {
+        this.register = new boolean[bits];
     }
 
-    public Register(int decimal) {
-        this.register = converter.intToBoolean(decimal);
-    }
+    //public Register(int decimal) {
+    //    this.register = converter.intToBoolean(decimal);
+    //}
 
     public boolean[] getRegister() {
         return this.register;
@@ -27,7 +27,11 @@ public class Register {
 
     public void loadRegister(boolean[] register, boolean load) {
         if (load) {
-            for (int i = 0; i<register.length; i++) this.register[i] = register[i];
+            //System.out.print("\n load Register");
+            for (int i = 0; i<register.length; i++) {
+                this.register[i] = register[i];
+                //System.out.print(this.register[i]?"1":"0");
+            }
         }
     }
 }

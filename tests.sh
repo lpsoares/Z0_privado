@@ -70,6 +70,9 @@ python -m pytest -v TestesSW/testeVMTranslator.py -rxs
 
 # Testes para codigos em Jack
 #python TestesSW/compiler.py -t TestesSW/testesJack.txt -in Codigos/Jack/ -out TestesSW/machine_code/ -p 3
+
+# java -jar Elemulator.jar ../machine_code/HelloWorld/HelloWorld.hack -p ../machine_code/Hexagon4.pbm -r 512 256 -c 8388608 -b 32
+
 #python TestesSW/vmtranslator.py -t TestesSW/testesJack.txt -in TestesSW/machine_code/ -out TestesSW/machine_code/ -p 3
 #python TestesSW/assembler.py -t TestesSW/testesJack.txt -in TestesSW/machine_code/ -out TestesSW/machine_code/ -p 3
 #python TestesSW/emulate.py -t TestesSW/testesJack.txt -in TestesSW/testesAssembly/ -out TestesSW/machine_code/ -p 3

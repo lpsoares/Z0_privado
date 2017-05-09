@@ -9,6 +9,12 @@ package elemulator;
 
 public class ProgramCounter extends Register {
 
+    int bits;
+    public ProgramCounter(int bits) {
+        super(bits);
+        this.bits = bits;
+    }
+
     public void execute (boolean[] register, boolean load, boolean reset) {
         if (reset) reset();
         else if (load) loadRegister(register, load);
@@ -18,7 +24,7 @@ public class ProgramCounter extends Register {
     private void increment() {
         int decimal = converter.booleanToInt(register);
         decimal++;
-        register = converter.intToBoolean(decimal);
+        register = converter.intToBoolean(decimal,bits);
     }
 
     private void reset () {

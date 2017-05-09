@@ -202,6 +202,13 @@ public class Code {
         return String.format("%1$15s", binary).replace(" ", "0");
     }
 
+    public static String toBinary32(String symbol) {
+        int value = Integer.valueOf(symbol);
+        String binary = Integer.toBinaryString(value);
+        return String.format("%1$31s", binary).replace(" ", "0");
+    }
+
+
     // Identifica o destino
     private static int checkDest(String s) throws InvalidDestException {
         if (s.equals("%A"))

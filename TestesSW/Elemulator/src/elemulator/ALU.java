@@ -12,6 +12,12 @@ public class ALU {
     private boolean zr;
     private boolean ng;
 
+    int bits;
+
+    public ALU(int bits) {
+        this.bits = bits;
+    }
+
     public void execute(boolean[] x, boolean[] y, boolean zx, boolean nx, boolean zy, boolean ny, boolean f, boolean no) {
 
         zr = true;
@@ -35,7 +41,7 @@ public class ALU {
     }
 
     private boolean[] clear () {
-        boolean[] result = new boolean[16];
+        boolean[] result = new boolean[bits];
         for (int j = 0; j<result.length; j++) {
             result[j] = false;
         }
@@ -43,7 +49,7 @@ public class ALU {
     }
 
     private boolean[] negate (boolean[] a) {
-        boolean[] result = new boolean[16];
+        boolean[] result = new boolean[bits];
         for (int i = 0; i<result.length; i++) {
             result[i] = !a[i];
         }
@@ -51,7 +57,7 @@ public class ALU {
     }
 
     private boolean[] and (boolean[] x, boolean[] y) {
-        boolean[] result = new boolean[16];
+        boolean[] result = new boolean[bits];
         for (int i = 0; i<x.length; i++) {
             result[i] = x[i] && y[i];
         }
@@ -59,7 +65,7 @@ public class ALU {
     }
 
     private boolean[] adder (boolean[] x, boolean[] y) {
-        boolean[] result = new boolean[16];
+        boolean[] result = new boolean[bits];
         for (int i = 0; i<x.length; i++) {
             int count = 0;
             if (x[i]) count++;
@@ -69,13 +75,13 @@ public class ALU {
             else if (count == 1) result[i] = true;
             else if (count == 2) {
                 result[i] = false;
-                if(i != 15) {
+                if(i != (bits-1)) {
                     result[i+1] = true;
                 }
             }
             else if (count == 3) {
                 result[i] = true;
-                if(i != 15) {
+                if(i != (bits-1)) {
                     result[i+1] = true;
                 }
             }
@@ -84,7 +90,7 @@ public class ALU {
     }
 
     private void compareNg (boolean[] a) {
-        if (a[15]) ng = true;
+        if (a[bits-1]) ng = true;
     }
 
     private void compareZr (boolean[] a) {

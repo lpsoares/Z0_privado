@@ -11,9 +11,15 @@ public class InstruDec {
 
     private boolean muxIOsel, muxAMsel, zx, nx, zy, ny, f, no, loadA, loadD, loadM, loadPC;
 
+    int bits;
+
+    public InstruDec(int bits) {
+        this.bits = bits;
+    }
+
     public void execute (boolean[] instruction) {
 
-        muxIOsel = instruction[15];
+        muxIOsel = instruction[bits-1];
         muxAMsel = instruction[12];
         zx = instruction[11];
         nx = instruction[10];
@@ -21,9 +27,9 @@ public class InstruDec {
         ny = instruction[8];
         f = !instruction[7];
         no = instruction[6];
-        loadA = (!instruction[15]) || (instruction[15] && instruction[5]);
-        loadD = instruction[4] && instruction[15];
-        loadM = instruction[3] && instruction[15];
+        loadA = (!instruction[bits-1]) || (instruction[bits-1] && instruction[5]);
+        loadD = instruction[4] && instruction[bits-1];
+        loadM = instruction[3] && instruction[bits-1];
     }
 
     public void executeJump(boolean[] instruction, boolean zr, boolean ng) {
@@ -38,7 +44,7 @@ public class InstruDec {
         loadPC2 = zr && instruction[1];
         loadPC3 = ng && instruction[2];
         
-        loadPC = (loadPC1 || loadPC2 || loadPC3) && instruction[15];
+        loadPC = (loadPC1 || loadPC2 || loadPC3) && instruction[bits-1];
 
     }
 
