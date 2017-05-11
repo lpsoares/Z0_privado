@@ -34,7 +34,8 @@ public class Hack {
 
         while (s.hasNext()){
             String nextValue = s.nextLine();
-            System.out.println(String.valueOf(current_line)+"|"+nextValue+"|");
+            // s.next(); pode ser mais interessante quando ler arquivos MIF
+            
             if(nextValue.length() != bits) {
                 Error.error("Tamanho da instrução na linha "+String.valueOf(current_line+1)+
                     " Mem=("+String.valueOf(current_line)+") diferente de "+String.valueOf(bits)+
