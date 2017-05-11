@@ -20,7 +20,7 @@ public class Code {
     public static String dest(String[] mnemnonic) throws InvalidDestException {
 
         if ( mnemnonic.length == 0 || mnemnonic[0].equals("")) {
-            Error.error("Instrução invalida");
+            Error.error("Instrução vazia na rotina dest");
             throw new InvalidDestException();
         }
 
@@ -30,44 +30,44 @@ public class Code {
             if(mnemnonic.length==3) dests[checkDest(mnemnonic[2])]='1';
             if(mnemnonic.length==4) dests[checkDest(mnemnonic[3])]='1';
             if(mnemnonic.length==5) dests[checkDest(mnemnonic[4])]='1';
-            if(mnemnonic.length > 5) Error.error("Mais de três destinos em MOV");
+            if(mnemnonic.length > 5) Error.error("Mais de três destinos em MOV: "+String.join(" ",mnemnonic));
         } else if (mnemnonic[0].startsWith("add")) {
             if(mnemnonic.length==4) dests[checkDest(mnemnonic[3])]='1';
             if(mnemnonic.length==5) dests[checkDest(mnemnonic[4])]='1';
             if(mnemnonic.length==6) dests[checkDest(mnemnonic[5])]='1';
-            if(mnemnonic.length > 6) Error.error("Mais de três destinos em ADD");
+            if(mnemnonic.length > 6) Error.error("Mais de três destinos em ADD: "+String.join(" ",mnemnonic));
         } else if (mnemnonic[0].startsWith("sub")) {
             if(mnemnonic.length==4) dests[checkDest(mnemnonic[3])]='1';
             if(mnemnonic.length==5) dests[checkDest(mnemnonic[4])]='1';
             if(mnemnonic.length==6) dests[checkDest(mnemnonic[5])]='1';
-            if(mnemnonic.length > 6) Error.error("Mais de três destinos em SUB");
+            if(mnemnonic.length > 6) Error.error("Mais de três destinos em SUB: "+String.join(" ",mnemnonic));
         } else if (mnemnonic[0].startsWith("rsub")) {
             if(mnemnonic.length==4) dests[checkDest(mnemnonic[3])]='1';
             if(mnemnonic.length==5) dests[checkDest(mnemnonic[4])]='1';
             if(mnemnonic.length==6) dests[checkDest(mnemnonic[5])]='1';
-            if(mnemnonic.length > 6) Error.error("Mais de três destinos em RSUB");
+            if(mnemnonic.length > 6) Error.error("Mais de três destinos em RSUB: "+String.join(" ",mnemnonic));
         } else if (mnemnonic[0].startsWith("inc")) {
             if(mnemnonic.length==2) dests[checkDest(mnemnonic[1])]='1';
-            if(mnemnonic.length > 2) Error.error("Mais de um destino em INC");
+            if(mnemnonic.length > 2) Error.error("Mais de um destino em INC: "+String.join(" ",mnemnonic));
         } else if (mnemnonic[0].startsWith("dec")) {
             if(mnemnonic.length==2) dests[checkDest(mnemnonic[1])]='1';
-            if(mnemnonic.length > 2) Error.error("Mais de um destino em DEC");
+            if(mnemnonic.length > 2) Error.error("Mais de um destino em DEC: "+String.join(" ",mnemnonic));
         } else if (mnemnonic[0].startsWith("not")) {
             if(mnemnonic.length==2) dests[checkDest(mnemnonic[1])]='1';
-            if(mnemnonic.length > 2) Error.error("Mais de um destino em NOT");
+            if(mnemnonic.length > 2) Error.error("Mais de um destino em NOT: "+String.join(" ",mnemnonic));
         } else if (mnemnonic[0].startsWith("neg")) {
             if(mnemnonic.length==2) dests[checkDest(mnemnonic[1])]='1';
-            if(mnemnonic.length > 2) Error.error("Mais de um destino em NEG");
+            if(mnemnonic.length > 2) Error.error("Mais de um destino em NEG: "+String.join(" ",mnemnonic));
         } else if (mnemnonic[0].startsWith("and")) {
             if(mnemnonic.length==4) dests[checkDest(mnemnonic[3])]='1';
             if(mnemnonic.length==5) dests[checkDest(mnemnonic[4])]='1';
             if(mnemnonic.length==6) dests[checkDest(mnemnonic[5])]='1';
-            if(mnemnonic.length > 6) Error.error("Mais de três destinos em AND");
+            if(mnemnonic.length > 6) Error.error("Mais de três destinos em AND: "+String.join(" ",mnemnonic));
         } else if (mnemnonic[0].startsWith("or")) {
             if(mnemnonic.length==4) dests[checkDest(mnemnonic[3])]='1';
             if(mnemnonic.length==5) dests[checkDest(mnemnonic[4])]='1';
             if(mnemnonic.length==6) dests[checkDest(mnemnonic[5])]='1';
-            if(mnemnonic.length > 6) Error.error("Mais de três destinos em OR");
+            if(mnemnonic.length > 6) Error.error("Mais de três destinos em OR: "+String.join(" ",mnemnonic));
         } else {
             // instrução não possui destino
         }
@@ -122,7 +122,7 @@ public class Code {
                     mnemnonic[0].startsWith("jmp") ) {
             comp = "%D";
         } else {
-            Error.error("Instrução invalida");
+            Error.error("Instrução invalida: "+String.join(" ",mnemnonic));
             throw new InvalidCompException();
         }
 
@@ -174,7 +174,7 @@ public class Code {
     public static String jump(String[] mnemnonic) throws InvalidJumpException {
         
         if ( mnemnonic.length == 0 || mnemnonic[0].equals("")) {
-            Error.error("Jump invalido");
+            Error.error("Jump invalido: "+String.join(" ",mnemnonic));
             throw new InvalidJumpException();
         }
 
@@ -218,7 +218,7 @@ public class Code {
         else if (s.equals("(%A)"))
             return(2);
         else {
-            Error.error("Instrução invalida");
+            Error.error("Instrução invalida: "+s);
             throw new InvalidDestException();
         }
     }
