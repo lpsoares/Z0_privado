@@ -107,6 +107,7 @@ public class Parser {
         if (command.endsWith(":")) {
             return command.replace(":", "");
         } else {
+            Error.error("Label não está terminando com dois pontos : ");
             throw new InvalidAssemblyException();
         }
     }
