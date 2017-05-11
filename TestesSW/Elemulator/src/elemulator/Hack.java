@@ -33,9 +33,12 @@ public class Hack {
         Scanner s = new Scanner(file);
 
         while (s.hasNext()){
-            String nextValue = s.next();
+            String nextValue = s.nextLine();
+            System.out.println(String.valueOf(current_line)+"|"+nextValue+"|");
             if(nextValue.length() != bits) {
-                Error.error("Tamanho da instrução diferente de "+String.valueOf(bits)+" bits : "+nextValue.length());
+                Error.error("Tamanho da instrução na linha "+String.valueOf(current_line+1)+
+                    " Mem=("+String.valueOf(current_line)+") diferente de "+String.valueOf(bits)+
+                    " bits, quantidade de caracteres = "+nextValue.length());
             }
             boolean[] instruction = converter.stringToBoolean(nextValue,bits);
             rom.setSelectedInstruction(instruction, current_line);

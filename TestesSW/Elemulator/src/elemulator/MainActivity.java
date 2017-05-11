@@ -82,7 +82,6 @@ public class MainActivity {
             final Screen screen = new Screen(resolution);
             final DisplayDriver dd = new DisplayDriver(screen);
             final Hack hack = new Hack(targetStream, dd, bits);
-            //final Converter converter = new Converter();
 
             hack.load_ram(memory_load);
 
