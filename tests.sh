@@ -42,18 +42,27 @@ mvn-color()
   echo -ne ${RESET_FORMATTING}
 }
 
+let "n_error=0"
+
 # Testes para VHDL
 python TestesHW/run.py -p3
+let "n_error+=$?"
+
 
 # Testes para codigos em Assembly
 python TestesSW/assembler.py -t TestesSW/testesAssembly.txt -in Codigos/Assembly/ -out TestesSW/machine_code/ -p 3
+let "n_error+=$?"
 python TestesSW/emulate.py -t TestesSW/testesAssembly.txt -in TestesSW/testesAssembly/ -out TestesSW/machine_code/ -p 3 -r 512,256
+let "n_error+=$?"
 python -m pytest -v TestesSW/testeAssembly.py -rxs
+let "n_error+=$?"
 
 # Testes para AssemblerZ0
 mvn-color -f Codigos/AssemblerZ0 package
+let "n_error+=$?"
 python -m pytest -v TestesSW/testeAssembler.py -rxs
 ### O CERTO SERIA COLOCAR NO EMULADOR ###
+let "n_error+=$?"
 
 
 # Testes para codigos VM
@@ -62,27 +71,45 @@ python -m pytest -v TestesSW/testeAssembler.py -rxs
 
 # Testes para o VMTranslator
 mvn-color -f Codigos/VMTranslator package
+let "n_error+=$?"
 python TestesSW/vmtranslator.py -t TestesSW/testesVMTranslator.txt -in Codigos/VMTranslator/src/test/resources/ -out TestesSW/machine_code/ -p 3
+let "n_error+=$?"
 python TestesSW/assembler.py -t TestesSW/testesVMTranslator.txt -in TestesSW/machine_code/ -out TestesSW/machine_code/ -p 3
+let "n_error+=$?"
 python TestesSW/emulate.py -t TestesSW/testesVMTranslator.txt -in TestesSW/testesVMTranslator/ -out TestesSW/machine_code/ -p 3
+let "n_error+=$?"
 python -m pytest -v TestesSW/testeVMTranslator.py -rxs
-
+let "n_error+=$?"
 
 # Testes para codigos em Jack
 #python TestesSW/compiler.py -t TestesSW/testesJack.txt -in Codigos/Jack/ -out TestesSW/machine_code/ -p 3
+#let "n_error+=$?"
 
 # java -jar Elemulator.jar ../machine_code/HelloWorld/HelloWorld.hack -p ../machine_code/Hexagon4.pbm -r 512 256 -c 8388608 -b 32
+#let "n_error+=$?"
 
 #python TestesSW/vmtranslator.py -t TestesSW/testesJack.txt -in TestesSW/machine_code/ -out TestesSW/machine_code/ -p 3
+#let "n_error+=$?"
 #python TestesSW/assembler.py -t TestesSW/testesJack.txt -in TestesSW/machine_code/ -out TestesSW/machine_code/ -p 3
+#let "n_error+=$?"
 #python TestesSW/emulate.py -t TestesSW/testesJack.txt -in TestesSW/testesAssembly/ -out TestesSW/machine_code/ -p 3
+#let "n_error+=$?"
 #python -m pytest -v TestesSW/testeJack.py -rxs
+#let "n_error+=$?"
 
 # Testes para o Compiler
 # mvn-color -f Codigos/Compiler package
+#let "n_error+=$?"
 #python TestesSW/testeCompiler.py -t TestesSW/testesCompiler.txt -in Codigos/Compiler/src/test/resources/ -out TestesSW/machine_code/ -p 3
+#let "n_error+=$?"
 #python TestesSW/vmtranslator.py -t TestesSW/testesCompiler.txt -in Codigos/Compiler/src/test/resources/ -out TestesSW/machine_code/ -p 3
+#let "n_error+=$?"
 #python TestesSW/assembler.py -t TestesSW/testesCompiler.txt -in TestesSW/machine_code/ -out TestesSW/machine_code/ -p 3
+#let "n_error+=$?"
 #python TestesSW/emulate.py -t TestesSW/testesCompiler.txt -in TestesSW/testesCompiler/ -out TestesSW/machine_code/ -p 3
+#let "n_error+=$?"
 #python -m pytest -v TestesSW/testeVMTranslator.py -rxs
+#let "n_error+=$?"
 
+
+exit $n_error
