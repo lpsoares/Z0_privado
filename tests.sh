@@ -88,7 +88,7 @@ python TestesSW/vmtranslator.py -t TestesSW/testesJack.txt -in TestesSW/jack_cod
 let "n_error+=$?"
 python TestesSW/assembler.py -t TestesSW/testesJack.txt -in TestesSW/jack_code/ -out TestesSW/jack_code/ -p 3 -b 32
 let "n_error+=$?"
-python TestesSW/emulate.py -t TestesSW/testesJack.txt -in TestesSW/testesAssembly/ -out TestesSW/jack_code/ -p 3 -b 32 -r 512,256
+python TestesSW/emulate.py -t TestesSW/testesJack.txt -out TestesSW/jack_code/ -p 3 -b 32 -r 512,256
 let "n_error+=$?"
 #python -m pytest -v TestesSW/testeJack.py -rxs
 #let "n_error+=$?"
