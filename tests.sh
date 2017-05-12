@@ -72,11 +72,11 @@ let "n_error+=$?"
 # Testes para o VMTranslator
 mvn-color -f Codigos/VMTranslator package
 let "n_error+=$?"
-python TestesSW/vmtranslator.py -t TestesSW/testesVMTranslator.txt -in Codigos/VMTranslator/src/test/resources/ -out TestesSW/machine_code/ -p 3
+python TestesSW/vmtranslator.py -t TestesSW/testesVMTranslator.txt -in Codigos/VMTranslator/src/test/resources/ -out TestesSW/vm_code/ -p 3
 let "n_error+=$?"
-python TestesSW/assembler.py -t TestesSW/testesVMTranslator.txt -in TestesSW/machine_code/ -out TestesSW/machine_code/ -p 3
+python TestesSW/assembler.py -t TestesSW/testesVMTranslator.txt -in TestesSW/vm_code/ -out TestesSW/vm_code/ -p 3
 let "n_error+=$?"
-python TestesSW/emulate.py -t TestesSW/testesVMTranslator.txt -in TestesSW/testesVMTranslator/ -out TestesSW/machine_code/ -p 3
+python TestesSW/emulate.py -t TestesSW/testesVMTranslator.txt -in TestesSW/testesVMTranslator/ -out TestesSW/vm_code/ -p 3
 let "n_error+=$?"
 python -m pytest -v TestesSW/testeVMTranslator.py -rxs
 let "n_error+=$?"
