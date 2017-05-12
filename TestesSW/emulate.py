@@ -8,7 +8,7 @@ import time
 import os
 import argparse
 
-def emulate(testes,in_dir,out_dir,processos,resolution):
+def emulate(testes,in_dir,out_dir,bits,processos,resolution):
 	
 	processes = set()
 	max_processes = processos
@@ -32,10 +32,14 @@ def emulate(testes,in_dir,out_dir,processos,resolution):
 				# Testa se arquivos existem, senão pula
 				if os.path.exists(out_dir+"{0}.hack".format(nome[0])):
 
-					processes.add(subprocess.Popen(['java', '-jar', 'TestesSW/Elemulator/Elemulator.jar',
+					rotina = ['java', '-jar', 'TestesSW/Elemulator/Elemulator.jar',
 						out_dir+"{0}.hack".format(nome[0]),
 						"-i",in_dir+"{0}{1}_in.mif".format(nome[0],i),
-						"-o",out_dir+"{0}{1}_out.mif".format(nome[0],i),"-c",nome[2]]))
+						"-o",out_dir+"{0}{1}_out.mif".format(nome[0],i),"-c",nome[2]]
+					if bits==32:
+						rotina.append("-b")
+						rotina.append("32")
+					processes.add(subprocess.Popen(rotina))
 					count += 1
 					while count >= max_processes:
 						count = 0
@@ -51,10 +55,14 @@ def emulate(testes,in_dir,out_dir,processos,resolution):
 			# Testa se arquivos existem, senão pula
 			if os.path.exists(out_dir+"{0}.hack".format(nome[0])):
 
-				processes.add(subprocess.Popen(['java', '-jar', 'TestesSW/Elemulator/Elemulator.jar',
+				rotina = ['java', '-jar', 'TestesSW/Elemulator/Elemulator.jar',
 					out_dir+"{0}.hack".format(nome[0]),
 					"-i",in_dir+"{0}_in.mif".format(nome[0]),
-					"-o",out_dir+"{0}_out.mif".format(nome[0]),"-c",nome[2]]))
+					"-o",out_dir+"{0}_out.mif".format(nome[0]),"-c",nome[2]]
+				if bits==32:
+					rotina.append("-b")
+					rotina.append("32")
+				processes.add(subprocess.Popen(rotina))
 				count += 1
 				while count >= max_processes:
 					count = 0
@@ -70,12 +78,19 @@ def emulate(testes,in_dir,out_dir,processos,resolution):
 			# Testa se arquivos existem, senão pula
 			if os.path.exists(out_dir+"{0}.hack".format(nome[0])):
 
-				processes.add(subprocess.Popen(['java', '-jar', 'TestesSW/Elemulator/Elemulator.jar',
+				rotina = ['java', '-jar', 'TestesSW/Elemulator/Elemulator.jar',
 					out_dir+"{0}.hack".format(nome[0]),
-					"-p",out_dir+"{0}.pbm".format(nome[0],i),
-					"-i",in_dir+"{0}_in.mif".format(nome[0],i),
-					"-o",out_dir+"{0}_out.mif".format(nome[0],i),
-					"-c",nome[2],"-r",resolution[0],resolution[1]]))
+					"-p",out_dir+"{0}.pbm".format(nome[0]),
+					"-o",out_dir+"{0}_out.mif".format(nome[0]),
+					"-c",nome[2],"-r",resolution[0],resolution[1]]
+
+				if in_dir:
+					rotina.append("-i")
+					rotina.append(in_dir+"{0}_in.mif".format(nome[0]))
+				if bits==32:
+					rotina.append("-b")
+					rotina.append("32")
+				processes.add(subprocess.Popen(rotina))
 				count += 1
 				while count >= max_processes:
 					count = 0
@@ -114,14 +129,21 @@ def emulate(testes,in_dir,out_dir,processos,resolution):
 if __name__ == "__main__":
 	ap = argparse.ArgumentParser()
 	ap.add_argument("-t", "--tests", required=True,help="arquivo com lista de testes")
-	ap.add_argument("-in", "--in_dir", required=True,help="caminho para codigos")
+	ap.add_argument("-in", "--in_dir", required=False,help="caminho para codigos")
 	ap.add_argument("-out", "--out_dir", required=True,help="caminho para salvar resultado de testes")
 	ap.add_argument("-p", "--processos", required=True,help="numero de threads a se paralelizar")
 	ap.add_argument("-r", "--resolution", required=False,help="resolução em X e Y")
+	ap.add_argument("-b", "--bits", required=False,help="bits da arquitetura")
 	args = vars(ap.parse_args())
 	proc = int(args["processos"])
+
+	if args["bits"]:
+		bita = int(args["bits"])
+	else:
+		bita=16
+
 	if args["resolution"] != None:
 		res = args["resolution"].split(",")
 	else:
 		res = ['320', '240']	# valor padrão
-	emulate(testes=args["tests"],in_dir=args["in_dir"],out_dir=args["out_dir"],processos=proc,resolution=res)
+	emulate(testes=args["tests"],in_dir=args["in_dir"],out_dir=args["out_dir"],bits=bita,processos=proc,resolution=res)

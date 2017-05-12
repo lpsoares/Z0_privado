@@ -1,0 +1,31 @@
+/**
+ * Main class para desenhar figuras geometricas na tela.
+ * Arquivo : Hexagon/Main.jack
+ * Desenvolvido por: Lucas Astur
+ */
+
+class Main {
+
+    function void main() {
+    
+        // Exemplo de chamada para subrotina
+        do Main.drawHexagon(160, 120, 20);
+        
+        return;
+    }
+    
+    /** Desenha um Hexagono na tela. */
+    function void drawHexagon(int x, int y, int d){
+    /** Nao esta desenhando
+        var int e;
+        let e = Math.divide(d,2);
+        do Screen.drawline(x-d, y-d, x+d, y-d);
+        do Screen.drawline(x+d, y-d, x+(2*d), y-d+(math.sqrt(3)*d));
+        do Screen.drawline(x+(2*d), y-d+(math.sqrt(3)*d), x+d, y-d+(2*(math.sqrt(3)*d)));
+        do Screen.drawline(x+d, y-d+(2*(math.sqrt(3)*d)),x-d, y-d+(2*(math.sqrt(3)*d)));
+        do Screen.drawline(x-d, y-d+(2*(math.sqrt(3)*d)), x-(2*d), y-d+(math.sqrt(3)*d));
+        do Screen.drawline(x-(2*d), y-d+(math.sqrt(3)*d), x-d, y-d); */
+        return;
+	}
+
+}

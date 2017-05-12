@@ -82,20 +82,17 @@ python -m pytest -v TestesSW/testeVMTranslator.py -rxs
 let "n_error+=$?"
 
 # Testes para codigos em Jack
-#python TestesSW/compiler.py -t TestesSW/testesJack.txt -in Codigos/Jack/ -out TestesSW/machine_code/ -p 3
-#let "n_error+=$?"
-
-# java -jar Elemulator.jar ../machine_code/HelloWorld/HelloWorld.hack -p ../machine_code/Hexagon4.pbm -r 512 256 -c 8388608 -b 32
-#let "n_error+=$?"
-
-#python TestesSW/vmtranslator.py -t TestesSW/testesJack.txt -in TestesSW/machine_code/ -out TestesSW/machine_code/ -p 3
-#let "n_error+=$?"
-#python TestesSW/assembler.py -t TestesSW/testesJack.txt -in TestesSW/machine_code/ -out TestesSW/machine_code/ -p 3
-#let "n_error+=$?"
-#python TestesSW/emulate.py -t TestesSW/testesJack.txt -in TestesSW/testesAssembly/ -out TestesSW/machine_code/ -p 3
-#let "n_error+=$?"
+python TestesSW/compiler.py -t TestesSW/testesJack.txt -in Codigos/Jack/ -out TestesSW/jack_code/ -p 3
+let "n_error+=$?"
+python TestesSW/vmtranslator.py -t TestesSW/testesJack.txt -in TestesSW/jack_code/ -out TestesSW/jack_code/ -p 3
+let "n_error+=$?"
+python TestesSW/assembler.py -t TestesSW/testesJack.txt -in TestesSW/jack_code/ -out TestesSW/jack_code/ -p 3 -b 32
+let "n_error+=$?"
+python TestesSW/emulate.py -t TestesSW/testesJack.txt -in TestesSW/testesAssembly/ -out TestesSW/jack_code/ -p 3 -b 32 -r 512,256
+let "n_error+=$?"
 #python -m pytest -v TestesSW/testeJack.py -rxs
 #let "n_error+=$?"
+
 
 # Testes para o Compiler
 # mvn-color -f Codigos/Compiler package

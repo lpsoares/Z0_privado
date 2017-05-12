@@ -7,7 +7,7 @@ import loadTestes
 import time
 import argparse
 
-def assembler(testes,in_dir,out_dir,processos):
+def compiler(testes,in_dir,out_dir,processos):
 	
 	start_time = time.time()
 
@@ -32,6 +32,7 @@ def assembler(testes,in_dir,out_dir,processos):
 
 		subprocess.call(["mkdir", "-p", out_dir+nome[0]])
 		subprocess.call(["mv {0} {1}".format(in_dir+nome[0]+"/*.vm",out_dir+nome[0]	)],shell=True)
+		subprocess.call(["cp {0} {1}".format("TestesSW/OS/*.vm",out_dir+nome[0]	)],shell=True)
 
 	elapsed_time = time.time() - start_time
 	print('\033[92m'+"Assembled {0} file(s) in {1:.2f} seconds".format(done,elapsed_time)+'\033[0m') 
@@ -48,5 +49,5 @@ if __name__ == "__main__":
 	ap.add_argument("-out", "--out_dir", required=True,help="caminho para salvar resultado de testes")
 	ap.add_argument("-p", "--processos", required=True,help="numero de threads a se paralelizar")
 	args = vars(ap.parse_args())
-	assembler(testes=args["tests"],in_dir=args["in_dir"],out_dir=args["out_dir"],processos=int(args["processos"]))
+	compiler(testes=args["tests"],in_dir=args["in_dir"],out_dir=args["out_dir"],processos=int(args["processos"]))
 	
