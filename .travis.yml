@@ -2,7 +2,7 @@ language: python
 matrix:
   include:
   # Python 3.5 with ghdl llvm
-  - env: BUILD_NAME=py35-acceptance-ghdl
+  - env: BUILD_NAME=vhdl
     python: '3.5'
     os: linux
     sudo: required
@@ -30,7 +30,29 @@ matrix:
     - pip install opencv-python
     - pip install imutils
 
-  - env: BUILD_NAME=teste2
+  - env: BUILD_NAME=assembly
+    python: '3.5'
+    os: linux
+    sudo: required
+    dist: trusty
+    before_install:
+    - sudo apt-get install -y caca-utils
+
+  - env: BUILD_NAME=assembler
+    python: '3.5'
+    os: linux
+    sudo: required
+    dist: trusty
+    before_install:
+
+  - env: BUILD_NAME=vmtranslator
+    python: '3.5'
+    os: linux
+    sudo: required
+    dist: trusty
+    before_install:
+
+  - env: BUILD_NAME=jack
     python: '3.5'
     os: linux
     sudo: required
@@ -45,7 +67,7 @@ addons:
       - oracle-java8-installer
 
 script:
-- bash tests.sh $TEST_SUITE
+- bash tests.sh $BUILD_NAME
 
 notifications:
   email: false

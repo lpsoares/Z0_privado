@@ -7,7 +7,7 @@ import loadTestes
 import time
 import argparse
 
-def vmtranslator(testes,in_dir,out_dir,processos):
+def vmtranslator(jar,testes,in_dir,out_dir,processos):
 	
 	start_time = time.time()
 
@@ -38,8 +38,8 @@ def vmtranslator(testes,in_dir,out_dir,processos):
 		
 		saida = out_dir+"{0}.nasm".format(nome[0])
 
-		rotina = ['java', '-jar', 'Codigos/VMTranslator/target/VMTranslator-1.0.jar',
-			entrada,"-o",saida]
+		#rotina = ['java', '-jar', 'Codigos/VMTranslator/target/VMTranslator-1.0.jar',
+		rotina = ['java', '-jar', jar, entrada,"-o",saida]
 		
 		# remove rotina de bootstrap do vmtranslator
 		if no_bootstrap: 
@@ -61,11 +61,12 @@ def vmtranslator(testes,in_dir,out_dir,processos):
 	
 if __name__ == "__main__":
 	ap = argparse.ArgumentParser()
+	ap.add_argument("-j", "--jar", required=True,help="arquivo jar para executar")
 	ap.add_argument("-t", "--tests", required=True,help="arquivo com lista de testes")
 	ap.add_argument("-in", "--in_dir", required=True,help="caminho para codigos")
 	ap.add_argument("-out", "--out_dir", required=True,help="caminho para salvar resultado de testes")
 	ap.add_argument("-p", "--processos", required=True,help="numero de threads a se paralelizar")
 	args = vars(ap.parse_args())
-	vmtranslator(testes=args["tests"],in_dir=args["in_dir"],out_dir=args["out_dir"],processos=int(args["processos"]))
+	vmtranslator(jar=args["jar"],testes=args["tests"],in_dir=args["in_dir"],out_dir=args["out_dir"],processos=int(args["processos"]))
 	
 
