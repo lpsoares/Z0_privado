@@ -16,6 +16,9 @@ class Main {
     
     /** Desenha um Hexagono na tela. */
     function void drawHexagon(int x, int y, int d){
+
+
+
     /** Nao esta desenhando
         var int e;
         let e = Math.divide(d,2);
@@ -25,7 +28,20 @@ class Main {
         do Screen.drawline(x+d, y-d+(2*(math.sqrt(3)*d)),x-d, y-d+(2*(math.sqrt(3)*d)));
         do Screen.drawline(x-d, y-d+(2*(math.sqrt(3)*d)), x-(2*d), y-d+(math.sqrt(3)*d));
         do Screen.drawline(x-(2*d), y-d+(math.sqrt(3)*d), x-d, y-d); */
+
+
+        /** Desenha uma triangulo na tela. */
+        var int h;
+        var int d2;
+        let h = (d * Math.sqrt(3)) / 2;
+        let d2 = d / 2;
+        do Screen.drawLine(x, y, x + d2, y - h);
+        do Screen.drawLine(x + d2, y - h, x + d, y);
+        do Screen.drawLine(x + d, y, x, y);
         return;
+
+
+
 	}
 
 }

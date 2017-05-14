@@ -16,7 +16,23 @@ class Main {
     
     /** Desenha um Paralelogramo na tela. */
     function void drawParallelogram(int x, int y, int d, int l) {
-        return;
+
+
+
+
+        /** Desenha uma triangulo na tela. */
+		var int h;
+		var int d2;
+		let h = (d * Math.sqrt(3)) / 2;
+		let d2 = d / 2;
+		do Screen.drawLine(x, y, x + d2, y - h);
+		do Screen.drawLine(x + d2, y - h, x + d, y);
+		do Screen.drawLine(x + d, y, x, y);
+		return;
+	
+
+	
+
     }
 
 }

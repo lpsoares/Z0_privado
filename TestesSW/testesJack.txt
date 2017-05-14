@@ -2,12 +2,12 @@
 # Criado por Luciano Soares <lpsoares@insper.edu.br>
 
 HelloWorld -1 8388608 /
-Quadrado -1 16777216 /
-Diamond -1 16777216 /
-Hexagon -1 46777216 /
-Parallelogram -1 16777216 /
-Octagon -1 16777216 /
-Pentagon -1 16777216 /
-Star -1 16777216 /
-Triangle -1 16777216 /
-Trapezoid -1 16777216 /
+Quadrado -1 33554432 /
+Diamond -1 33554432 /
+Hexagon -1 33554432 /
+Parallelogram -1 33554432 /
+Octagon -1 33554432 /
+Pentagon -1 33554432 /
+Star -1 33554432 /
+Triangle -1 33554432 /
+Trapezoid -1 33554432 /
