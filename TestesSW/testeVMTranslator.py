@@ -19,7 +19,7 @@ def test_Assembly(nomes_testes):
 
 	nomes_testes = nomes_testes.split()
 
-	resultado = "TestesSW/machine_code/{0}_out.mif".format(nomes_testes[0])
+	resultado = "TestesSW/vm_code/{0}_out.mif".format(nomes_testes[0])
 	teste = "TestesSW/testesVMTranslator/{0}_tst.mif".format(nomes_testes[0])
 	debug = False
 

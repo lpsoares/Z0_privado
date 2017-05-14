@@ -39,6 +39,9 @@ def emulate(testes,in_dir,out_dir,bits,processos,resolution):
 					if bits==32:
 						rotina.append("-b")
 						rotina.append("32")
+
+					print("\nEmulating: "+nome[0])
+					print(" ".join(rotina))
 					processes.add(subprocess.Popen(rotina))
 					count += 1
 					while count >= max_processes:
@@ -62,6 +65,9 @@ def emulate(testes,in_dir,out_dir,bits,processos,resolution):
 				if bits==32:
 					rotina.append("-b")
 					rotina.append("32")
+
+				print("\nEmulating: "+nome[0])
+				print(" ".join(rotina))
 				processes.add(subprocess.Popen(rotina))
 				count += 1
 				while count >= max_processes:
@@ -90,6 +96,9 @@ def emulate(testes,in_dir,out_dir,bits,processos,resolution):
 				if bits==32:
 					rotina.append("-b")
 					rotina.append("32")
+
+				print("\nEmulating: "+nome[0])
+				print(" ".join(rotina))
 				processes.add(subprocess.Popen(rotina))
 				count += 1
 				while count >= max_processes:
