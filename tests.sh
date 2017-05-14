@@ -5,6 +5,9 @@
 # Criado por: Luciano Soares <lpsoares@insper.edu.br>
 # Data: 27/04/2017
 
+echo $1
+echo "isso"
+
 # Formatting constants
 export BOLD=`tput bold`
 export UNDERLINE_ON=`tput smul`

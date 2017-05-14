@@ -26,26 +26,26 @@ matrix:
     - cd vunit
     - python setup.py install
     - cd ..
+    install:
+    - pip install opencv-python
+    - pip install imutils
 
-env:
-  global:
-    - CI_NODE_TOTAL=3
-  matrix:
-    - CI_NODE_INDEX=0
-    - CI_NODE_INDEX=1
-    - CI_NODE_INDEX=2
+  - env: BUILD_NAME=teste2
+    python: '3.5'
+    os: linux
+    sudo: required
+    dist: trusty
+    before_install:
+    - sudo apt-get install -y caca-utils
+
 
 addons:
   apt:
     packages:
       - oracle-java8-installer
 
-install:
-  - pip install opencv-python
-  - pip install imutils
-
 script:
-- bash tests.sh 
+- bash tests.sh $TEST_SUITE
 
 notifications:
   email: false
