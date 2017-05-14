@@ -35,7 +35,7 @@ def compiler(testes,in_dir,out_dir,processos):
 		subprocess.call(["cp {0} {1}".format("TestesSW/OS/*.vm",out_dir+nome[0]	)],shell=True)
 
 	elapsed_time = time.time() - start_time
-	print('\033[92m'+"Assembled {0} file(s) in {1:.2f} seconds".format(done,elapsed_time)+'\033[0m') 
+	print('\033[92m'+"Compiled {0} file(s) in {1:.2f} seconds".format(done,elapsed_time)+'\033[0m') 
 
 	if(error_code!=0):
 		print('\033[91m'+"Failed {0} file(s)".format(len(nomes_testes)-done)+'\033[0m') 

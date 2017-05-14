@@ -44,12 +44,23 @@ mvn-color()
 
 let "n_error=0"
 
+
 # Testes para VHDL
+echo -e "\n\n"
+echo -e ${TEXT_MAGENTA}${BACKGROUND_CYAN}"\t\t\t                \t\t\t"${RESET_FORMATTING}
+echo -e ${TEXT_MAGENTA}${BACKGROUND_CYAN}"\t\t\tTestes para VHDL\t\t\t"${RESET_FORMATTING}
+echo -e ${TEXT_MAGENTA}${BACKGROUND_CYAN}"\t\t\t                \t\t\t"${RESET_FORMATTING}
+echo -e "\n"
 python TestesHW/run.py -p3
 let "n_error+=$?"
 
 
 # Testes para codigos em Assembly
+echo -e "\n\n"
+echo -e ${TEXT_MAGENTA}${BACKGROUND_CYAN}"\t\t\t                               \t\t\t"${RESET_FORMATTING}
+echo -e ${TEXT_MAGENTA}${BACKGROUND_CYAN}"\t\t\tTestes para codigos em Assembly\t\t\t"${RESET_FORMATTING}
+echo -e ${TEXT_MAGENTA}${BACKGROUND_CYAN}"\t\t\t                               \t\t\t"${RESET_FORMATTING}
+echo -e "\n"
 python TestesSW/assembler.py -t TestesSW/testesAssembly.txt -in Codigos/Assembly/ -out TestesSW/machine_code/ -p 3
 let "n_error+=$?"
 python TestesSW/emulate.py -t TestesSW/testesAssembly.txt -in TestesSW/testesAssembly/ -out TestesSW/machine_code/ -p 3 -r 512,256
@@ -57,7 +68,13 @@ let "n_error+=$?"
 python -m pytest -v TestesSW/testeAssembly.py -rxs
 let "n_error+=$?"
 
+
 # Testes para AssemblerZ0
+echo -e "\n\n"
+echo -e ${TEXT_MAGENTA}${BACKGROUND_CYAN}"\t\t\t                       \t\t\t"${RESET_FORMATTING}
+echo -e ${TEXT_MAGENTA}${BACKGROUND_CYAN}"\t\t\tTestes para AssemblerZ0\t\t\t"${RESET_FORMATTING}
+echo -e ${TEXT_MAGENTA}${BACKGROUND_CYAN}"\t\t\t                       \t\t\t"${RESET_FORMATTING}
+echo -e "\n"
 mvn-color -f Codigos/AssemblerZ0 package
 let "n_error+=$?"
 python -m pytest -v TestesSW/testeAssembler.py -rxs
@@ -70,6 +87,11 @@ let "n_error+=$?"
 
 
 # Testes para o VMTranslator
+echo -e "\n\n"
+echo -e ${TEXT_MAGENTA}${BACKGROUND_CYAN}"\t\t\t                          \t\t\t"${RESET_FORMATTING}
+echo -e ${TEXT_MAGENTA}${BACKGROUND_CYAN}"\t\t\tTestes para o VMTranslator\t\t\t"${RESET_FORMATTING}
+echo -e ${TEXT_MAGENTA}${BACKGROUND_CYAN}"\t\t\t                          \t\t\t"${RESET_FORMATTING}
+echo -e "\n"
 mvn-color -f Codigos/VMTranslator package
 let "n_error+=$?"
 python TestesSW/vmtranslator.py -t TestesSW/testesVMTranslator.txt -in Codigos/VMTranslator/src/test/resources/ -out TestesSW/vm_code/ -p 3
@@ -81,7 +103,13 @@ let "n_error+=$?"
 python -m pytest -v TestesSW/testeVMTranslator.py -rxs
 let "n_error+=$?"
 
+
 # Testes para codigos em Jack
+echo -e "\n\n"
+echo -e ${TEXT_MAGENTA}${BACKGROUND_CYAN}"\t\t\t                           \t\t\t"${RESET_FORMATTING}
+echo -e ${TEXT_MAGENTA}${BACKGROUND_CYAN}"\t\t\tTestes para codigos em Jack\t\t\t"${RESET_FORMATTING}
+echo -e ${TEXT_MAGENTA}${BACKGROUND_CYAN}"\t\t\t                           \t\t\t"${RESET_FORMATTING}
+echo -e "\n"
 python TestesSW/compiler.py -t TestesSW/testesJack.txt -in Codigos/Jack/ -out TestesSW/jack_code/ -p 3
 let "n_error+=$?"
 python TestesSW/vmtranslator.py -t TestesSW/testesJack.txt -in TestesSW/jack_code/ -out TestesSW/jack_code/ -p 3
@@ -90,11 +118,16 @@ python TestesSW/assembler.py -t TestesSW/testesJack.txt -in TestesSW/jack_code/ 
 let "n_error+=$?"
 python TestesSW/emulate.py -t TestesSW/testesJack.txt -out TestesSW/jack_code/ -p 3 -b 32 -r 512,256
 let "n_error+=$?"
-#python -m pytest -v TestesSW/testeJack.py -rxs
-#let "n_error+=$?"
+python -m pytest -v TestesSW/testeJack.py -rxs
+let "n_error+=$?"
 
 
 # Testes para o Compiler
+#echo -e "\n\n"
+#echo -e ${TEXT_MAGENTA}${BACKGROUND_CYAN}"\t\t\t                      \t\t\t"${RESET_FORMATTING}
+#echo -e ${TEXT_MAGENTA}${BACKGROUND_CYAN}"\t\t\tTestes para o Compiler\t\t\t"${RESET_FORMATTING}
+#echo -e ${TEXT_MAGENTA}${BACKGROUND_CYAN}"\t\t\t                      \t\t\t"${RESET_FORMATTING}
+#echo -e "\n"
 # mvn-color -f Codigos/Compiler package
 #let "n_error+=$?"
 #python TestesSW/testeCompiler.py -t TestesSW/testesCompiler.txt -in Codigos/Compiler/src/test/resources/ -out TestesSW/machine_code/ -p 3
