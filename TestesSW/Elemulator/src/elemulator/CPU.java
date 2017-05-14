@@ -40,7 +40,7 @@ public class CPU {
 
     public void execute (boolean[] inM, boolean[] instruction, boolean reset) {
 
-        Log.print("PC        ",pcOut);
+        //Log.print("PC        ",pcOut);
 
         id.execute(instruction);
         this.writeM = id.isLoadM();
@@ -52,13 +52,13 @@ public class CPU {
         alu.execute(registerD.getRegister(), muxAM, id.isZx(), id.isNx(), id.isZy(), id.isNy(), id.isF(), id.isNo());
         this.outM = alu.getOut();
         
-        Log.print("ALU       ",alu.getOut(),"ng",alu.getNg(),"zr",alu.getZr());
+        //Log.print("ALU       ",alu.getOut(),"ng",alu.getNg(),"zr",alu.getZr());
 
         registerA.loadRegister(mux.execute(alu.getOut(), instruction, id.isMuxIOsel()), id.isLoadA());
-        Log.print("REG-A     ",registerA.getRegister());
+        //Log.print("REG-A     ",registerA.getRegister());
         
         registerD.loadRegister(alu.getOut(), id.isLoadD());
-        Log.print("REG-D     ",registerD.getRegister());
+        //Log.print("REG-D     ",registerD.getRegister());
         
         id.executeJump(instruction, alu.getZr(), alu.getNg());
         pc.execute(registerA.getRegister(), id.isLoadPC(), reset);

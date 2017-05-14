@@ -13,8 +13,11 @@ public class Converter {
         String s = "";
 
         for (int i = a.length-1; i>=0; i--) {
-            if (a[i] == false) s+='0';
-            else if (a[i] == true) s+='1';
+            //if (a[i] == false) s+='0';
+            //else if (a[i] == true) s+='1';
+            if (a[i]) s+='1';
+            else s+='0';
+               
         }
 
         int decimal = Integer.parseInt(s, 2);
@@ -28,7 +31,8 @@ public class Converter {
 
         for (int j = 0; j<s.length();j++) {
             if (s.charAt(j)=='0') a[s.length()-1-j] = false;
-            else if (s.charAt(j)=='1') a[s.length()-1-j] = true;
+            //else if (s.charAt(j)=='1') a[s.length()-1-j] = true;
+            else a[s.length()-1-j] = true;
         }
 
         return a;
@@ -38,8 +42,10 @@ public class Converter {
         String s = "";
 
         for (int i = a.length-1; i>=0; i--) {
-            if (a[i] == false) s+='0';
-            else if (a[i] == true) s+='1';
+            //if (a[i] == false) s+='0';
+            //else if (a[i] == true) s+='1';
+            if (a[i]) s+='1';
+            else s+='0';
         }
 
         return s;
@@ -50,7 +56,8 @@ public class Converter {
 
         for (int j = 0; j<s.length();j++) {
             if (s.charAt(j)=='0') a[s.length()-1-j] = false;
-            else if (s.charAt(j)=='1') a[s.length()-1-j] = true;
+            //else if (s.charAt(j)=='1') a[s.length()-1-j] = true;
+            else a[s.length()-1-j] = true;
         }
 
         return a;

@@ -42,15 +42,16 @@ public class ALU {
 
     private boolean[] clear () {
         boolean[] result = new boolean[bits];
-        for (int j = 0; j<result.length; j++) {
-            result[j] = false;
-        }
+        // por padrão já é falso
+        //  for (int j = 0; j<result.length; j++) {
+        //    result[j] = false;
+        //}
         return result;
     }
 
     private boolean[] negate (boolean[] a) {
         boolean[] result = new boolean[bits];
-        for (int i = 0; i<result.length; i++) {
+        for (int i = 0; i<bits; i++) {
             result[i] = !a[i];
         }
         return result;
@@ -58,7 +59,7 @@ public class ALU {
 
     private boolean[] and (boolean[] x, boolean[] y) {
         boolean[] result = new boolean[bits];
-        for (int i = 0; i<x.length; i++) {
+        for (int i = 0; i<bits; i++) {
             result[i] = x[i] && y[i];
         }
         return result;
@@ -66,7 +67,15 @@ public class ALU {
 
     private boolean[] adder (boolean[] x, boolean[] y) {
         boolean[] result = new boolean[bits];
-        for (int i = 0; i<x.length; i++) {
+        for (int i = 0; i<bits; i++) {
+            // by Luciano
+            if(i < bits-1) {
+                result[i+1] = (x[i] & y[i]) | (x[i] & result[i]) | ( y[i] & result[i]);
+            }
+            result[i] = (x[i] ^ y[i]) ^ result[i];
+
+            // by Lucas
+            /*
             int count = 0;
             if (x[i]) count++;
             if (y[i]) count++;
@@ -85,7 +94,15 @@ public class ALU {
                     result[i+1] = true;
                 }
             }
+            */
+            
         }
+
+        // System.out.print("\n\nC"); for (int i = bits-1; i>=0; i--) System.out.print(carry[i]?"1":"0");
+        // System.out.print("\nX");   for (int i = bits-1; i>=0; i--) System.out.print(x[i]?"1":"0"); 
+        // System.out.print("\nY");   for (int i = bits-1; i>=0; i--) System.out.print(y[i]?"1":"0");
+        // System.out.print("\nR");   for (int i = bits-1; i>=0; i--) System.out.print(result[i]?"1":"0");
+
         return result;
     }
 

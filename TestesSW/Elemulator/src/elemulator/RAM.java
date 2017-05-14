@@ -63,12 +63,12 @@ public class RAM {
     }
 
     public void dump(String memory_dump) {
-        Log.print("\n\nMemoria RAM\n");
-        for(int i=0;i<RAM_SIZE;i++) {
-            if(this.ram[i]!=null) {
-                Log.print(String.format("%5d",i),this.ram[i].getRegister());
-            }
-        }
+        // Log.print("\n\nMemoria RAM\n");
+        // for(int i=0;i<RAM_SIZE;i++) {
+        //     if(this.ram[i]!=null) {
+        //         Log.print(String.format("%5d",i),this.ram[i].getRegister());
+        //     }
+        // }
         if(memory_dump!=null) {
             try(  PrintWriter out = new PrintWriter(memory_dump)  ){
                 for(int j=0;j<RAM_SIZE;j++) {
@@ -94,7 +94,7 @@ public class RAM {
             Error.error("Tentando acessar um endereço de memória RAM inválido: "+decIndex);
         }
         if (load) {
-            Log.print(String.format("MEM(%5d)",decIndex),register);
+            //Log.print(String.format("MEM(%5d)",decIndex),register);
             if (this.ram[decIndex] == null) this.ram[decIndex] = new Register(bits);
             this.ram[decIndex].loadRegister(register, load);
             if (converter.booleanToInt(index) >= SCREEN) {

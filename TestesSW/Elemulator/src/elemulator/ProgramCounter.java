@@ -22,9 +22,21 @@ public class ProgramCounter extends Register {
     }
 
     private void increment() {
-        int decimal = converter.booleanToInt(register);
-        decimal++;
-        register = converter.intToBoolean(decimal,bits);
+
+        // by Luciano
+        boolean[] carry = new boolean[bits];
+        carry[0]=true;
+        for (int i = 0; i<bits; i++) {
+            if(i < bits-1) {
+                carry[i+1] = register[i] & carry[i];
+            }
+            register[i] = register[i] ^ carry[i];
+        }
+
+        // by Lucas
+        //int decimal = converter.booleanToInt(register);
+        //decimal++;
+        //register = converter.intToBoolean(decimal,bits);
     }
 
     private void reset () {
