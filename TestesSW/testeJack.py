@@ -19,8 +19,6 @@ import checkUnitTests
 
 nomes_testes = loadTestes.testes("TestesSW/testesJack.txt")
 
-@pytest.mark.skipif(checkUnitTests.checkUnitTests("Codigos/AssemblerZ0/target/"),
-	reason="Testes unitários anteriores não passaram por completo, não executando teste de sistema.")
 @pytest.mark.parametrize(('nomes_testes'),nomes_testes)
 def test_Assembly(nomes_testes):
 
