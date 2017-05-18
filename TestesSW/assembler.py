@@ -19,10 +19,10 @@ def assembler(jar,testes,in_dir,out_dir,bits,processos):
 	rotina_mkdir = ["mkdir"]
 
 	if platform.system()=="Windows":
-		jar.replace('/','\\')
-		testes.replace('/','\\')
-		in_dir.replace('/','\\')
-		out_dir.replace('/','\\')
+		jar = jar.replace('/','\\')
+		testes = testes.replace('/','\\')
+		in_dir = in_dir.replace('/','\\')
+		out_dir = out_dir.replace('/','\\')
 	else:
 		rotina_mkdir.append("-p") # para criar os subdiretórios no mkdir no UNIX
 
