@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 # Checa se testes unitarios passsaram antes de fazer o teste de sistema
 # Arquivo: checkUnitTests.py
 # Criado por: Luciano Soares <lpsoares@insper.edu.br>
