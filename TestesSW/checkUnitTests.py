@@ -23,6 +23,7 @@ def checkUnitTests(pasta):
 			if i.strip():
 				str = i.strip();
 				str = str.replace("/",".")
+				str = str.replace("\\",".")
 				str = str.replace("class","txt")
 				testesJUnit.append(str)
 
