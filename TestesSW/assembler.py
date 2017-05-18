@@ -28,7 +28,7 @@ def assembler(jar,testes,in_dir,out_dir,bits,processos):
 
 	rotina_mkdir.append(out_dir)
 
-	subprocess.call(rotina_mkdir) # cria subdiretório para resultados
+	subprocess.call(rotina_mkdir, shell=True) # cria subdiretório para resultados
 
 	nomes_testes = loadTestes.testes(testes)
 
