@@ -2,12 +2,12 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>vmtranslator</groupId>
-  <artifactId>VMTranslator</artifactId>
+  <groupId>compiler</groupId>
+  <artifactId>JackCompiler</artifactId>
   <packaging>jar</packaging>
   <version>1.0</version>
   
-  <name>VMTranslator</name>
+  <name>JackCompiler</name>
   <url>http://maven.apache.org</url>
   
   <build>
@@ -28,7 +28,7 @@
           <configuration>
               <archive>
                   <manifest>
-                      <mainClass>vmtranslator.VMTranslator</mainClass>
+                      <mainClass>compiler.JackAnalyzer</mainClass>
                   </manifest>
               </archive>
           </configuration>

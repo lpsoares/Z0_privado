@@ -1,11 +1,11 @@
 /**
  * Curso: Elementos de Sistemas
- * Arquivo: VMTranslator.java
+ * Arquivo: JackAnalyzer.java
  * Created by Luciano Soares <lpsoares@insper.edu.br> 
- * Date: 2/05/2017
+ * Date: 4/05/2017
  */
 
-package vmtranslator;
+package compiler;
 
 import java.io.*;
 import java.nio.file.*;
@@ -14,11 +14,10 @@ import java.util.ArrayList;
 /**
  * Classe principal que orquestra a tradução do arquivo em linguagem de máquina virtual à pilha.
  * Opções:
- *   <arquivo vm>         primeiro parametro é o nome do arquivo vm a ser aberto 
- *   -o <arquivo nasm>    parametro indica onde será salvo o arquivo gerado .nasm
- *   -n                   parametro indica não colocar rotina de bootstrap (conveniente para testar)
+ *   <arquivo vm>         primeiro parametro é o nome do arquivo jack a ser aberto 
+ *   -o <arquivo xml>     parametro indica onde será salvo o arquivo gerado .xml
  */
-class VMTranslator {
+class JackAnalyzer {
 
     public static void main(String[] args) {
 
@@ -27,8 +26,9 @@ class VMTranslator {
 
         String inputFilename = null;
         String outputFilename = null;
+        String outputFilenameT = null;
+
         boolean debug = false;
-        boolean bootstrap = true;
 
         for (int i = 0; i < args.length; i++) {
             switch (args[i].charAt(0)) {
@@ -37,15 +37,9 @@ class VMTranslator {
                     System.out.println("Opções");
                     System.out.println("<arquivo> : programa em linguagem de máquina a ser carregado");
                     System.out.println("-o <arquivo> : nome do arquivo para salvar no formato NASM");
-                    System.out.println("-n : não colocar rotina de bootstrap (conveniente para testar)");
-
-                } else
-                if (args[i].charAt(1) == 'o') {
+                } else if (args[i].charAt(1) == 'o') {
                     outputFilename = args[i+1]; // arquivo output
                     i++;
-                } else
-                if (args[i].charAt(1) == 'n') {
-                    bootstrap = false; // não insere rotina de bootstrap
                 } else {
                     Error.error("Argumento não reconhecido: "+args[i]);
                 }
@@ -72,7 +66,7 @@ class VMTranslator {
                 if(outputFilename==null) {
                     outputFilename = path.toString()+
                                  File.separator+
-                                 path.getName(indexName).toString()+".nasm";
+                                 path.getName(indexName).toString()+".xml";
                 }
                 
                 DirectoryStream<Path> directoryStream = Files.newDirectoryStream(path);
@@ -83,72 +77,30 @@ class VMTranslator {
                     if (i > 0) {
                         extension = p.toString().substring(i+1);
                     }
-                    if(extension.equals("vm")) {
+                    if(extension.equals("jack")) {
                         files.add(p.toString());
                     }
                 }
             } else {
                 files.add(inputFilename);
                 if(outputFilename==null) {
-                    outputFilename = inputFilename.substring(0, inputFilename.lastIndexOf('.')) + ".nasm";
+                    outputFilename = inputFilename.substring(0, inputFilename.lastIndexOf('.')) + ".xml";
+                    outputFilenameT = inputFilename.substring(0, inputFilename.lastIndexOf('.')) + "T.xml";
                 }
             }
 
-            Code code = new Code(outputFilename);
-
-            if(bootstrap) {
-              code.writeInit();  
-            }
 
             for (String file : files) {
 
-                Parser parser = new Parser(file);
+                CompilationEngine code = new CompilationEngine(file,outputFilename,outputFilenameT);
 
-                code.vmfile(file);
+                code.compileClass();
 
-                // Avança enquanto houver linhas para traduzir
-                while (parser.advance()){
-                    if(debug) {System.out.println(parser.command());}
-                    
-                    if( parser.commandType(parser.command())==Parser.CommandType.C_PUSH ||
-                        parser.commandType(parser.command())==Parser.CommandType.C_POP
-                    ) {
-                        code.writePushPop(parser.commandType(parser.command()),
-                                                      parser.arg1(parser.command()),
-                                                      parser.arg2(parser.command())
-                                                      );
-                    } else if( parser.commandType(parser.command())==Parser.CommandType.C_LABEL) {
-                        code.writeLabel(parser.arg1(parser.command()));
+                code.close();
 
-                    } else if( parser.commandType(parser.command())==Parser.CommandType.C_GOTO) {
-                        code.writeGoto(parser.arg1(parser.command()));
-                    
-                    } else if( parser.commandType(parser.command())==Parser.CommandType.C_IF) {
-                        code.writeIf(parser.arg1(parser.command()));
-
-                    } else if( parser.commandType(parser.command())==Parser.CommandType.C_FUNCTION) {
-                        code.writeFunction(parser.arg1(parser.command()),parser.arg2(parser.command()));
-
-                    } else if( parser.commandType(parser.command())==Parser.CommandType.C_RETURN) {
-                        code.writeReturn();
-                    
-                    } else if( parser.commandType(parser.command())==Parser.CommandType.C_CALL) {
-                        code.writeCall(parser.arg1(parser.command()),parser.arg2(parser.command()));
-                    
-                    } else if( parser.commandType(parser.command())==Parser.CommandType.C_ARITHMETIC) {
-                        code.writeArithmetic(parser.command());
-                    } else {
-                        Error.error("Comando não reconhecido");
-                    }
-
-                }
-                parser.close();
             }
-            code.close();
+            
 
-        } catch (FileNotFoundException e){
-            Error.error("Arquivo \'" + inputFilename + "\' nao encontrado");
-            System.exit(1);
         } catch (IOException e) {
             Error.error("uma excessao de i/o foi lancada");
             System.exit(1);

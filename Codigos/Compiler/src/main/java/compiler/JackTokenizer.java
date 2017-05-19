@@ -5,10 +5,10 @@
  * Date: 6/05/2017
  */
 
-package vmtranslator;
+package compiler;
 
 import java.io.*;
-
+import java.lang.*;
 
 
 /**
@@ -19,6 +19,7 @@ import java.io.*;
 public class JackTokenizer {
 
     public String currentCommand = "";  // comando atual
+    public String[] currentCommands = {""};  // comandos atuais
     private BufferedReader fileReader;  // leitor de arquivo
 
     /** Enumerator para os tipos de comandos de Linguagem de Máquina Virtua a Pilha. */
@@ -31,7 +32,7 @@ public class JackTokenizer {
     }
 
     /** Enumerator para os tipos de comandos de Linguagem de Máquina Virtua a Pilha. */
-    public enum CommandType2 {
+    public enum KeywordType {
         CLASS,
         METHOD, 
         FUNCTION, 
@@ -55,13 +56,21 @@ public class JackTokenizer {
         THIS           // 
     }
 
+
+    boolean comment = false;
+    int tokencounter;
+
     /** 
      * Abre o arquivo de entrada VM e se prepara para analisá-lo.
      * @param file arquivo VM que será feito o parser.
      */
     public JackTokenizer(String file) throws FileNotFoundException {
         this.fileReader = new BufferedReader(new FileReader(file));
+        tokencounter = 1;
+
     }
+
+
 
     /**
      * Carrega um comando e avança seu apontador interno para o próxima
@@ -70,17 +79,53 @@ public class JackTokenizer {
      * @return Verdadeiro se ainda há instruções, Falso se as instruções terminaram.
      */
 // Gets the next token from the input and makes it the current token. This method should only be called if hasMoreTokens() is true. Initially there is no current token.
-    public Boolean advance() throws IOException {
+    public Boolean readline() {
+        tokencounter = 0;
         while(true){
-            String currentLine = fileReader.readLine();
-            if (currentLine == null)
-                return false;  // caso não haja mais comandos
-            currentCommand = currentLine.replaceAll("//.*$", "").trim();
-            if (currentCommand.equals(""))
-                continue;
-            return true;   // caso um comando seja encontrado
+            try {
+                String currentLine = fileReader.readLine();
+                if (currentLine == null)
+                    return false;  // caso não haja mais comandos
+                if(comment)
+                    if(currentLine.contains("*/")) {
+                        comment = false;
+                        continue;
+                    }
+                String[] parts = currentLine.split("/\\*");
+                currentLine = parts[0].replaceAll("//.*$", "").trim();
+                if(parts.length > 1)
+                    if(!parts[1].contains("*/")) {
+                        comment = true;
+                    }
+                if (currentLine.equals(""))
+                    continue;
+
+                String regex = "(?<=[\\{\\}\\(\\)\\]\\[.,;+\\-*/&\\|<>=~])|(?=[ \\{\\}\\(\\)\\]\\[.,;+\\-*/&\\|<>=~])";
+                currentCommands = currentLine.split(regex);
+
+                return true;   // caso um comando seja encontrado
+            } catch (IOException e) {
+                System.out.println("Erro de leitura de linha");
+            }
         }
     }
+
+    public Boolean advance() {
+        //System.out.println(tokencounter);
+        //System.out.println(currentCommands.length);
+        if( tokencounter >= currentCommands.length) {
+            //System.out.println( "oi");
+            if(!readline()) {
+                return false;
+            }
+        }
+        currentCommand = currentCommands[tokencounter++].trim();
+        if(currentCommand.equals("")) {
+            return advance();
+        }
+        return true;
+    }
+
 
     /**
      * Retorna o comando "intrução" atual (sem o avanço)
@@ -99,29 +144,88 @@ public class JackTokenizer {
      */
 // Returns the type of the current token.
     public CommandType tokenType(String command) {
-        if (command.startsWith("push")) {
-            return CommandType.C_PUSH;  // comandos de PUSH
-        } else if (command.startsWith("pop")) {
-            return CommandType.C_POP;  //  comandos de POP
+        if (
+            command.equals("class") ||
+            command.equals("constructor") ||
+            command.equals("function") ||
+            command.equals("method") ||
+            command.equals("field") ||
+            command.equals("static") ||
+            command.equals("var") ||
+            command.equals("int") ||
+            command.equals("char") ||
+            command.equals("boolean") ||
+            command.equals("void") ||
+            command.equals("true") ||
+            command.equals("false") ||
+            command.equals("null") ||
+            command.equals("this") ||
+            command.equals("let") ||
+            command.equals("do") ||
+            command.equals("if") ||
+            command.equals("else") ||
+            command.equals("while") ||
+            command.equals("return")
+            ) {
+            return CommandType.KEYWORD;  // 
+        } else if (
+            command.equals("{") ||
+            command.equals("}") ||
+            command.equals("(") ||
+            command.equals(")") ||
+            command.equals("[") ||
+            command.equals("]") ||
+            command.equals(".") ||
+            command.equals(",") ||
+            command.equals(";") ||
+            command.equals("+") ||
+            command.equals("-") ||
+            command.equals("*") ||
+            command.equals("/") ||
+            command.equals("&") ||
+            command.equals("|") ||
+            command.equals("<") ||
+            command.equals(">") ||
+            command.equals("=") ||
+            command.equals("~")
+            ) {
+            return CommandType.SYMBOL;  // 
+        } else if (Character.isDigit(command.charAt(0))) {
+            return CommandType.INT_CONST;  // 
+        } else if (command.charAt(0)=='"' || command.charAt(0)=='\'') {
+            return CommandType.STRING_CONST;
         } else {
-            return CommandType.C_ARITHMETIC;  // C_ARITHMETIC for add, sub, etc...
+            return CommandType.IDENTIFIER;  // 
         }
     }
-    
+
 
 // Returns the keyword which is the current token. Should be called only when tokenType() is KEYWORD.
-    public CommandType keyWord(String command) {
-        if (command.startsWith("push")) {
-            return CommandType.C_PUSH;  // comandos de PUSH
-        } else if (command.startsWith("pop")) {
-            return CommandType.C_POP;  //  comandos de POP
-        } else {
-            return CommandType.C_ARITHMETIC;  // C_ARITHMETIC for add, sub, etc...
-        }
+    public KeywordType keyWord(String command) {
+        if (command.equals("class")) return KeywordType.CLASS;  //
+        if (command.equals("constructor")) return KeywordType.CONSTRUCTOR;
+        if (command.equals("function")) return KeywordType.FUNCTION;
+        if (command.equals("method")) return KeywordType.METHOD;
+        if (command.equals("field")) return KeywordType.FIELD;
+        if (command.equals("static")) return KeywordType.STATIC;
+        if (command.equals("var")) return KeywordType.VAR;
+        if (command.equals("int")) return KeywordType.INT;
+        if (command.equals("char")) return KeywordType.CHAR;
+        if (command.equals("boolean")) return KeywordType.BOOLEAN;
+        if (command.equals("void")) return KeywordType.VOID;
+        if (command.equals("true")) return KeywordType.TRUE;
+        if (command.equals("false")) return KeywordType.FALSE;
+        if (command.equals("null")) return KeywordType.NULL;
+        if (command.equals("this")) return KeywordType.THIS;
+        if (command.equals("let")) return KeywordType.LET;
+        if (command.equals("do")) return KeywordType.DO;
+        if (command.equals("if")) return KeywordType.IF;
+        if (command.equals("else")) return KeywordType.ELSE;
+        if (command.equals("while")) return KeywordType.WHILE;
+        if (command.equals("return")) return KeywordType.RETURN;
+        return null;
     }
     
-
-
 
     /**
      * Retorna o primeiro argumento de um comando push ou pop passada no argumento.
@@ -131,8 +235,8 @@ public class JackTokenizer {
      * @return somente o símbolo ou o valor número da instrução.
      */
 // Returns the character which is the current token. Should be called only when tokenType() is SYMBOL.
-    public String symbol(String command) {
-        
+    public Character symbol(String command) {
+        return command.charAt(0);
     }
 
     /**
@@ -141,20 +245,14 @@ public class JackTokenizer {
      * @param  command instrução a ser analisada.
      * @return o símbolo da instrução (sem os dois pontos).
      */
-
-// Returns the identifier which is the current token. Should be called only when tokenType() is IDENTIFIER.
-    public Integer identifier(String command) {
-
-    }
-
 // Returns the integer value of the current token. Should be called only when tokenType() is INT_CONST.
     public Integer intVal(String command) {
-
+        return Integer.valueOf(command);
     }
 
 // Returns the string value of the current token, without the double quotes. Should be called only when tokenType() is STRING_CONST.
-    public Integer stringVal(String command) {
-
+    public String stringVal(String command) {
+        return command.replace("\"","");
     }
 
 

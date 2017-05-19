@@ -5,7 +5,7 @@
  * Date: 2/05/2017
  */
 
-package vmtranslator;
+package compiler;
 
 class Error {
     public static void error(String message) {

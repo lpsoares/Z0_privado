@@ -17,7 +17,7 @@ import java.nio.file.*;
 public class Code {
 
     PrintWriter outputFile = null;
-    String outputFilename = null;
+    //String outputFilename = null;
     String filename = null;
     Integer labelCounter;
     Map<String, Integer> retHash;
@@ -28,7 +28,7 @@ public class Code {
      * @param filename nome do arquivo NASM que receberá o código traduzido.
      */
     public Code(String filename) throws FileNotFoundException,IOException {
-        this.outputFilename = filename.substring(filename.lastIndexOf('/')+1, filename.lastIndexOf('.'));
+        //this.outputFilename = filename.substring(filename.lastIndexOf('/')+1, filename.lastIndexOf('.'));
         File file = new File(filename);
         this.outputFile = new PrintWriter(new FileWriter(file));
         labelCounter = 0;
