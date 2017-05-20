@@ -94,48 +94,75 @@ public class CompilationEngine {
             System.exit(1);
         }
 
-
     }
 
+    public void saveOpenTag(String tag, boolean linebreak) {    
+        //System.out.print("<"+tag+">");
+        outputFile.print("<"+tag+">");
+        //if(linebreak) { System.out.println(); }
+        if(linebreak) { outputFile.println(); }
+    }
+
+    public void saveCloseTag(String tag) {   
+        outputFile.println("</"+tag+">");
+        //System.out.println("</"+tag+">");
+    }
+    
+    public void saveName(String name) { 
+        outputFile.print(" "+name+" ");
+        //System.out.print(" "+name+" ");
+    }
+
+    public void saveTerminal(String tag, String name) {
+        saveOpenTag(tag, false);
+        saveName(name);
+        saveCloseTag(tag);
+        if(!tokenizer.advance()) return;
+    }
 
     public void compileIdentifier() {
-        if(tokenizer.tokenType(tokenizer.command())!=JackTokenizer.CommandType.IDENTIFIER) 
-        {
+        if(tokenizer.tokenType(tokenizer.command())!=JackTokenizer.CommandType.IDENTIFIER) {
             Error.error("Não encontrado identifier. Encontrado: "+tokenizer.command());
         }
-
-        System.out.print("<identifier>");
-        System.out.print(" "+tokenizer.command()+" ");
-        System.out.println("</identifier>"); 
+        saveTerminal("identifier",tokenizer.command());
     }
 
     public void compileSymbol(Character symbol) {
-        if(tokenizer.tokenType(tokenizer.command())!=JackTokenizer.CommandType.SYMBOL) 
-        {
+        if(tokenizer.tokenType(tokenizer.command())!=JackTokenizer.CommandType.SYMBOL) {
             Error.error("Não encontrado symbol"+Character.toString(symbol)+". Encontrado: "+tokenizer.command());
         }
-        if(tokenizer.symbol(tokenizer.command())!=symbol) 
-        {
+        if(tokenizer.symbol(tokenizer.command())!=symbol) {
             Error.error("Não encontrado symbol"+Character.toString(symbol)+". Encontrado: "+tokenizer.command());
         }
+        saveTerminal("symbol",tokenizer.command());
+    }
 
-        System.out.print("<symbol>");
-        System.out.print(" "+tokenizer.command()+" ");
-        System.out.println("</symbol>"); 
+    public boolean isType() {
+        return (tokenizer.command().equals("int") ||
+                tokenizer.command().equals("char") ||
+                tokenizer.command().equals("boolean") ||
+                tokenizer.tokenType(tokenizer.command())==JackTokenizer.CommandType.IDENTIFIER);
+    }
+
+    public boolean isStatement() {
+        return (tokenizer.command().equals("let") ||
+                tokenizer.command().equals("if") ||
+                tokenizer.command().equals("while") ||
+                tokenizer.command().equals("do") ||
+                tokenizer.command().equals("return"));
+                
     }
 
     public void compileType() {
-        if(!(tokenizer.command().equals("int") ||
-             tokenizer.command().equals("char") ||
-             tokenizer.command().equals("boolean") ||
-             tokenizer.tokenType(tokenizer.command())==JackTokenizer.CommandType.IDENTIFIER) ) 
-        {
+        if(!isType()) {
             Error.error("Não encontrado keyword ou identifier. Encontrado: "+tokenizer.command());
         }
-
-        System.out.print("<keyword>");
-        System.out.print(" "+tokenizer.command()+" ");
-        System.out.println("</keyword>"); 
+        if(tokenizer.tokenType(tokenizer.command())==JackTokenizer.CommandType.IDENTIFIER) {
+            saveTerminal("identifier",tokenizer.command());    
+        } else {
+            saveTerminal("keyword",tokenizer.command());
+        }
+        
     }
 
     /**
@@ -144,114 +171,415 @@ public class CompilationEngine {
      */
     public void compileClass() {
 
-//        outputFile.println("<tokens>");
+        saveOpenTag("class",true);
 
-        System.out.println("<class>");
+        if(!tokenizer.advance()) return; // pega primeiro token
 
-        if(!tokenizer.advance()) return;
         if(tokenizer.tokenType(tokenizer.command())!=JackTokenizer.CommandType.KEYWORD ||
-           tokenizer.keyWord(tokenizer.command())!=JackTokenizer.KeywordType.CLASS)
-        {
+           tokenizer.keyWord(tokenizer.command())!=JackTokenizer.KeywordType.CLASS) {
             Error.error("Não encontrada class. Encontrado: "+tokenizer.command());
         }
 
-        System.out.print("<keyword>");
-        System.out.print(" class ");
-        System.out.println("</keyword>");        
+        saveTerminal("keyword",tokenizer.command());
 
-        if(!tokenizer.advance()) return;
         compileIdentifier();
 
-        if(!tokenizer.advance()) return;
         compileSymbol('{');
 
-        if(!tokenizer.advance()) return;
+        saveOpenTag("classVarDec",true);
         while( tokenizer.command().equals("static") || tokenizer.command().equals("field")) {
             compileClassVarDec();    
         }
+        saveCloseTag("classVarDec");
+        
+        while( tokenizer.command().equals("constructor") || tokenizer.command().equals("function") || tokenizer.command().equals("method") ) {
+            saveOpenTag("subroutineDec",true);
+            compileSubroutineDec();    
+            saveCloseTag("subroutineDec");
+        }
+        
+        compileSymbol('}');
 
-        System.out.println("</class>");
+        saveCloseTag("class");
 
         outputFile.close();
-
 
     }
 
     public void compileClassVarDec() {
 
-        System.out.println("<classVarDec>");
-
         if(tokenizer.tokenType(tokenizer.command())!=JackTokenizer.CommandType.KEYWORD ||
            !(tokenizer.keyWord(tokenizer.command())==JackTokenizer.KeywordType.STATIC ||
-             tokenizer.keyWord(tokenizer.command())==JackTokenizer.KeywordType.FIELD))
-        {
+             tokenizer.keyWord(tokenizer.command())==JackTokenizer.KeywordType.FIELD)) {
             Error.error("Não encontrada static ou field. Encontrado: "+tokenizer.command());
         }
 
-        if(tokenizer.keyWord(tokenizer.command())==JackTokenizer.KeywordType.STATIC) {
-            System.out.print("<keyword>");
-            System.out.print(" static ");
-            System.out.println("</keyword>");
-        } else {
-            System.out.print("<keyword>");
-            System.out.print(" field ");
-            System.out.println("</keyword>");
-        }
+        saveTerminal("keyword",tokenizer.command());  // static ou field
 
-        if(!tokenizer.advance()) return;
         compileType();
 
-        if(!tokenizer.advance()) return;
         compileIdentifier();
         
-        if(!tokenizer.advance()) return;
         while( tokenizer.command().equals(",") ) {
             compileSymbol(',');
-            if(!tokenizer.advance()) return;
             compileIdentifier();
         }
 
         compileSymbol(';');
 
-        System.out.println("</classVarDec>");
-
     }
 
-    public void compileSubroutine() {
+    public void compileSubroutineDec() {
+
+        if(tokenizer.tokenType(tokenizer.command())!=JackTokenizer.CommandType.KEYWORD ||
+           !(tokenizer.keyWord(tokenizer.command())==JackTokenizer.KeywordType.CONSTRUCTOR ||
+             tokenizer.keyWord(tokenizer.command())==JackTokenizer.KeywordType.METHOD ||
+             tokenizer.keyWord(tokenizer.command())==JackTokenizer.KeywordType.FUNCTION) )
+        {
+            Error.error("Não encontrada constructor, method ou function. Encontrado: "+tokenizer.command());
+        }
+
+        saveTerminal("keyword",tokenizer.command());
+
+        if( tokenizer.command().equals("void") ) {
+            saveTerminal("keyword",tokenizer.command());
+        } else {
+            compileType();    
+        }
+        
+        compileIdentifier();
+        
+        compileSymbol('(');
+
+        saveOpenTag("parameterList",true);
+        if(isType()) {
+            compileParameterList();
+        }
+        saveCloseTag("parameterList");
+
+        compileSymbol(')');
+
+        compileSubroutineBody();
+
     }
 
     public void compileParameterList() {
+
+        // ((type varName) (',' type varName)*)?
+
+        compileType();
+
+        compileIdentifier();
+    
+        while( tokenizer.command().equals(",") ) {
+        
+            compileSymbol(',');
+        
+            compileType();
+        
+            compileIdentifier();
+        
+        }
+
+    }
+
+    public void compileSubroutineBody() {
+
+        saveOpenTag("subroutineBody",true);
+        compileSymbol('{');
+
+        compileVarDec();
+
+        compileStatements();
+
+        compileSymbol('}');
+        saveCloseTag("subroutineBody");
+
     }
 
     public void compileVarDec() {
+
+        while(tokenizer.command().equals("var")) {
+
+            saveOpenTag("varDec",true);
+
+            saveTerminal("keyword",tokenizer.command());
+
+            compileType();
+
+            compileIdentifier();
+
+            while( tokenizer.command().equals(",") ) {
+                compileSymbol(',');
+            
+                compileIdentifier();
+            }
+
+            compileSymbol(';');
+
+            saveCloseTag("varDec");
+
+        }
+
     }
 
     public void compileStatements() {
+
+        saveOpenTag("statements",true);
+
+        while(isStatement()) {
+
+            if( tokenizer.command().equals("let") ) {
+                saveOpenTag("letStatement",true);
+                compileLet();
+                saveCloseTag("letStatement");
+            }
+
+            if( tokenizer.command().equals("if") ) {
+                saveOpenTag("ifStatement",true);
+                compileIf();
+                saveCloseTag("ifStatement");
+            }
+
+            if( tokenizer.command().equals("while") ) {
+                saveOpenTag("whileStatement",true);
+                compileWhile();
+                saveCloseTag("whileStatement");
+            }
+
+            if( tokenizer.command().equals("do") ) {
+                saveOpenTag("doStatement",true);
+                compileDo();
+                saveCloseTag("doStatement");
+            }
+
+            if( tokenizer.command().equals("return") ) {
+                saveOpenTag("returnStatement",true);
+                compileReturn();
+                saveCloseTag("returnStatement");
+            }
+
+        }
+
+        saveCloseTag("statements");
     }
 
     public void compileDo() {
+        //'do' subroutineCall ';'
+
+        saveTerminal("keyword",tokenizer.command());
+
+        // subroutineCall
+
+        compileIdentifier();  //subroutineName | (className|varName)
+        
+        if( tokenizer.command().equals("(") ) {  //'(' expressionList ')'
+
+            compileSymbol('(');
+    
+            compileExpressionList();
+
+            compileSymbol(')');
+
+        } else { // '.' subroutineName '(' expressionList ')'
+
+            compileSymbol('.');
+
+            compileIdentifier();
+
+            compileSymbol('(');
+    
+            compileExpressionList();
+
+            compileSymbol(')');
+
+        }
+
+        compileSymbol(';');
+
     }
 
     public void compileLet() {
+        //'let' varName ('[' expression ']')? '=' expression ';'
+
+        saveTerminal("keyword",tokenizer.command());
+
+        compileIdentifier();
+            
+        if( tokenizer.command().equals("[") ) {
+        
+            compileSymbol('[');
+        
+            compileExpression();
+
+            compileSymbol(']');
+    
+        }
+
+        compileSymbol('=');
+        
+        compileExpression();
+
+        compileSymbol(';');
+
     }
 
     public void compileWhile() {
+
+        //'while' '(' expression ')' '{' statements '}'
+
+        saveTerminal("keyword",tokenizer.command());
+
+        compileSymbol('(');
+
+        compileExpression();
+
+        compileSymbol(')');
+
+        compileSymbol('{');
+
+        compileStatements();
+
+        compileSymbol('}');
+
     }
 
     public void compileReturn() {
+        // 'return' expression? ';'
+
+        saveTerminal("keyword",tokenizer.command());
+
+        if( isTerm() ) {
+
+            compileExpression();
+
+        }
+
+        compileSymbol(';');
+
     }
 
     public void compileIf() {
+        
+        // 'if' '(' expression ')' '{' statements '}'
+        // ('else' '{' statements '}')?
+
+        saveTerminal("keyword",tokenizer.command());
+
+        compileSymbol('(');
+
+        compileExpression();
+
+        compileSymbol(')');
+
+        compileSymbol('{');
+
+        compileStatements();
+
+        compileSymbol('}');
+
+        if(tokenizer.command().equals("else")) {
+
+            saveTerminal("keyword",tokenizer.command());
+
+            compileSymbol('{');
+
+            compileStatements();
+
+            compileSymbol('}');
+
+        }
+
+    }
+
+    public boolean isKeywordConstant() {
+        return (tokenizer.command().equals("true") ||
+            tokenizer.command().equals("false") ||
+            tokenizer.command().equals("null") ||
+            tokenizer.command().equals("this")); 
+    }
+
+    public boolean isUnaryOp() {
+        return (tokenizer.command().equals("-") ||
+            tokenizer.command().equals("~")); 
+    }
+
+
+
+    public boolean isTerm() {
+
+//integerConstant | stringConstant | keywordConstant |
+// varName | varName '[' expression ']' | subroutineCall |
+// '(' expression ')' | unaryOp term
+        return(
+            tokenizer.tokenType(tokenizer.command())==JackTokenizer.CommandType.INT_CONST ||
+            tokenizer.tokenType(tokenizer.command())==JackTokenizer.CommandType.STRING_CONST ||
+            isKeywordConstant() ||
+            tokenizer.tokenType(tokenizer.command())==JackTokenizer.CommandType.IDENTIFIER || //varName ou subroutineName
+            tokenizer.command().equals("(") ||
+            isUnaryOp()
+        );
+
+    }
+
+    public boolean isOp() {
+        return (tokenizer.command().equals("+") ||
+            tokenizer.command().equals("-") ||
+            tokenizer.command().equals("*") ||
+            tokenizer.command().equals("/") ||
+            tokenizer.command().equals("&") ||
+            tokenizer.command().equals("|") ||
+            tokenizer.command().equals("<") ||
+            tokenizer.command().equals(">") ||
+            tokenizer.command().equals("=")
+        );
     }
 
     public void compileExpression() {
+        saveOpenTag("expression",true);
+        compileTerm();
+
+        while(isOp()) {
+
+            saveTerminal("symbol",tokenizer.command());
+
+            compileTerm();
+
+        }
+        saveCloseTag("expression");
     }
 
     public void compileTerm() {
+        saveOpenTag("term",true);
+        
+        if(tokenizer.tokenType(tokenizer.command())==JackTokenizer.CommandType.IDENTIFIER) {
+            compileIdentifier();
+        }            
+        saveCloseTag("term");
     }
 
     public void compileExpressionList() {
+        // (expression (',' expression)* )?
+
+        saveOpenTag("expressionList",true);
+
+        if( isTerm() ) {
+
+            compileExpression();
+
+            while( tokenizer.command().equals(",") ) {
+                compileSymbol(',');
+            
+                compileExpression();
+            }
+
+        }
+
+        saveCloseTag("expressionList");
+
     }
+
+
     // fecha o arquivo de escrita
     public void close() throws IOException {
         this.outputFile.close();
