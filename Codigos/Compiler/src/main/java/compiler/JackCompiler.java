@@ -1,6 +1,6 @@
 /**
  * Curso: Elementos de Sistemas
- * Arquivo: JackAnalyzer.java
+ * Arquivo: JackCompiler.java
  * Created by Luciano Soares <lpsoares@insper.edu.br> 
  * Date: 4/05/2017
  */
@@ -17,9 +17,8 @@ import java.util.ArrayList;
  *   <arquivo vm>         primeiro parametro é o nome do arquivo jack a ser aberto 
  *   -o <arquivo xml>     parametro indica onde será salvo o arquivo gerado .xml
  */
-class JackAnalyzer {
+class JackCompiler {
 
-/*
     public static void main(String[] args) {
 
         if (args.length < 1)  // checa se arquivo foi passado
@@ -104,5 +103,4 @@ class JackAnalyzer {
             System.exit(1);
         }
     }
-    */
 }

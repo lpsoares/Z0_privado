@@ -5,7 +5,7 @@
  * Date: 04/02/2017
  */
 
-package assembler;
+package compiler;
 
 import java.util.*;
 
@@ -18,11 +18,56 @@ public class SymbolTable {
 
     /**
      * Cria a tabela de símbolos.
+     * Creates a new empty symbol table.
      */
     public SymbolTable() {
         symbolTable = new HashMap<String, Integer>();
         initialize();
     }
+
+    /** Enumerator para os kind. */
+    public enum Kind {
+        STATIC,
+        FIELD, 
+        ARG, 
+        VAR
+    }
+
+    // Starts a new subroutine scope (i.e., resets the subroutine’s symbol table).
+    public void startSubroutine() {
+
+    }
+
+    // Defines a new identifier of a given name, type, and kind and assigns it a running index. 
+    // STATIC and FIELD identifiers have a class scope, while ARG and VAR identifiers have a subroutine scope.
+    public Integer Define(String name, String type, Kind kind) {
+
+        return null;
+    }
+
+    // Returns the number of variables of the given kind already defined in the current scope.
+    public void VarCount(Kind kind) {
+        return;
+    }
+
+
+    // Returns the kind of the named identifier in the current scope.
+    // If the identifier is unknown in the current scope, returns NONE.
+    public void kindOf() {
+
+    }
+
+    // Returns the type of the named identifier in the current scope.
+    public String TypeOf(String name) {
+        return null;
+    }
+
+    // Returns the index assigned to the named identifier.
+    public Integer IndexOf(String name) {
+        return null;
+    }
+
+
 
     /**
      * Insere uma entrada de um símbolo com seu endereço numérico na tabela de símbolos.
@@ -55,21 +100,9 @@ public class SymbolTable {
     // initialize the symbol table with predefined symbols
     public void initialize() {
 
-        // Registradores Virtuais
-        for (int i = 0; i < 16; i++)
-            this.addEntry("R" + i, i);
-        
         // Ponteiros para teclado e display
         this.addEntry("KBD", 24576);
-        this.addEntry("SCREEN", 16384);
-    
-        // Simbolos para máquina virtual
-        this.addEntry("SP", 0);
-        this.addEntry("LCL", 1);
-        this.addEntry("ARG", 2);
-        this.addEntry("THIS", 3);
-        this.addEntry("THAT", 4);
-        
+   
         return;
     }
 }

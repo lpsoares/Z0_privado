@@ -28,7 +28,7 @@
           <configuration>
               <archive>
                   <manifest>
-                      <mainClass>compiler.JackAnalyzer</mainClass>
+                      <mainClass>compiler.JackCompiler</mainClass>
                   </manifest>
               </archive>
           </configuration>

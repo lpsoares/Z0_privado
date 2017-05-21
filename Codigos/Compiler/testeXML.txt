@@ -1,0 +1,27 @@
+java -jar target/JackCompiler-1.0.jar src/test/resources/ArrayTest/Main.jack 
+/Applications/Nand2Tetris/TextComparer.sh src/test/resources/ArrayTest/MainT.xml src/test/resources/ArrayTest/MainT2.xml 
+/Applications/Nand2Tetris/TextComparer.sh src/test/resources/ArrayTest/Main.xml src/test/resources/ArrayTest/Main2.xml 
+
+java -jar target/JackCompiler-1.0.jar src/test/resources/ExpressionLessSquare/Main.jack
+/Applications/Nand2Tetris/TextComparer.sh src/test/resources/ExpressionLessSquare/Main.xml src/test/resources/ExpressionLessSquare/Main2.xml 
+/Applications/Nand2Tetris/TextComparer.sh src/test/resources/ExpressionLessSquare/MainT.xml src/test/resources/ExpressionLessSquare/MainT2.xml 
+
+java -jar target/JackCompiler-1.0.jar src/test/resources/ExpressionLessSquare/Square.jack 
+/Applications/Nand2Tetris/TextComparer.sh src/test/resources/ExpressionLessSquare/SquareT.xml src/test/resources/ExpressionLessSquare/SquareT2.xml
+/Applications/Nand2Tetris/TextComparer.sh src/test/resources/ExpressionLessSquare/Square.xml src/test/resources/ExpressionLessSquare/Square2.xml
+
+java -jar target/JackCompiler-1.0.jar src/test/resources/ExpressionLessSquare/SquareGame.jack
+/Applications/Nand2Tetris/TextComparer.sh src/test/resources/ExpressionLessSquare/SquareGameT.xml src/test/resources/ExpressionLessSquare/SquareGameT2.xml 
+/Applications/Nand2Tetris/TextComparer.sh src/test/resources/ExpressionLessSquare/SquareGame.xml src/test/resources/ExpressionLessSquare/SquareGame2.xml 
+
+java -jar target/JackCompiler-1.0.jar src/test/resources/Square/Main.jack 
+/Applications/Nand2Tetris/TextComparer.sh src/test/resources/Square/Main.xml src/test/resources/Square/Main2.xml 
+/Applications/Nand2Tetris/TextComparer.sh src/test/resources/Square/MainT.xml src/test/resources/Square/MainT2.xml 
+
+java -jar target/JackCompiler-1.0.jar src/test/resources/Square/Square.jack 
+/Applications/Nand2Tetris/TextComparer.sh src/test/resources/Square/Square.xml src/test/resources/Square/Square2.xml
+/Applications/Nand2Tetris/TextComparer.sh src/test/resources/Square/SquareT.xml src/test/resources/Square/SquareT2.xml
+
+java -jar target/JackCompiler-1.0.jar src/test/resources/Square/SquareGame.jack 
+/Applications/Nand2Tetris/TextComparer.sh src/test/resources/Square/SquareGame.xml src/test/resources/Square/SquareGame2.xml 
+/Applications/Nand2Tetris/TextComparer.sh src/test/resources/Square/SquareGameT.xml src/test/resources/Square/SquareGameT2.xml 
