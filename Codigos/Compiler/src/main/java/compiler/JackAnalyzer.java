@@ -26,6 +26,7 @@ class JackAnalyzer {
 
         String inputFilename = null;
         String outputFilename = null;
+        String outputFilenameX = null;
         String outputFilenameT = null;
 
         boolean debug = false;
@@ -62,12 +63,6 @@ class JackAnalyzer {
                 if(path.getName(indexName).toString().equals(".")) {
                     indexName--;
                 }
-
-                if(outputFilename==null) {
-                    outputFilename = path.toString()+
-                                 File.separator+
-                                 path.getName(indexName).toString()+".xml";
-                }
                 
                 DirectoryStream<Path> directoryStream = Files.newDirectoryStream(path);
                 for (Path p : directoryStream) {
@@ -84,20 +79,22 @@ class JackAnalyzer {
             } else {
                 files.add(inputFilename);
                 if(outputFilename==null) {
-                    outputFilename = inputFilename.substring(0, inputFilename.lastIndexOf('.')) + ".xml";
+                    outputFilenameX = inputFilename.substring(0, inputFilename.lastIndexOf('.')) + ".xml";
                     outputFilenameT = inputFilename.substring(0, inputFilename.lastIndexOf('.')) + "T.xml";
+                } else {
+                    outputFilenameX = outputFilename;
+                    outputFilenameT = outputFilename.replace(".xml","T.xml");
                 }
             }
 
-
             for (String file : files) {
-
-                CompilationEngine code = new CompilationEngine(file,outputFilename,outputFilenameT);
-
+                if(outputFilename==null) {
+                    outputFilenameX = file.replace(".jack",".xml");
+                    outputFilenameT = file.replace(".jack","T.xml");
+                }                
+                CompilationEngine code = new CompilationEngine(file,outputFilenameX,outputFilenameT);
                 code.compileClass();
-
                 code.close();
-
             }
             
 

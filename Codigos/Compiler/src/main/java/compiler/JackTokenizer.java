@@ -9,7 +9,7 @@ package compiler;
 
 import java.io.*;
 import java.lang.*;
-
+import java.util.*;
 
 /**
  * Encapsula o código de leitura. Carrega as instruções na linguagem de máquina virtual a pilha,
@@ -86,11 +86,12 @@ public class JackTokenizer {
                 String currentLine = fileReader.readLine();
                 if (currentLine == null)
                     return false;  // caso não haja mais comandos
-                if(comment)
+                if(comment) {
                     if(currentLine.contains("*/")) {
                         comment = false;
-                        continue;
                     }
+                    continue;
+                }
                 String[] parts = currentLine.split("/\\*");
                 currentLine = parts[0].replaceAll("//.*$", "").trim();
                 if(parts.length > 1)
@@ -100,9 +101,27 @@ public class JackTokenizer {
                 if (currentLine.equals(""))
                     continue;
 
-                String regex = "(?<=[\\{\\}\\(\\)\\]\\[.,;+\\-*/&\\|<>=~])|(?=[ \\{\\}\\(\\)\\]\\[.,;+\\-*/&\\|<>=~])";
-                currentCommands = currentLine.split(regex);
+                String regex = "(?<=[\"])|(?=[\"])";
+                String[] findStrings = currentLine.split(regex);
 
+                regex = "(?<=[\\{\\}\\(\\)\\]\\[.,;+\\-*/&\\|<>=~\"])|(?=[ \\{\\}\\(\\)\\]\\[.,;+\\-*/&\\|<>=~\"])";
+
+                List<String> tmpCommands = new ArrayList<String>();
+
+                for(int i=0;i<findStrings.length;i++) {
+                    if(findStrings[i].equals("\"") || findStrings[i].equals("\'")) {
+                        tmpCommands.add("\""+findStrings[i+1]+"\"");
+                        i += 2;
+                    } else {
+                        String[] tmpS = findStrings[i].split(regex);
+                        for(String value : tmpS) {
+                            tmpCommands.add(value);
+                        }    
+                    }
+                      
+                }
+                currentCommands = new String[ tmpCommands.size() ];
+                tmpCommands.toArray(currentCommands);
                 return true;   // caso um comando seja encontrado
             } catch (IOException e) {
                 System.out.println("Erro de leitura de linha");
@@ -111,18 +130,17 @@ public class JackTokenizer {
     }
 
     public Boolean advance() {
-        //System.out.println(tokencounter);
-        //System.out.println(currentCommands.length);
         if( tokencounter >= currentCommands.length) {
-            //System.out.println( "oi");
             if(!readline()) {
                 return false;
             }
         }
         currentCommand = currentCommands[tokencounter++].trim();
+
         if(currentCommand.equals("")) {
             return advance();
         }
+
         return true;
     }
 
