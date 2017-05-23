@@ -25,3 +25,45 @@ java -jar target/JackCompiler-1.0.jar src/test/resources/Square/Square.jack
 java -jar target/JackCompiler-1.0.jar src/test/resources/Square/SquareGame.jack 
 /Applications/Nand2Tetris/TextComparer.sh src/test/resources/Square/SquareGame.xml src/test/resources/Square/SquareGame2.xml 
 /Applications/Nand2Tetris/TextComparer.sh src/test/resources/Square/SquareGameT.xml src/test/resources/Square/SquareGameT2.xml 
+
+
+
+java -classpath '${CLASSPATH}:TestesSW/Compiler:TestesSW/Compiler/Hack.jar:TestesSW/Compiler/Compilers.jar' Hack.Compiler.JackCompiler Codigos/Compiler/src/test/resources/ConvertToBin/Main.jack 
+
+
+java -jar target/JackCompiler-1.0.jar src/test/resources/Seven/Main.jack > teste.txt 
+diff teste.txt src/test/resources/Seven/Main2.vm
+
+java -jar target/JackCompiler-1.0.jar src/test/resources/ConvertToBin/Main.jack > teste.txt
+diff teste.txt src/test/resources/ConvertToBin/Main2.vm
+
+java -jar target/JackCompiler-1.0.jar src/test/resources/Square/Main.jack > teste.txt
+diff teste.txt src/test/resources/Square/Main2.vm
+
+java -jar target/JackCompiler-1.0.jar src/test/resources/Square/Square.jack > teste.txt
+diff teste.txt src/test/resources/Square/Square2.vm 
+
+java -jar target/JackCompiler-1.0.jar src/test/resources/Square/SquareGame.jack > teste.txt 
+diff teste.txt src/test/resources/Square/SquareGame2.vm
+
+java -jar target/JackCompiler-1.0.jar src/test/resources/Average/Main.jack > teste.txt 
+diff teste.txt src/test/resources/Average/Main2.vm
+
+java -jar target/JackCompiler-1.0.jar src/test/resources/Pong/Main.jack > teste.txt
+diff teste.txt src/test/resources/Pong/Main2.vm 
+
+java -jar target/JackCompiler-1.0.jar src/test/resources/Pong/Ball.jack > teste.txt 
+diff teste.txt src/test/resources/Pong/Ball2.vm 
+
+java -jar target/JackCompiler-1.0.jar src/test/resources/Pong/Bat.jack > teste.txt 
+diff teste.txt src/test/resources/Pong/Bat2.vm 
+
+java -jar target/JackCompiler-1.0.jar src/test/resources/Pong/PongGame.jack > teste.txt
+diff teste.txt src/test/resources/Pong/PongGame2.vm
+
+java -jar target/JackCompiler-1.0.jar src/test/resources/ComplexArrays/Main.jack > teste.txt 
+diff teste.txt src/test/resources/ComplexArrays/Main2.vm
+
+
+
+

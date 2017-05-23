@@ -14,95 +14,135 @@ import java.util.*;
  */
 public class SymbolTable {
 
-    private HashMap<String, Integer> symbolTable;
+    // name, type, kind, #
+    private HashMap<String, Symbol> symbolTable;
+
+    Integer indexSTATIC;
+    Integer indexFIELD;
+    Integer indexARG;
+    Integer indexVAR;
 
     /**
      * Cria a tabela de símbolos.
      * Creates a new empty symbol table.
      */
     public SymbolTable() {
-        symbolTable = new HashMap<String, Integer>();
-        initialize();
-    }
-
-    /** Enumerator para os kind. */
-    public enum Kind {
-        STATIC,
-        FIELD, 
-        ARG, 
-        VAR
+        startSubroutine();
     }
 
     // Starts a new subroutine scope (i.e., resets the subroutine’s symbol table).
     public void startSubroutine() {
-
+        symbolTable = new HashMap<String, Symbol>();
+        indexSTATIC = 0;
+        indexFIELD = 0;
+        indexARG = 0;
+        indexVAR = 0;
     }
 
     // Defines a new identifier of a given name, type, and kind and assigns it a running index. 
     // STATIC and FIELD identifiers have a class scope, while ARG and VAR identifiers have a subroutine scope.
-    public Integer Define(String name, String type, Kind kind) {
+    public Integer define(String name, String type, Symbol.Kind kind) {
 
-        return null;
+        Integer tmpIndex=0;
+
+        switch (kind) {
+            case STATIC:
+                tmpIndex = indexSTATIC;
+                indexSTATIC++;
+                break;
+
+            case FIELD:
+                tmpIndex = indexFIELD;
+                indexFIELD++;
+                break;
+            case ARG:
+                tmpIndex = indexARG;
+                indexARG++;
+                break;
+
+            case VAR:
+                tmpIndex = indexVAR;
+                indexVAR++;
+                break;
+        }
+
+        symbolTable.put(name, new Symbol(type, kind,tmpIndex));
+        
+        return tmpIndex;
     }
 
     // Returns the number of variables of the given kind already defined in the current scope.
-    public void VarCount(Kind kind) {
-        return;
+    public Integer varCount(Symbol.Kind kind) {
+        Integer tmpIndex=0;
+        switch (kind) {
+            case STATIC:
+                tmpIndex = indexSTATIC;
+                break;
+            case FIELD:
+                tmpIndex = indexFIELD;
+                break;
+            case ARG:
+                tmpIndex = indexARG;
+                break;
+            case VAR:
+                tmpIndex = indexVAR;
+                break;
+        }
+        return tmpIndex;
     }
 
 
     // Returns the kind of the named identifier in the current scope.
     // If the identifier is unknown in the current scope, returns NONE.
-    public void kindOf() {
-
+    public Symbol.Kind kindOf(String name) {
+        if(symbolTable.containsKey(name)) {
+            return symbolTable.get(name).kind;
+        }
+        return null;
     }
 
     // Returns the type of the named identifier in the current scope.
-    public String TypeOf(String name) {
+    public String typeOf(String name) {
+        if(symbolTable.containsKey(name)) {
+            return symbolTable.get(name).type;    
+        }
         return null;
     }
 
     // Returns the index assigned to the named identifier.
-    public Integer IndexOf(String name) {
+    public Integer indexOf(String name) {
+        if(symbolTable.containsKey(name)) {
+            return symbolTable.get(name).index;
+        }
         return null;
     }
-
-
 
     /**
      * Insere uma entrada de um símbolo com seu endereço numérico na tabela de símbolos.
      * @param  symbol símbolo a ser armazenado na tabela de símbolos.
      * @param  address símbolo a ser armazenado na tabela de símbolos.
      */
-    public void addEntry(String symbol, int address) {
-        symbolTable.put(symbol, address);
-        return;
-    }
+//    public void addEntry(String symbol, int address) {
+//        symbolTable.put(symbol, address);
+//        return;
+//    }
 
     /**
      * Confere se o símbolo informado já foi inserido na tabela de símbolos.
      * @param  symbol símbolo a ser procurado na tabela de símbolos.
      * @return Verdadeiro se símbolo está na tabela de símbolos, Falso se não está na tabela de símbolos.
      */
-    public Boolean contains(String symbol) {
-        return symbolTable.containsKey(symbol);
-    }
+//    public Boolean contains(String symbol) {
+//        return symbolTable.containsKey(symbol);
+//    }
 
     /**
      * Retorna o valor númerico associado a um símbolo já inserido na tabela de símbolos.
      * @param  symbol símbolo a ser procurado na tabela de símbolos.
      * @return valor numérico associado ao símbolo procurado.
      */
-    public Integer getAddress(String symbol) {
-        return symbolTable.get(symbol);
-    }
+//    public Integer getAddress(String symbol) {
+//        return symbolTable.get(symbol);
+//    }
 
-    // initialize the symbol table with predefined symbols
-    public void initialize() {
-
-        // Ponteiros para teclado e display
-        this.addEntry("KBD", 24576);
-   
-        return;
-    }
 }

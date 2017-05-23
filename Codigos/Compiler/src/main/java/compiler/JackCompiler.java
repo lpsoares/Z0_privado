@@ -28,6 +28,7 @@ class JackCompiler {
         String outputFilename = null;
         String outputFilenameX = null;
         String outputFilenameT = null;
+        String outputFilenameV = null;  // para vm
 
         boolean debug = false;
 
@@ -79,20 +80,24 @@ class JackCompiler {
             } else {
                 files.add(inputFilename);
                 if(outputFilename==null) {
+                    outputFilenameV = inputFilename.substring(0, inputFilename.lastIndexOf('.')) + ".vm";
                     outputFilenameX = inputFilename.substring(0, inputFilename.lastIndexOf('.')) + ".xml";
                     outputFilenameT = inputFilename.substring(0, inputFilename.lastIndexOf('.')) + "T.xml";
                 } else {
-                    outputFilenameX = outputFilename;
-                    outputFilenameT = outputFilename.replace(".xml","T.xml");
+                    outputFilenameV = outputFilename;
+                    outputFilenameX = outputFilename.replace(".vm",".xml");;
+                    outputFilenameT = outputFilename.replace(".vm","T.xml");
                 }
             }
 
             for (String file : files) {
                 if(outputFilename==null) {
+                    outputFilenameV = file.replace(".jack",".vm");
                     outputFilenameX = file.replace(".jack",".xml");
                     outputFilenameT = file.replace(".jack","T.xml");
                 }                
-                CompilationEngine code = new CompilationEngine(file,outputFilenameX,outputFilenameT);
+                //CompilationEngine code = new CompilationEngine(file,outputFilenameX,outputFilenameT);
+                CompilationEngine code = new CompilationEngine(file,outputFilenameV);
                 code.compileClass();
                 code.close();
             }
