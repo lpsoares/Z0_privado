@@ -5,40 +5,36 @@
  * Date: 6/05/2017
  */
 
-
-//output module for generating VM code;
-
 package compiler;
 
 import java.io.*;
 
 /**
- * Encapsula o código de leitura. Carrega as instruções na linguagem de máquina virtual a pilha,
- * analisa, e oferece acesso aos comandos.
- * Além disso, remove todos os espaços em branco e comentários.
+ * Encapsula o código para gravar as instruções em Liguagem de Máquina Virtual à Pilha.
+ * Responsável por abrir o arquivo para gravar instruções, possui funcionalidade para gravar as instruções.
  */
 public class VMWriter {
 
-    PrintWriter outputFile = null;
+    PrintWriter outputFile = null;  // PrintWriter usado para gravar as instruções no arquivo.
 
     /** 
-     * Abre o arquivo de entrada VM e se prepara para analisá-lo.
-     * @param file arquivo VM que será feito o parser.
+     * Grava instruções no formato de máquina virtual a pilha.
+     * @param filename nome do arquivo onde serão salvas as instruções em VM.
      */
-    public VMWriter(String outputfilename) {
+    public VMWriter(String filename) {
         try {
-
-            File file = new File(outputfilename);
+            File file = new File(filename);
             outputFile = new PrintWriter(new FileWriter(file));
-
         } catch (FileNotFoundException e) {
-
+            Error.error("Arquivo "+filename+" não pode ser aberto para gravar instruções VM");
+            System.exit(1);
         } catch (java.io.IOException e) {
-
+            Error.error("uma excessao de i/o foi lancada");
+            System.exit(1);
         }
     }
 
-    /** Enumerator para os kind. */
+    /** Enumerator para os tipos de segmentos de memória do Z0. */
     public enum Segment {
         CONST,
         ARG, 
@@ -50,7 +46,7 @@ public class VMWriter {
         TEMP
     }
 
-    /** Enumerator para os kind. */
+    /** Enumerator para os tipos de instruções aritméticas suportadas pelo Z0. */
     public enum Command {
         ADD,
         SUB, 
@@ -63,12 +59,20 @@ public class VMWriter {
         NOT
     }
 
-    public void print(String text) {
-        //System.out.println(text);
+    /** 
+     * Grava as instruções no arquivo de saída.
+     * @param text texto que será gravado no arquivo de saída.
+     */
+    private void print(String text) {
         outputFile.println(text);        
     }
 
-
+    /** 
+     * Encontra o código do segmento e traduz para o texto usado em linguagem VM.
+     * Exemplo: findSegment(Segment.CONST) ==> "constant".
+     * @param segment código do segmento usado no VMWriter.
+     * @return String com o texto usado em linguagem VM
+     */
     public String findSegment(Segment segment) {
 
         String segmentName = "";
@@ -95,19 +99,30 @@ public class VMWriter {
         return segmentName;
     }
 
-    // Writes a VM push command.
+    /** 
+     * Grava um comand "push" no arquivo de instruções VM.
+     * @param segment código do segmento usado no VMWriter.
+     * @param index índice do segmento de memória a ser usado..
+     */
     public void writePush(Segment segment, Integer index) {
         String segmentName = findSegment(segment);
         print("push "+segmentName+" "+String.valueOf(index));
     }
 
-    // Writes a VM pop command.
+    /** 
+     * Grava um comand "pop" no arquivo de instruções VM.
+     * @param segment código do segmento usado no VMWriter.
+     * @param index índice do segmento de memória a ser usado..
+     */
     public void writePop(Segment segment, Integer index) {
         String segmentName = findSegment(segment);
         print("pop "+segmentName+" "+String.valueOf(index));
     }
 
-    // Writes a VM arithmetic command.
+    /** 
+     * Grava um comand aritmético no arquivo de instruções VM.
+     * @param coomand código da instrução a ser salva em linguagem de VM.
+     */
     public void writeArithmetic(Command command) {
 
         String commandName = "";
@@ -137,53 +152,75 @@ public class VMWriter {
 
     }
 
-    // Writes a VM label command.
+    /** 
+     * Grava um marcador (Lable) no arquivo de instruções VM.
+     * @param label nome de marcador a ser usado na linha do arquivo.
+     */
     public void writeLabel(String label) {
         print("label "+label);
     }
 
-    // Writes a VM goto command.
+    /** 
+     * Grava uma instrução de goto (incondicional) no arquivo de instruções VM.
+     * @param label nome do marcador para onde será realizado o salto de execução.
+     */
     public void writeGoto(String label) {
         print("goto "+label);
     }
 
-    // Writes a VM If-goto command.
+    /** 
+     * Grava uma instrução de if-goto (goto condicional) no arquivo de instruções VM.
+     * @param label nome do marcador para onde será realizado o salto de execução caso condição satisfeita.
+     */
     public void writeIf(String label) {
         print("if-goto "+label);
     }
 
-    // Writes a VM call command.
+    /** 
+     * Grava uma instrução call (usada para invocar uma subrotina) no arquivo de instruções VM.
+     * @param name nome da subrotina a ser executada.
+     * @param nArgs número de argumento que serão passados para a subrotina.
+     */
     public void writeCall(String name, Integer nArgs) {
         print("call "+name+" "+String.valueOf(nArgs));
     }
 
-    // Writes a VM function command.
+    /** 
+     * Declara uma função em linguagem VM no arquivo de instruções VM.
+     * @param name nome da subrotina a ser criada.
+     * @param nLocals número de espaços de memória local que devem ser reservados.
+     */
     public void writeFunction(String name, Integer nLocals) {
         print("function "+name+" "+String.valueOf(nLocals));
     }
 
-    // Writes a VM return command.
+    /** 
+     * Grava uma instrução de return no arquivo de instruções VM.
+     */
     public void writeReturn() {
         print("return");
 
     }
 
+    /** 
+     * Grava um String, letra por letra, no arquivo de instruções VM.
+     * Cada caracter é traduzido para seu código ASCII e colocado na pilha.
+     * O módulo de Sistema Operaciona String.appendChar termina a execução.
+     * @param text String a ser escrita em linguagem de máquina virtual à pilha.
+     */
     public void writeString(String text) {
-        //print(String.valueOf(text.length()));
         writePush(Segment.CONST,text.length()-2);
         writeCall("String.new",1);
-        
         for(int i=1;i<text.length()-1;i++) {
             char character = text.charAt(i);
             int ascii = (int) character;
             writePush(Segment.CONST,ascii);
             writeCall("String.appendChar",2);
         }
-
     }
 
     // fecha o arquivo de leitura
-    public void close() throws IOException {
+    public void close() {
         this.outputFile.close();
     }
 

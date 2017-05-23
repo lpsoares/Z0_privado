@@ -39,6 +39,12 @@ public class SymbolTable {
         indexVAR = 0;
     }
 
+    /**
+     * Insere uma entrada de um símbolo com seu endereço numérico na tabela de símbolos.
+     * @param  name símbolo a ser armazenado na tabela de símbolos.
+     * @param  type símbolo a ser armazenado na tabela de símbolos.
+     * @param  kind símbolo a ser armazenado na tabela de símbolos.
+     */
     // Defines a new identifier of a given name, type, and kind and assigns it a running index. 
     // STATIC and FIELD identifiers have a class scope, while ARG and VAR identifiers have a subroutine scope.
     public Integer define(String name, String type, Symbol.Kind kind) {
@@ -92,6 +98,11 @@ public class SymbolTable {
     }
 
 
+    /**
+     * Retorna o valor númerico associado a um símbolo já inserido na tabela de símbolos.
+     * @param  symbol símbolo a ser procurado na tabela de símbolos.
+     * @return valor numérico associado ao símbolo procurado.
+     */
     // Returns the kind of the named identifier in the current scope.
     // If the identifier is unknown in the current scope, returns NONE.
     public Symbol.Kind kindOf(String name) {
@@ -117,32 +128,8 @@ public class SymbolTable {
         return null;
     }
 
-    /**
-     * Insere uma entrada de um símbolo com seu endereço numérico na tabela de símbolos.
-     * @param  symbol símbolo a ser armazenado na tabela de símbolos.
-     * @param  address símbolo a ser armazenado na tabela de símbolos.
-     */
-//    public void addEntry(String symbol, int address) {
-//        symbolTable.put(symbol, address);
-//        return;
-//    }
 
-    /**
-     * Confere se o símbolo informado já foi inserido na tabela de símbolos.
-     * @param  symbol símbolo a ser procurado na tabela de símbolos.
-     * @return Verdadeiro se símbolo está na tabela de símbolos, Falso se não está na tabela de símbolos.
-     */
-//    public Boolean contains(String symbol) {
-//        return symbolTable.containsKey(symbol);
-//    }
 
-    /**
-     * Retorna o valor númerico associado a um símbolo já inserido na tabela de símbolos.
-     * @param  symbol símbolo a ser procurado na tabela de símbolos.
-     * @return valor numérico associado ao símbolo procurado.
-     */
-//    public Integer getAddress(String symbol) {
-//        return symbolTable.get(symbol);
-//    }
+
 
 }

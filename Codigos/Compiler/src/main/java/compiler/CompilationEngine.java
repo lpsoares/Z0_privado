@@ -30,6 +30,11 @@ public class CompilationEngine {
     int counterIf = 0;
     int counterWhile = 0;
 
+    boolean voidType;
+    boolean constructor;
+    boolean method;
+    boolean function;
+
     public CompilationEngine(String inputfilename, String outputfilename) {
 
         subroutineSymbolTable = new SymbolTable();
@@ -38,7 +43,6 @@ public class CompilationEngine {
         try  {
             tokenizer = new JackTokenizer(inputfilename);
             vm = new VMWriter(outputfilename);
-
         } catch (FileNotFoundException e){
             Error.error("Arquivo \'" + inputfilename + "\' nao encontrado");
             System.exit(1);
@@ -276,11 +280,6 @@ public class CompilationEngine {
         compileSymbol(';');
     }
 
-    boolean voidType;
-    boolean constructor;
-    boolean method;
-    boolean function;
-
 
     public void compileSubroutineDec() {
 
@@ -490,18 +489,8 @@ public class CompilationEngine {
             compileIdentifier();
 
             if(isObj) {
-                
-                // if(function) {
-                //     vm.writePush(VMWriter.Segment.LOCAL,0);    
-                // } else {
-                //     vm.writePush(VMWriter.Segment.THIS,1110);
-                // }
-
                 VMWriter.Segment segment = convertKind(kind);
                 vm.writePush(segment,index);
-
-
-
             }
 
             compileSymbol('(');
@@ -534,7 +523,6 @@ public class CompilationEngine {
     public boolean compileArray(String identifier) {
         if( tokenizer.command().equals("[") ) {
 
-            
             compileSymbol('[');
             compileExpression();
             compileSymbol(']');
@@ -650,7 +638,6 @@ public class CompilationEngine {
             vm.writeLabel("IF_END"+String.valueOf(tmpCounterIf));
         }
 
-
     }
 
     public boolean isKeywordConstant() {
@@ -665,10 +652,10 @@ public class CompilationEngine {
             tokenizer.command().equals("~")); 
     }
 
-    public boolean isTerm() {
 //integerConstant | stringConstant | keywordConstant |
 // varName | varName '[' expression ']' | subroutineCall |
 // '(' expression ')' | unaryOp term
+    public boolean isTerm() {
         return(
             tokenizer.tokenType(tokenizer.command())==JackTokenizer.CommandType.INT_CONST ||
             tokenizer.tokenType(tokenizer.command())==JackTokenizer.CommandType.STRING_CONST ||
@@ -846,6 +833,7 @@ public class CompilationEngine {
             //saveTerminal("symbol",tokenizer.command());
 
             compileTerm();
+
             if(command!=null) {
                 vm.writeArithmetic(command);
             } else if(multiply) {
@@ -859,8 +847,8 @@ public class CompilationEngine {
         saveCloseTag("expression");
     }
 
+    // (expression (',' expression)* )?
     public int compileExpressionList() {
-        // (expression (',' expression)* )?
 
         int nParameters = 0;
 

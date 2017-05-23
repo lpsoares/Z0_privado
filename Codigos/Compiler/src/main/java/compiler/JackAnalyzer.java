@@ -5,6 +5,15 @@
  * Date: 4/05/2017
  */
 
+/*
+
+Arquivo não mais usado
+
+Serviu para inciar estudo de árvore sintática
+
+*/
+
+
 package compiler;
 
 import java.io.*;
