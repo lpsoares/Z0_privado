@@ -10,43 +10,56 @@ package compiler;
 import java.util.*;
 
 /**
- * Mantém uma tabela com a correspondência entre os rótulos simbólicos e endereços numéricos de memória.
+ * Mantém uma tabela com a correspondência entre os nomes das variáveis e seus detalhes.
+ * Os dados salvos são o tipo de dado que a variável suporta, o posicionamento no código e
+ * o indice numérico no segmento de memória relacionado.
+ * Esta tabela de símbolos pode ser usada para armazenar variáveis no contexto da Classe/objeto,
+ * bem como atributos e variáveis de subrotinas (métodos, funções e construtores).
  */
 public class SymbolTable {
 
-    // name, type, kind, #
+    // Hash table que armazena o relacionamento name(nome), com Symbol
+    // Symbol é usado para gerenciar type(tipo), kind(posicionamento), index(indice).
     private HashMap<String, Symbol> symbolTable;
 
+    // Contadores para as diferentes formas de variáveis.
     Integer indexSTATIC;
     Integer indexFIELD;
     Integer indexARG;
     Integer indexVAR;
 
     /**
-     * Cria a tabela de símbolos.
-     * Creates a new empty symbol table.
+     * Cria uma tabela de símbolos vazia.
      */
     public SymbolTable() {
         startSubroutine();
     }
 
     // Starts a new subroutine scope (i.e., resets the subroutine’s symbol table).
+    /**
+     * Reinicia todos os valores da tabela de símbolos, bem como quaisquer 
+     * contadores ou outra estrutura de dados que não serão reusadas em um novo
+     * contexto, por exemplo quando se muda para uma nova subrotina.
+     */
     public void startSubroutine() {
         symbolTable = new HashMap<String, Symbol>();
         indexSTATIC = 0;
-        indexFIELD = 0;
-        indexARG = 0;
-        indexVAR = 0;
+        indexFIELD  = 0;
+        indexARG    = 0;
+        indexVAR    = 0;
     }
 
     /**
-     * Insere uma entrada de um símbolo com seu endereço numérico na tabela de símbolos.
-     * @param  name símbolo a ser armazenado na tabela de símbolos.
-     * @param  type símbolo a ser armazenado na tabela de símbolos.
-     * @param  kind símbolo a ser armazenado na tabela de símbolos.
-     */
-    // Defines a new identifier of a given name, type, and kind and assigns it a running index. 
-    // STATIC and FIELD identifiers have a class scope, while ARG and VAR identifiers have a subroutine scope.
+     * Insere uma entrada na tabela de símbolos, sendo essa tabela indexada pelo nome
+     * da variável a ser inserida, os dados de type (tipo) e kind (posicionamento) são
+     * fornecidos, já o índice de segmento de memória é gerado automaticamente nessa rotina.
+     * As posicionamentos STATIC e FIELD são usados para escopos de classes, enquando 
+     * ARG e VAR são usados nos escopos de subrotinas.
+     * @param  name nome da variável a ser armazenada na tabela de símbolos e usada para indexar tabela.
+     * @param  type tipo a ser armazenado na tabela de símbolos, por exemplo: int, char, ou uma Classe qualquer.
+     * @param  kind posicionamento no código da variável a ser armazenado na tabela de símbolos, por exemplo: STATIC, ARG.
+     * @return valor inteiro do índice para segmento de memória criado para a variável.
+     */    
     public Integer define(String name, String type, Symbol.Kind kind) {
 
         Integer tmpIndex=0;
@@ -56,7 +69,6 @@ public class SymbolTable {
                 tmpIndex = indexSTATIC;
                 indexSTATIC++;
                 break;
-
             case FIELD:
                 tmpIndex = indexFIELD;
                 indexFIELD++;
@@ -65,7 +77,6 @@ public class SymbolTable {
                 tmpIndex = indexARG;
                 indexARG++;
                 break;
-
             case VAR:
                 tmpIndex = indexVAR;
                 indexVAR++;
@@ -77,7 +88,12 @@ public class SymbolTable {
         return tmpIndex;
     }
 
-    // Returns the number of variables of the given kind already defined in the current scope.
+    /**
+     * Informa o número de variáveis que foram alocadas, conform o posicionamento delas (kind).
+     * Quando a tabela é reiniciada, esses valores são zerados.
+     * @param kind forma de posicionamento de uma variável. Por exemplo: FIELD, VAR, etc.
+     * @return quantidade de variáveis definidas para uma determinada forma de posicionamento (kind).
+     */
     public Integer varCount(Symbol.Kind kind) {
         Integer tmpIndex=0;
         switch (kind) {
@@ -97,22 +113,12 @@ public class SymbolTable {
         return tmpIndex;
     }
 
-
     /**
-     * Retorna o valor númerico associado a um símbolo já inserido na tabela de símbolos.
-     * @param  symbol símbolo a ser procurado na tabela de símbolos.
-     * @return valor numérico associado ao símbolo procurado.
+     * Retorna o tipo da variável buscada, se a variável não for encontrada para o escopo 
+     * da tabela de símbolos procurada, um valor null deve ser retornado informando que não existe na tabela.
+     * @param  name nome da variável a ser procurado na tabela de símbolos.
+     * @return tipo da variável procurada (null caso não encontrado).
      */
-    // Returns the kind of the named identifier in the current scope.
-    // If the identifier is unknown in the current scope, returns NONE.
-    public Symbol.Kind kindOf(String name) {
-        if(symbolTable.containsKey(name)) {
-            return symbolTable.get(name).kind;
-        }
-        return null;
-    }
-
-    // Returns the type of the named identifier in the current scope.
     public String typeOf(String name) {
         if(symbolTable.containsKey(name)) {
             return symbolTable.get(name).type;    
@@ -120,16 +126,30 @@ public class SymbolTable {
         return null;
     }
 
-    // Returns the index assigned to the named identifier.
+    /**
+     * Retorna a forma de posicionamento (kind) da variável buscada, se a variável não for encontrada para o escopo 
+     * da tabela de símbolos procurada, um valor null deve ser retornado informando que não existe na tabela.
+     * @param  name nome da variável a ser procurado na tabela de símbolos.
+     * @return forma de posicionamento (kind) da variável procurada (null caso não encontrado).
+     */
+    public Symbol.Kind kindOf(String name) {
+        if(symbolTable.containsKey(name)) {
+            return symbolTable.get(name).kind;
+        }
+        return null;
+    }
+
+    /**
+     * Retorna o índice do segmento de memória da variável buscada, se a variável não for encontrada para o escopo 
+     * da tabela de símbolos procurada, um valor null deve ser retornado informando que não existe na tabela.
+     * @param  name nome da variável a ser procurado na tabela de símbolos.
+     * @return índice do segmento de memória da variável procurada (null caso não encontrado).
+     */
     public Integer indexOf(String name) {
         if(symbolTable.containsKey(name)) {
             return symbolTable.get(name).index;
         }
         return null;
     }
-
-
-
-
 
 }
