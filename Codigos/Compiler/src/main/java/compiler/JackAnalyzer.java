@@ -91,4 +91,92 @@ class JackAnalyzer {
         }
     }
     */
+
+
+    /*
+    public CompilationEngine(String inputfilename, String outputfilename, String outputfilenameT) {
+        
+        SymbolTable table = new SymbolTable();
+
+        try  {
+            JackTokenizer tokenizerI = new JackTokenizer(inputfilename);
+
+            PrintWriter outputFileT = null;
+            File fileT = new File(outputfilenameT);
+            outputFileT = new PrintWriter(new FileWriter(fileT));
+            
+
+            outputFileT.println("<tokens>");
+
+            // Avança enquanto houver linhas para traduzir
+            while(tokenizerI.advance()) {
+
+                if      (tokenizerI.tokenType(tokenizerI.token())==JackTokenizer.TokenType.KEYWORD) {
+                    outputFileT.print("  <keyword>");
+                }else if(tokenizerI.tokenType(tokenizerI.token())==JackTokenizer.TokenType.SYMBOL) {
+                    outputFileT.print("  <symbol>");
+                }else if(tokenizerI.tokenType(tokenizerI.token())==JackTokenizer.TokenType.IDENTIFIER) {
+                    outputFileT.print("  <identifier>");
+                }else if(tokenizerI.tokenType(tokenizerI.token())==JackTokenizer.TokenType.INT_CONST) {
+                    outputFileT.print("  <integerConstant>");
+                }else if(tokenizerI.tokenType(tokenizerI.token())==JackTokenizer.TokenType.STRING_CONST) {
+                    outputFileT.print("  <stringConstant>");
+                }
+
+                if(tokenizerI.tokenType(tokenizerI.token())==JackTokenizer.TokenType.STRING_CONST) {
+                    outputFileT.print(tokenizerI.stringVal(tokenizerI.token()));
+                } else if(tokenizerI.token().equals("<")) {
+                    outputFileT.print("&lt;");
+                } else if(tokenizerI.token().equals(">")) {
+                    outputFileT.print("&gt;");
+                } else if(tokenizerI.token().equals("&")) {
+                    outputFileT.print("&amp;");
+                } else {
+                    outputFileT.print(" "+tokenizerI.token());
+                }
+                
+
+                if      (tokenizerI.tokenType(tokenizerI.token())==JackTokenizer.TokenType.KEYWORD) {
+                    outputFileT.println("  </keyword>");
+                }else if(tokenizerI.tokenType(tokenizerI.token())==JackTokenizer.TokenType.SYMBOL) {
+                    outputFileT.println("  </symbol>");
+                }else if(tokenizerI.tokenType(tokenizerI.token())==JackTokenizer.TokenType.IDENTIFIER) {
+                    outputFileT.println("  </identifier>");
+                }else if(tokenizerI.tokenType(tokenizerI.token())==JackTokenizer.TokenType.INT_CONST) {
+                    outputFileT.println("  </integerConstant>");
+                }else if(tokenizerI.tokenType(tokenizerI.token())==JackTokenizer.TokenType.STRING_CONST) {
+                    outputFileT.println("  </stringConstant>");
+                }
+                
+            }
+
+            outputFileT.println("</tokens>");
+
+            outputFileT.close();
+
+        } catch (FileNotFoundException e){
+            Error.error("Arquivo \'" + inputfilename + "\' nao encontrado");
+            System.exit(1);
+        } catch (IOException e) {
+            Error.error("uma excessao de i/o foi lancada");
+            System.exit(1);
+        }
+
+        // Para gravar o sintatico
+        try  {
+            tokenizer = new JackTokenizer(inputfilename);
+            File file = new File(outputfilename);
+            outputFileXML = new PrintWriter(new FileWriter(file));
+        } catch (FileNotFoundException e){
+            Error.error("Arquivo \'" + inputfilename + "\' nao encontrado");
+            System.exit(1);
+        } catch (IOException e) {
+            Error.error("uma excessao de i/o foi lancada");
+            System.exit(1);
+        }
+
+    }
+    */
+
+
 }
