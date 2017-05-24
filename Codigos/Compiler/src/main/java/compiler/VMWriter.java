@@ -11,7 +11,7 @@ import java.io.*;
 
 /**
  * Encapsula o código para gravar as instruções em Liguagem de Máquina Virtual à Pilha.
- * Responsável por abrir o arquivo para gravar instruções, possui funcionalidade para gravar as instruções.
+ * Responsável por abrir o arquivo para gravar instruções, possui funcionalidades para gravar as instruções.
  */
 public class VMWriter {
 
@@ -19,14 +19,14 @@ public class VMWriter {
 
     /** 
      * Grava instruções no formato de máquina virtual a pilha.
-     * @param filename nome do arquivo onde serão salvas as instruções em VM.
+     * @param objeto File para o arquivo onde serão salvas as instruções em VM.
      */
-    public VMWriter(String filename) {
+    public VMWriter(File file) {
         try {
-            File file = new File(filename);
+            //File file = new File(filename);
             outputFile = new PrintWriter(new FileWriter(file));
         } catch (FileNotFoundException e) {
-            Error.error("Arquivo "+filename+" não pode ser aberto para gravar instruções VM");
+            Error.error("Arquivo "+file.getName()+" não pode ser aberto para gravar instruções VM");
             System.exit(1);
         } catch (java.io.IOException e) {
             Error.error("uma excessao de i/o foi lancada");
@@ -59,20 +59,173 @@ public class VMWriter {
         NOT
     }
 
+
     /** 
-     * Grava as instruções no arquivo de saída.
-     * @param text texto que será gravado no arquivo de saída.
+     * Grava um comand "push" no arquivo de instruções VM.
+     * Adicionalmente o método tem a possibilidade de retornar a instrução gerada.
+     * @param segment código do segmento usado no VMWriter.
+     * @param index índice do segmento de memória a ser usado.
+     * @return retorna a String do respectivo comando
      */
+    public String writePush(Segment segment, Integer index) {
+        String segmentName = findSegment(segment);
+        String command = "push "+segmentName+" "+String.valueOf(index);
+        print(command);
+        return command;
+    }
+
+    /** 
+     * Grava um comand "pop" no arquivo de instruções VM.
+     * @param segment código do segmento usado no VMWriter.
+     * @param index índice do segmento de memória a ser usado.
+     * @return retorna a String do respectivo comando
+     */
+    public String writePop(Segment segment, Integer index) {
+        String segmentName = findSegment(segment);
+        String command = "pop "+segmentName+" "+String.valueOf(index);
+        print(command);
+        return command;
+    }
+
+    /** 
+     * Grava um comand aritmético no arquivo de instruções VM.
+     * @param coomand código da instrução a ser salva em linguagem de VM.
+     * @return retorna a String do respectivo comando
+     */
+    public String writeArithmetic(Command command) {
+
+        String commandName = "";
+
+        switch(command) {
+            case ADD: commandName = "add";
+            break;
+            case SUB: commandName = "sub";
+            break;
+            case NEG: commandName = "neg";
+            break;
+            case EQ: commandName = "eq";
+            break;
+            case GT: commandName = "gt";
+            break;
+            case LT: commandName = "lt";
+            break;
+            case AND: commandName = "and";
+            break;
+            case OR: commandName = "or";
+            break;
+            case NOT: commandName = "not";
+            break;
+        }
+    
+        print(commandName);
+        return(commandName);
+    }
+
+    /** 
+     * Grava um marcador (Lable) no arquivo de instruções VM.
+     * @param label nome de marcador a ser usado na linha do arquivo.
+     * @return retorna a String do respectivo comando
+     */
+    public String writeLabel(String label) {
+        String command = "label "+label;
+        print(command);
+        return(command);
+    }
+
+    /** 
+     * Grava uma instrução de goto (incondicional) no arquivo de instruções VM.
+     * @param label nome do marcador para onde será realizado o salto de execução.
+     * @return retorna a String do respectivo comando
+     */
+    public String writeGoto(String label) {
+        String command = "goto "+label;
+        print(command);
+        return(command);
+    }
+
+    /** 
+     * Grava uma instrução de if-goto (goto condicional) no arquivo de instruções VM.
+     * @param label nome do marcador para onde será realizado o salto de execução caso condição satisfeita.
+     * @return retorna a String do respectivo comando
+     */
+    public String writeIf(String label) {
+        String command = "if-goto "+label;
+        print(command);
+        return(command);
+    }
+
+    /** 
+     * Grava uma instrução call (usada para invocar uma subrotina) no arquivo de instruções VM.
+     * @param name nome da subrotina a ser executada.
+     * @param nArgs número de argumento que serão passados para a subrotina.
+     * @return retorna a String do respectivo comando
+     */
+    public String writeCall(String name, Integer nArgs) {
+        String command = "call "+name+" "+String.valueOf(nArgs);
+        print(command);
+        return(command);
+    }
+
+    /** 
+     * Declara uma função em linguagem VM no arquivo de instruções VM.
+     * @param name nome da subrotina a ser criada.
+     * @param nLocals número de espaços de memória local que devem ser reservados.
+     * @return retorna a String do respectivo comando
+     */
+    public String writeFunction(String name, Integer nLocals) {
+        String command = "function "+name+" "+String.valueOf(nLocals);
+        print(command);
+        return(command);
+    }
+
+    /** 
+     * Grava uma instrução de return no arquivo de instruções VM.
+     * @return retorna a String do respectivo comando
+     */
+    public String writeReturn() {
+        String command = "return";
+        print(command);
+        return(command);
+    }
+
+    /** 
+     * Grava um String, letra por letra, no arquivo de instruções VM.
+     * Cada caracter é traduzido para seu código ASCII e colocado na pilha.
+     * O módulo de Sistema Operaciona String.appendChar termina a execução.
+     * @param text String a ser escrita em linguagem de máquina virtual à pilha.
+     * @return retorna o numero de caracteres que foram detectados na String.
+     */
+    public Integer writeString(String text) {
+        writePush(Segment.CONST,text.length());
+        writeCall("String.new",1);
+        for(int i=0;i<text.length();i++) {
+            char character = text.charAt(i);
+            int ascii = (int) character;
+            writePush(Segment.CONST,ascii);
+            writeCall("String.appendChar",2);
+        }
+        return(text.length());
+    }
+
+    /** 
+     * Fecha o arquivo de leitura.
+     * O arquivo deve ser fechado ao final da gravação, senão dados podem não ser gravados de fato.
+     */
+    public void close() {
+        this.outputFile.close();
+    }
+
+    
+    // Grava as instruções no arquivo de saída.
+    // @param text texto que será gravado no arquivo de saída.
     private void print(String text) {
         outputFile.println(text);        
     }
 
-    /** 
-     * Encontra o código do segmento e traduz para o texto usado em linguagem VM.
-     * Exemplo: findSegment(Segment.CONST) ==> "constant".
-     * @param segment código do segmento usado no VMWriter.
-     * @return String com o texto usado em linguagem VM
-     */
+    // Encontra o código do segmento e traduz para o texto usado em linguagem VM.
+    // Exemplo: findSegment(Segment.CONST) ==> "constant".
+    // @param segment código do segmento usado no VMWriter.
+    // @return String com o texto usado em linguagem VM
     public String findSegment(Segment segment) {
 
         String segmentName = "";
@@ -99,129 +252,6 @@ public class VMWriter {
         return segmentName;
     }
 
-    /** 
-     * Grava um comand "push" no arquivo de instruções VM.
-     * @param segment código do segmento usado no VMWriter.
-     * @param index índice do segmento de memória a ser usado..
-     */
-    public void writePush(Segment segment, Integer index) {
-        String segmentName = findSegment(segment);
-        print("push "+segmentName+" "+String.valueOf(index));
-    }
 
-    /** 
-     * Grava um comand "pop" no arquivo de instruções VM.
-     * @param segment código do segmento usado no VMWriter.
-     * @param index índice do segmento de memória a ser usado..
-     */
-    public void writePop(Segment segment, Integer index) {
-        String segmentName = findSegment(segment);
-        print("pop "+segmentName+" "+String.valueOf(index));
-    }
-
-    /** 
-     * Grava um comand aritmético no arquivo de instruções VM.
-     * @param coomand código da instrução a ser salva em linguagem de VM.
-     */
-    public void writeArithmetic(Command command) {
-
-        String commandName = "";
-
-        switch(command) {
-            case ADD: commandName = "add";
-            break;
-            case SUB: commandName = "sub";
-            break;
-            case NEG: commandName = "neg";
-            break;
-            case EQ: commandName = "eq";
-            break;
-            case GT: commandName = "gt";
-            break;
-            case LT: commandName = "lt";
-            break;
-            case AND: commandName = "and";
-            break;
-            case OR: commandName = "or";
-            break;
-            case NOT: commandName = "not";
-            break;
-        }
-    
-        print(commandName);
-
-    }
-
-    /** 
-     * Grava um marcador (Lable) no arquivo de instruções VM.
-     * @param label nome de marcador a ser usado na linha do arquivo.
-     */
-    public void writeLabel(String label) {
-        print("label "+label);
-    }
-
-    /** 
-     * Grava uma instrução de goto (incondicional) no arquivo de instruções VM.
-     * @param label nome do marcador para onde será realizado o salto de execução.
-     */
-    public void writeGoto(String label) {
-        print("goto "+label);
-    }
-
-    /** 
-     * Grava uma instrução de if-goto (goto condicional) no arquivo de instruções VM.
-     * @param label nome do marcador para onde será realizado o salto de execução caso condição satisfeita.
-     */
-    public void writeIf(String label) {
-        print("if-goto "+label);
-    }
-
-    /** 
-     * Grava uma instrução call (usada para invocar uma subrotina) no arquivo de instruções VM.
-     * @param name nome da subrotina a ser executada.
-     * @param nArgs número de argumento que serão passados para a subrotina.
-     */
-    public void writeCall(String name, Integer nArgs) {
-        print("call "+name+" "+String.valueOf(nArgs));
-    }
-
-    /** 
-     * Declara uma função em linguagem VM no arquivo de instruções VM.
-     * @param name nome da subrotina a ser criada.
-     * @param nLocals número de espaços de memória local que devem ser reservados.
-     */
-    public void writeFunction(String name, Integer nLocals) {
-        print("function "+name+" "+String.valueOf(nLocals));
-    }
-
-    /** 
-     * Grava uma instrução de return no arquivo de instruções VM.
-     */
-    public void writeReturn() {
-        print("return");
-
-    }
-
-    /** 
-     * Grava um String, letra por letra, no arquivo de instruções VM.
-     * Cada caracter é traduzido para seu código ASCII e colocado na pilha.
-     * O módulo de Sistema Operaciona String.appendChar termina a execução.
-     * @param text String a ser escrita em linguagem de máquina virtual à pilha.
-     */
-    public void writeString(String text) {
-        writePush(Segment.CONST,text.length()-2);
-        writeCall("String.new",1);
-        for(int i=1;i<text.length()-1;i++) {
-            char character = text.charAt(i);
-            int ascii = (int) character;
-            writePush(Segment.CONST,ascii);
-            writeCall("String.appendChar",2);
-        }
-    }
-
-    // fecha o arquivo de leitura
-    public void close() {
-        this.outputFile.close();
-    }
 
 }

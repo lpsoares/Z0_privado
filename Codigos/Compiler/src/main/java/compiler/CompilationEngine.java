@@ -40,16 +40,10 @@ public class CompilationEngine {
         subroutineSymbolTable = new SymbolTable();
 
         // Para gravar o vm
-        try  {
-            tokenizer = new JackTokenizer(inputfilename);
-            vm = new VMWriter(outputfilename);
-        } catch (FileNotFoundException e){
-            Error.error("Arquivo \'" + inputfilename + "\' nao encontrado");
-            System.exit(1);
-        } catch (IOException e) {
-            Error.error("uma excessao de i/o foi lancada");
-            System.exit(1);
-        }
+        tokenizer = new JackTokenizer(inputfilename);
+        
+        vm = new VMWriter(new File(outputfilename));
+
     }
 
     /** 
@@ -73,40 +67,40 @@ public class CompilationEngine {
             // Avança enquanto houver linhas para traduzir
             while(tokenizer.advance()) {
 
-                if      (tokenizer.tokenType(tokenizer.command())==JackTokenizer.CommandType.KEYWORD) {
+                if      (tokenizer.tokenType(tokenizer.token())==JackTokenizer.TokenType.KEYWORD) {
                     outputFileT.print("  <keyword>");
-                }else if(tokenizer.tokenType(tokenizer.command())==JackTokenizer.CommandType.SYMBOL) {
+                }else if(tokenizer.tokenType(tokenizer.token())==JackTokenizer.TokenType.SYMBOL) {
                     outputFileT.print("  <symbol>");
-                }else if(tokenizer.tokenType(tokenizer.command())==JackTokenizer.CommandType.IDENTIFIER) {
+                }else if(tokenizer.tokenType(tokenizer.token())==JackTokenizer.TokenType.IDENTIFIER) {
                     outputFileT.print("  <identifier>");
-                }else if(tokenizer.tokenType(tokenizer.command())==JackTokenizer.CommandType.INT_CONST) {
+                }else if(tokenizer.tokenType(tokenizer.token())==JackTokenizer.TokenType.INT_CONST) {
                     outputFileT.print("  <integerConstant>");
-                }else if(tokenizer.tokenType(tokenizer.command())==JackTokenizer.CommandType.STRING_CONST) {
+                }else if(tokenizer.tokenType(tokenizer.token())==JackTokenizer.TokenType.STRING_CONST) {
                     outputFileT.print("  <stringConstant>");
                 }
 
-                if(tokenizer.tokenType(tokenizer.command())==JackTokenizer.CommandType.STRING_CONST) {
-                    outputFileT.print(tokenizer.stringVal(tokenizer.command()));
-                } else if(tokenizer.command().equals("<")) {
+                if(tokenizer.tokenType(tokenizer.token())==JackTokenizer.TokenType.STRING_CONST) {
+                    outputFileT.print(tokenizer.stringVal(tokenizer.token()));
+                } else if(tokenizer.token().equals("<")) {
                     outputFileT.print("&lt;");
-                } else if(tokenizer.command().equals(">")) {
+                } else if(tokenizer.token().equals(">")) {
                     outputFileT.print("&gt;");
-                } else if(tokenizer.command().equals("&")) {
+                } else if(tokenizer.token().equals("&")) {
                     outputFileT.print("&amp;");
                 } else {
-                    outputFileT.print(" "+tokenizer.command());
+                    outputFileT.print(" "+tokenizer.token());
                 }
                 
 
-                if      (tokenizer.tokenType(tokenizer.command())==JackTokenizer.CommandType.KEYWORD) {
+                if      (tokenizer.tokenType(tokenizer.token())==JackTokenizer.TokenType.KEYWORD) {
                     outputFileT.println("  </keyword>");
-                }else if(tokenizer.tokenType(tokenizer.command())==JackTokenizer.CommandType.SYMBOL) {
+                }else if(tokenizer.tokenType(tokenizer.token())==JackTokenizer.TokenType.SYMBOL) {
                     outputFileT.println("  </symbol>");
-                }else if(tokenizer.tokenType(tokenizer.command())==JackTokenizer.CommandType.IDENTIFIER) {
+                }else if(tokenizer.tokenType(tokenizer.token())==JackTokenizer.TokenType.IDENTIFIER) {
                     outputFileT.println("  </identifier>");
-                }else if(tokenizer.tokenType(tokenizer.command())==JackTokenizer.CommandType.INT_CONST) {
+                }else if(tokenizer.tokenType(tokenizer.token())==JackTokenizer.TokenType.INT_CONST) {
                     outputFileT.println("  </integerConstant>");
-                }else if(tokenizer.tokenType(tokenizer.command())==JackTokenizer.CommandType.STRING_CONST) {
+                }else if(tokenizer.tokenType(tokenizer.token())==JackTokenizer.TokenType.STRING_CONST) {
                     outputFileT.println("  </stringConstant>");
                 }
                 
@@ -143,7 +137,7 @@ public class CompilationEngine {
 
     public void print(String text) {
         //System.out.print(text);
-        //outputFileXML.print(text);        
+        outputFileXML.print(text);        
     }
 
     public void saveOpenTag(String tag, boolean linebreak) {    
@@ -167,46 +161,46 @@ public class CompilationEngine {
     }
 
     public void compileIdentifier() {
-        if(tokenizer.tokenType(tokenizer.command())!=JackTokenizer.CommandType.IDENTIFIER) {
-            Error.error("Não encontrado identifier. Encontrado: "+tokenizer.command());
+        if(tokenizer.tokenType(tokenizer.token())!=JackTokenizer.TokenType.IDENTIFIER) {
+            Error.error("Não encontrado identifier. Encontrado: "+tokenizer.token());
         }
-        saveTerminal("identifier",tokenizer.command());
+        saveTerminal("identifier",tokenizer.token());
     }
 
     public void compileSymbol(Character symbol) {
-        if(tokenizer.tokenType(tokenizer.command())!=JackTokenizer.CommandType.SYMBOL) {
-            Error.error("Não encontrado symbol"+Character.toString(symbol)+". Encontrado: "+tokenizer.command());
+        if(tokenizer.tokenType(tokenizer.token())!=JackTokenizer.TokenType.SYMBOL) {
+            Error.error("Não encontrado symbol"+Character.toString(symbol)+". Encontrado: "+tokenizer.token());
         }
-        if(tokenizer.symbol(tokenizer.command())!=symbol) {
-            Error.error("Não encontrado symbol"+Character.toString(symbol)+". Encontrado: "+tokenizer.command());
+        if(tokenizer.symbol(tokenizer.token())!=symbol) {
+            Error.error("Não encontrado symbol"+Character.toString(symbol)+". Encontrado: "+tokenizer.token());
         }
-        saveTerminal("symbol",tokenizer.command());
+        saveTerminal("symbol",tokenizer.token());
     }
 
     public boolean isType() {
-        return (tokenizer.command().equals("int") ||
-                tokenizer.command().equals("char") ||
-                tokenizer.command().equals("boolean") ||
-                tokenizer.tokenType(tokenizer.command())==JackTokenizer.CommandType.IDENTIFIER);
+        return (tokenizer.token().equals("int") ||
+                tokenizer.token().equals("char") ||
+                tokenizer.token().equals("boolean") ||
+                tokenizer.tokenType(tokenizer.token())==JackTokenizer.TokenType.IDENTIFIER);
     }
 
     public boolean isStatement() {
-        return (tokenizer.command().equals("let") ||
-                tokenizer.command().equals("if") ||
-                tokenizer.command().equals("while") ||
-                tokenizer.command().equals("do") ||
-                tokenizer.command().equals("return"));
+        return (tokenizer.token().equals("let") ||
+                tokenizer.token().equals("if") ||
+                tokenizer.token().equals("while") ||
+                tokenizer.token().equals("do") ||
+                tokenizer.token().equals("return"));
                 
     }
 
     public void compileType() {
         if(!isType()) {
-            Error.error("Não encontrado keyword ou identifier. Encontrado: "+tokenizer.command());
+            Error.error("Não encontrado keyword ou identifier. Encontrado: "+tokenizer.token());
         }
-        if(tokenizer.tokenType(tokenizer.command())==JackTokenizer.CommandType.IDENTIFIER) {
-            saveTerminal("identifier",tokenizer.command());    
+        if(tokenizer.tokenType(tokenizer.token())==JackTokenizer.TokenType.IDENTIFIER) {
+            saveTerminal("identifier",tokenizer.token());    
         } else {
-            saveTerminal("keyword",tokenizer.command());
+            saveTerminal("keyword",tokenizer.token());
         }
     }
 
@@ -220,22 +214,22 @@ public class CompilationEngine {
 
         saveOpenTag("class",true);
         if(!tokenizer.advance()) return; // pega primeiro token
-        if(tokenizer.tokenType(tokenizer.command())!=JackTokenizer.CommandType.KEYWORD ||
-           tokenizer.keyWord(tokenizer.command())!=JackTokenizer.KeywordType.CLASS) {
-            Error.error("Não encontrada class. Encontrado: "+tokenizer.command());
+        if(tokenizer.tokenType(tokenizer.token())!=JackTokenizer.TokenType.KEYWORD ||
+           tokenizer.keyWord(tokenizer.token())!=JackTokenizer.KeywordType.CLASS) {
+            Error.error("Não encontrada class. Encontrado: "+tokenizer.token());
         }
-        saveTerminal("keyword",tokenizer.command());
+        saveTerminal("keyword",tokenizer.token());
 
-        className = tokenizer.command();
+        className = tokenizer.token();
         compileIdentifier();
         
         compileSymbol('{');
-        while( tokenizer.command().equals("static") || tokenizer.command().equals("field")) {
+        while( tokenizer.token().equals("static") || tokenizer.token().equals("field")) {
             saveOpenTag("classVarDec",true);
             compileClassVarDec();    
             saveCloseTag("classVarDec");
         }
-        while( tokenizer.command().equals("constructor") || tokenizer.command().equals("function") || tokenizer.command().equals("method") ) {
+        while( tokenizer.token().equals("constructor") || tokenizer.token().equals("function") || tokenizer.token().equals("method") ) {
             saveOpenTag("subroutineDec",true);
             compileSubroutineDec();    
             saveCloseTag("subroutineDec");
@@ -246,32 +240,32 @@ public class CompilationEngine {
     }
 
     public void compileClassVarDec() {
-        if(tokenizer.tokenType(tokenizer.command())!=JackTokenizer.CommandType.KEYWORD ||
-           !(tokenizer.keyWord(tokenizer.command())==JackTokenizer.KeywordType.STATIC ||
-             tokenizer.keyWord(tokenizer.command())==JackTokenizer.KeywordType.FIELD)) {
-            Error.error("Não encontrada static ou field. Encontrado: "+tokenizer.command());
+        if(tokenizer.tokenType(tokenizer.token())!=JackTokenizer.TokenType.KEYWORD ||
+           !(tokenizer.keyWord(tokenizer.token())==JackTokenizer.KeywordType.STATIC ||
+             tokenizer.keyWord(tokenizer.token())==JackTokenizer.KeywordType.FIELD)) {
+            Error.error("Não encontrada static ou field. Encontrado: "+tokenizer.token());
         }
         
         Symbol.Kind kind;
-        if(tokenizer.keyWord(tokenizer.command())==JackTokenizer.KeywordType.STATIC) {
+        if(tokenizer.keyWord(tokenizer.token())==JackTokenizer.KeywordType.STATIC) {
             kind = Symbol.Kind.STATIC;
         } else {
             kind = Symbol.Kind.FIELD;
         }
-        saveTerminal("keyword",tokenizer.command());  // static ou field
+        saveTerminal("keyword",tokenizer.token());  // static ou field
 
-        String type = tokenizer.command();
+        String type = tokenizer.token();
         compileType();
 
-        String identifier = tokenizer.command();
+        String identifier = tokenizer.token();
         compileIdentifier();
 
         classSymbolTable.define(identifier, type, kind);
 
-        while( tokenizer.command().equals(",") ) {
+        while( tokenizer.token().equals(",") ) {
             compileSymbol(',');
 
-            identifier = tokenizer.command();
+            identifier = tokenizer.token();
             compileIdentifier();
 
             classSymbolTable.define(identifier, type, kind);
@@ -287,36 +281,36 @@ public class CompilationEngine {
         counterIf = 0;
         counterWhile = 0;
 
-        if(tokenizer.tokenType(tokenizer.command())!=JackTokenizer.CommandType.KEYWORD ||
-           !(tokenizer.keyWord(tokenizer.command())==JackTokenizer.KeywordType.CONSTRUCTOR ||
-             tokenizer.keyWord(tokenizer.command())==JackTokenizer.KeywordType.METHOD ||
-             tokenizer.keyWord(tokenizer.command())==JackTokenizer.KeywordType.FUNCTION) ) {
-            Error.error("Não encontrada constructor, method ou function. Encontrado: "+tokenizer.command());
+        if(tokenizer.tokenType(tokenizer.token())!=JackTokenizer.TokenType.KEYWORD ||
+           !(tokenizer.keyWord(tokenizer.token())==JackTokenizer.KeywordType.CONSTRUCTOR ||
+             tokenizer.keyWord(tokenizer.token())==JackTokenizer.KeywordType.METHOD ||
+             tokenizer.keyWord(tokenizer.token())==JackTokenizer.KeywordType.FUNCTION) ) {
+            Error.error("Não encontrada constructor, method ou function. Encontrado: "+tokenizer.token());
         }
 
         method = false;
         constructor = false;
         function = false;
-        if(tokenizer.keyWord(tokenizer.command())==JackTokenizer.KeywordType.METHOD) {
+        if(tokenizer.keyWord(tokenizer.token())==JackTokenizer.KeywordType.METHOD) {
             subroutineSymbolTable.define("this", className, Symbol.Kind.ARG);
             method = true; 
-        } else if(tokenizer.keyWord(tokenizer.command())==JackTokenizer.KeywordType.CONSTRUCTOR) {
+        } else if(tokenizer.keyWord(tokenizer.token())==JackTokenizer.KeywordType.CONSTRUCTOR) {
             constructor = true;
         } else {
             function = true;
         }
 
-        saveTerminal("keyword",tokenizer.command());
+        saveTerminal("keyword",tokenizer.token());
 
         voidType = false;
-        if( tokenizer.command().equals("void") ) {
+        if( tokenizer.token().equals("void") ) {
             voidType = true;
-            saveTerminal("keyword",tokenizer.command());
+            saveTerminal("keyword",tokenizer.token());
         } else {
             compileType();    
         }
         
-        subroutineName = tokenizer.command();
+        subroutineName = tokenizer.token();
         compileIdentifier();
         
         compileSymbol('(');
@@ -335,21 +329,21 @@ public class CompilationEngine {
 
     public void compileParameterList() {
         // ((type varName) (',' type varName)*)?
-        String type = tokenizer.command();
+        String type = tokenizer.token();
         compileType();
 
-        String identifier = tokenizer.command();
+        String identifier = tokenizer.token();
         compileIdentifier();
 
         subroutineSymbolTable.define(identifier, type, Symbol.Kind.ARG);    
 
-        while( tokenizer.command().equals(",") ) {
+        while( tokenizer.token().equals(",") ) {
             compileSymbol(',');
 
-            type = tokenizer.command();
+            type = tokenizer.token();
             compileType();
 
-            identifier = tokenizer.command();
+            identifier = tokenizer.token();
             compileIdentifier();
 
             subroutineSymbolTable.define(identifier, type, Symbol.Kind.ARG);    
@@ -382,22 +376,22 @@ public class CompilationEngine {
 
     public void compileVarDec() {
 
-        while(tokenizer.command().equals("var")) {
+        while(tokenizer.token().equals("var")) {
             saveOpenTag("varDec",true);
-            saveTerminal("keyword",tokenizer.command());
+            saveTerminal("keyword",tokenizer.token());
 
-            String type = tokenizer.command();
+            String type = tokenizer.token();
             compileType();
 
-            String identifier = tokenizer.command();
+            String identifier = tokenizer.token();
             compileIdentifier();
 
             subroutineSymbolTable.define(identifier, type, Symbol.Kind.VAR);
 
-            while( tokenizer.command().equals(",") ) {
+            while( tokenizer.token().equals(",") ) {
                 compileSymbol(',');
 
-                identifier = tokenizer.command();
+                identifier = tokenizer.token();
                 compileIdentifier();
 
                 subroutineSymbolTable.define(identifier, type, Symbol.Kind.VAR);                
@@ -411,31 +405,31 @@ public class CompilationEngine {
         saveOpenTag("statements",true);
         while(isStatement()) {
 
-            if( tokenizer.command().equals("let") ) {
+            if( tokenizer.token().equals("let") ) {
                 saveOpenTag("letStatement",true);
                 compileLet();
                 saveCloseTag("letStatement");
             }
 
-            if( tokenizer.command().equals("if") ) {
+            if( tokenizer.token().equals("if") ) {
                 saveOpenTag("ifStatement",true);
                 compileIf();
                 saveCloseTag("ifStatement");
             }
 
-            if( tokenizer.command().equals("while") ) {
+            if( tokenizer.token().equals("while") ) {
                 saveOpenTag("whileStatement",true);
                 compileWhile();
                 saveCloseTag("whileStatement");
             }
 
-            if( tokenizer.command().equals("do") ) {
+            if( tokenizer.token().equals("do") ) {
                 saveOpenTag("doStatement",true);
                 compileDo();
                 saveCloseTag("doStatement");
             }
 
-            if( tokenizer.command().equals("return") ) {
+            if( tokenizer.token().equals("return") ) {
                 saveOpenTag("returnStatement",true);
                 compileReturn();
                 saveCloseTag("returnStatement");
@@ -470,7 +464,7 @@ public class CompilationEngine {
             isObj = true;
         }
 
-        if( tokenizer.command().equals("(") ) {  //'(' expressionList ')'
+        if( tokenizer.token().equals("(") ) {  //'(' expressionList ')'
 
             // supondo sempre um método aqui.
             vm.writePush(VMWriter.Segment.POINTER,0);
@@ -484,7 +478,7 @@ public class CompilationEngine {
         } else { // '.' subroutineName '(' expressionList ')'
             compileSymbol('.');
 
-            String identifier = tokenizer.command();
+            String identifier = tokenizer.token();
 
             compileIdentifier();
 
@@ -508,9 +502,9 @@ public class CompilationEngine {
 
     public void compileDo() {
         //'do' subroutineCall ';'
-        saveTerminal("keyword",tokenizer.command());
+        saveTerminal("keyword",tokenizer.token());
 
-        subroutineCall1 = tokenizer.command();
+        subroutineCall1 = tokenizer.token();
         compileIdentifier();  //subroutineName | (className|varName)
         
         compileSubroutineCallCont();
@@ -521,7 +515,7 @@ public class CompilationEngine {
     }
 
     public boolean compileArray(String identifier) {
-        if( tokenizer.command().equals("[") ) {
+        if( tokenizer.token().equals("[") ) {
 
             compileSymbol('[');
             compileExpression();
@@ -538,9 +532,9 @@ public class CompilationEngine {
 
     public void compileLet() {
         //'let' varName ('[' expression ']')? '=' expression ';'
-        saveTerminal("keyword",tokenizer.command());
+        saveTerminal("keyword",tokenizer.token());
 
-        String identifier = tokenizer.command();
+        String identifier = tokenizer.token();
         compileIdentifier();
 
         boolean array = compileArray(identifier);
@@ -571,7 +565,7 @@ public class CompilationEngine {
 
         vm.writeLabel("WHILE_EXP"+String.valueOf(tmpCounterWhile));
 
-        saveTerminal("keyword",tokenizer.command());
+        saveTerminal("keyword",tokenizer.token());
         compileSymbol('(');
         compileExpression();
         compileSymbol(')');
@@ -591,7 +585,7 @@ public class CompilationEngine {
 
     public void compileReturn() {
         // 'return' expression? ';'
-        saveTerminal("keyword",tokenizer.command());
+        saveTerminal("keyword",tokenizer.token());
 
         if( isTerm() ) {
             compileExpression();
@@ -611,7 +605,7 @@ public class CompilationEngine {
 
         int tmpCounterIf = counterIf++;
 
-        saveTerminal("keyword",tokenizer.command());
+        saveTerminal("keyword",tokenizer.token());
         compileSymbol('(');
         compileExpression();
         compileSymbol(')');
@@ -624,14 +618,14 @@ public class CompilationEngine {
         compileStatements();
         compileSymbol('}');
 
-        if(tokenizer.command().equals("else")) {
+        if(tokenizer.token().equals("else")) {
             vm.writeGoto("IF_END"+String.valueOf(tmpCounterIf));
         }
 
         vm.writeLabel("IF_FALSE"+String.valueOf(tmpCounterIf));
 
-        if(tokenizer.command().equals("else")) {
-            saveTerminal("keyword",tokenizer.command());
+        if(tokenizer.token().equals("else")) {
+            saveTerminal("keyword",tokenizer.token());
             compileSymbol('{');
             compileStatements();
             compileSymbol('}');
@@ -641,15 +635,15 @@ public class CompilationEngine {
     }
 
     public boolean isKeywordConstant() {
-        return (tokenizer.command().equals("true") ||
-            tokenizer.command().equals("false") ||
-            tokenizer.command().equals("null") ||
-            tokenizer.command().equals("this")); 
+        return (tokenizer.token().equals("true") ||
+            tokenizer.token().equals("false") ||
+            tokenizer.token().equals("null") ||
+            tokenizer.token().equals("this")); 
     }
 
     public boolean isUnaryOp() {
-        return (tokenizer.command().equals("-") ||
-            tokenizer.command().equals("~")); 
+        return (tokenizer.token().equals("-") ||
+            tokenizer.token().equals("~")); 
     }
 
 //integerConstant | stringConstant | keywordConstant |
@@ -657,11 +651,11 @@ public class CompilationEngine {
 // '(' expression ')' | unaryOp term
     public boolean isTerm() {
         return(
-            tokenizer.tokenType(tokenizer.command())==JackTokenizer.CommandType.INT_CONST ||
-            tokenizer.tokenType(tokenizer.command())==JackTokenizer.CommandType.STRING_CONST ||
+            tokenizer.tokenType(tokenizer.token())==JackTokenizer.TokenType.INT_CONST ||
+            tokenizer.tokenType(tokenizer.token())==JackTokenizer.TokenType.STRING_CONST ||
             isKeywordConstant() ||
-            tokenizer.tokenType(tokenizer.command())==JackTokenizer.CommandType.IDENTIFIER || //varName ou subroutineName
-            tokenizer.command().equals("(") ||
+            tokenizer.tokenType(tokenizer.token())==JackTokenizer.TokenType.IDENTIFIER || //varName ou subroutineName
+            tokenizer.token().equals("(") ||
             isUnaryOp()
         );
     }
@@ -704,17 +698,17 @@ public class CompilationEngine {
 
     public void compileTerm() {
         saveOpenTag("term",true);
-        if(tokenizer.tokenType(tokenizer.command())==JackTokenizer.CommandType.IDENTIFIER) {
+        if(tokenizer.tokenType(tokenizer.token())==JackTokenizer.TokenType.IDENTIFIER) {
 
-            String identifier = tokenizer.command();
+            String identifier = tokenizer.token();
             compileIdentifier();
 
-            boolean array = compileArray(identifier);   //if(tokenizer.command().equals("[")) { // array
+            boolean array = compileArray(identifier);   //if(tokenizer.token().equals("[")) { // array
 
             if(array) {
                 vm.writePop(VMWriter.Segment.POINTER,1);
                 vm.writePush(VMWriter.Segment.THAT,0);
-            } else if( tokenizer.command().equals(".") || tokenizer.command().equals("(") ) { //subroutine
+            } else if( tokenizer.token().equals(".") || tokenizer.token().equals("(") ) { //subroutine
 
                 subroutineCall1 = identifier;
 
@@ -725,29 +719,29 @@ public class CompilationEngine {
 
             }
 
-        } else if(tokenizer.tokenType(tokenizer.command())==JackTokenizer.CommandType.INT_CONST) {
+        } else if(tokenizer.tokenType(tokenizer.token())==JackTokenizer.TokenType.INT_CONST) {
 
-            vm.writePush(VMWriter.Segment.CONST,Integer.valueOf(tokenizer.command()));
-            saveTerminal("integerConstant",tokenizer.command());
+            vm.writePush(VMWriter.Segment.CONST,Integer.valueOf(tokenizer.token()));
+            saveTerminal("integerConstant",tokenizer.token());
 
-        } else if(tokenizer.tokenType(tokenizer.command())==JackTokenizer.CommandType.STRING_CONST) {
+        } else if(tokenizer.tokenType(tokenizer.token())==JackTokenizer.TokenType.STRING_CONST) {
 
-            vm.writeString(tokenizer.command());
+            vm.writeString(JackTokenizer.stringVal(tokenizer.token()));
 
-            saveTerminal("stringConstant",tokenizer.stringVal(tokenizer.command()));
-        } else if(tokenizer.command().equals("(")) {
-            saveTerminal("symbol",tokenizer.command());
+            saveTerminal("stringConstant",tokenizer.stringVal(tokenizer.token()));
+        } else if(tokenizer.token().equals("(")) {
+            saveTerminal("symbol",tokenizer.token());
             compileExpression();
-            saveTerminal("symbol",tokenizer.command());
+            saveTerminal("symbol",tokenizer.token());
         } else if(isUnaryOp()) {
 
             VMWriter.Command command = null;
-            if(tokenizer.command().equals("-"))
+            if(tokenizer.token().equals("-"))
                 command = VMWriter.Command.NEG;
-            if(tokenizer.command().equals("~"))
+            if(tokenizer.token().equals("~"))
                 command = VMWriter.Command.NOT;
 
-            saveTerminal("symbol",tokenizer.command());
+            saveTerminal("symbol",tokenizer.token());
             compileTerm();
 
             if(command!=null) {
@@ -756,35 +750,35 @@ public class CompilationEngine {
 
         } else {
             
-            if(tokenizer.command().equals("true")) {
+            if(tokenizer.token().equals("true")) {
                 vm.writePush(VMWriter.Segment.CONST,0);
                 vm.writeArithmetic(VMWriter.Command.NOT);
             }
-            else if(tokenizer.command().equals("false")) {
+            else if(tokenizer.token().equals("false")) {
                 vm.writePush(VMWriter.Segment.CONST,0);
             }
-            else if(tokenizer.command().equals("null")) {
+            else if(tokenizer.token().equals("null")) {
                 vm.writePush(VMWriter.Segment.CONST,0);
             }
-            else if(tokenizer.command().equals("this")) {
+            else if(tokenizer.token().equals("this")) {
                 vm.writePush(VMWriter.Segment.POINTER,0);
             }
-            saveTerminal("keyword",tokenizer.command());
+            saveTerminal("keyword",tokenizer.token());
 
         }
         saveCloseTag("term");
     }
 
     public boolean isOp() {
-        return (tokenizer.command().equals("+") ||
-            tokenizer.command().equals("-") ||
-            tokenizer.command().equals("*") ||
-            tokenizer.command().equals("/") ||
-            tokenizer.command().equals("&") ||
-            tokenizer.command().equals("|") ||
-            tokenizer.command().equals("<") ||
-            tokenizer.command().equals(">") ||
-            tokenizer.command().equals("=")
+        return (tokenizer.token().equals("+") ||
+            tokenizer.token().equals("-") ||
+            tokenizer.token().equals("*") ||
+            tokenizer.token().equals("/") ||
+            tokenizer.token().equals("&") ||
+            tokenizer.token().equals("|") ||
+            tokenizer.token().equals("<") ||
+            tokenizer.token().equals(">") ||
+            tokenizer.token().equals("=")
         );
     }
 
@@ -799,38 +793,38 @@ public class CompilationEngine {
             boolean multiply = false;
             boolean divide = false;
 
-            if(tokenizer.command().equals("<")) {
+            if(tokenizer.token().equals("<")) {
                 command = VMWriter.Command.LT;
                 saveTerminal("symbol","&lt;");
-            } else if(tokenizer.command().equals(">")) {
+            } else if(tokenizer.token().equals(">")) {
                 command = VMWriter.Command.GT;
                 saveTerminal("symbol","&gt;");
-            } else if(tokenizer.command().equals("&")) {
+            } else if(tokenizer.token().equals("&")) {
                 command = VMWriter.Command.AND;
                 saveTerminal("symbol","&amp;");
-            } else if(tokenizer.command().equals("|")) {
+            } else if(tokenizer.token().equals("|")) {
                 command = VMWriter.Command.OR;
-                saveTerminal("symbol",tokenizer.command());
-            } else if(tokenizer.command().equals("-")) {
+                saveTerminal("symbol",tokenizer.token());
+            } else if(tokenizer.token().equals("-")) {
                 command = VMWriter.Command.SUB;
-                saveTerminal("symbol",tokenizer.command());
-            } else if(tokenizer.command().equals("+")) {
+                saveTerminal("symbol",tokenizer.token());
+            } else if(tokenizer.token().equals("+")) {
                 command = VMWriter.Command.ADD;
-                saveTerminal("symbol",tokenizer.command());
-            } else if(tokenizer.command().equals("=")) {
+                saveTerminal("symbol",tokenizer.token());
+            } else if(tokenizer.token().equals("=")) {
                 command = VMWriter.Command.EQ;
-                saveTerminal("symbol",tokenizer.command());
-            } else if(tokenizer.command().equals("*")) {
+                saveTerminal("symbol",tokenizer.token());
+            } else if(tokenizer.token().equals("*")) {
                 multiply = true;
-                saveTerminal("symbol",tokenizer.command());
-            } else if(tokenizer.command().equals("/")) {
+                saveTerminal("symbol",tokenizer.token());
+            } else if(tokenizer.token().equals("/")) {
                 divide = true;
-                saveTerminal("symbol",tokenizer.command());
+                saveTerminal("symbol",tokenizer.token());
             } else {
-                saveTerminal("symbol",tokenizer.command());
+                saveTerminal("symbol",tokenizer.token());
             }
 
-            //saveTerminal("symbol",tokenizer.command());
+            //saveTerminal("symbol",tokenizer.token());
 
             compileTerm();
 
@@ -856,7 +850,7 @@ public class CompilationEngine {
         if( isTerm() ) {
             nParameters++;
             compileExpression();
-            while( tokenizer.command().equals(",") ) {
+            while( tokenizer.token().equals(",") ) {
                 nParameters++;
                 compileSymbol(',');
                 compileExpression();

@@ -12,100 +12,122 @@ import java.nio.file.*;
 import java.util.ArrayList;
 
 /**
- * Classe principal que orquestra a tradução do arquivo em linguagem de máquina virtual à pilha.
+ * Classe principal (main) que orquestra a tradução do arquivo em linguagem de máquina virtual à pilha.
+ * Essa classe é responsável por ler os parametros da execução do programa pela linha de código, ou
+ * seja, se o programa for invocado com parâmetros esses deverão ser carregados.
  * Opções:
- *   <arquivo vm>         primeiro parametro é o nome do arquivo jack a ser aberto 
- *   -o <arquivo xml>     parametro indica onde será salvo o arquivo gerado .xml
+ *   <arquivo jack>      primeiro parametro é o nome do arquivo jack a ser aberto 
+ *   -o <arquivo vm>     parametro (opcional) que indica onde será salvo o arquivo gerado .vm
+ *   -x                  gera arquivos de saída da análise sintática em XML
  */
 class JackCompiler {
 
-    public static void main(String[] args) {
+	/**
+	 * Método estático que é carregado na execução do programa.
+	 * Os parâmetros de linha de comando dever ser tratados nessa rotina.
+	 */ 
+	public static void main(String[] args) {
 
-        if (args.length < 1)  // checa se arquivo foi passado
-            Error.error("informe o nome do arquivo vm");
+		if (args.length < 1)  // checa se arquivo foi passado
+			Error.error("informe o nome do arquivo vm");
 
-        String inputFilename = null;
-        String outputFilename = null;
-        String outputFilenameX = null;
-        String outputFilenameT = null;
-        String outputFilenameV = null;  // para vm
+		String inputFilename = null;    // Usado para armazenar argumento com nome do arquivo de entrada (.jack).
+		String outputFilename = null;   // Usado para armazenar argumento com nome do arquivo de saída (.vm).
 
-        boolean debug = false;
+		String outputFilenameX = null;  // Define nome do arquivo para salvar árvore sintática em XML.
+		String outputFilenameT = null;  // Define nome do arquivo para salvar parsing simples em XML.
+		String outputFilenameV = null;  // Define nome do arquivo para salvar código gerado em linguagem VM.
 
-        for (int i = 0; i < args.length; i++) {
-            switch (args[i].charAt(0)) {
-            case '-':
-                if (args[i].charAt(1) == 'h') {
-                    System.out.println("Opções");
-                    System.out.println("<arquivo> : programa em linguagem de máquina a ser carregado");
-                    System.out.println("-o <arquivo> : nome do arquivo para salvar no formato NASM");
-                } else if (args[i].charAt(1) == 'o') {
-                    outputFilename = args[i+1]; // arquivo output
-                    i++;
-                } else {
-                    Error.error("Argumento não reconhecido: "+args[i]);
-                }
-                break;
-            default:
-                inputFilename = args[i];
-                break;
-            }
-        }
+		//boolean debug = false;
 
-        try {
+		boolean createXML = false;
 
-            Path path = new File(inputFilename).toPath().toAbsolutePath();
+		for (int i = 0; i < args.length; i++) {
+			switch (args[i].charAt(0)) {
+			case '-':
+				if (args[i].charAt(1) == 'h') {
+					System.out.println("Opções");
+					System.out.println("<arquivo> : programa em linguagem de alto nível (jack) a ser carregado");
+					System.out.println("-o <arquivo> : nome do arquivo para salvar no formato VM");
+					System.out.println("-x : gera arquivos de saída da análise sintática em XML");
+				} else if (args[i].charAt(1) == 'o') {
+					outputFilename = args[i+1]; // nome genérico do arquivo de saída
+					i++;
+				} else if (args[i].charAt(1) == 'x') {
+					createXML = true; // gera arquivos XML de saída
+				} else {
+					Error.error("Argumento não reconhecido: "+args[i]);
+				}
+				break;
+			default:
+				inputFilename = args[i];
+				break;
+			}
+		}
 
-            ArrayList<String> files = new ArrayList<String>();
+		try {
 
-            // Cria um arquivo de saída dependendo se diretório.
-            if(Files.isDirectory(path)) {
-                int indexName = path.getNameCount()-1;
-                if(path.getName(indexName).toString().equals(".")) {
-                    indexName--;
-                }
-                
-                DirectoryStream<Path> directoryStream = Files.newDirectoryStream(path);
-                for (Path p : directoryStream) {
+			Path path = new File(inputFilename).toPath().toAbsolutePath();
 
-                    String extension = "";
-                    int i = p.toString().lastIndexOf('.');
-                    if (i > 0) {
-                        extension = p.toString().substring(i+1);
-                    }
-                    if(extension.equals("jack")) {
-                        files.add(p.toString());
-                    }
-                }
-            } else {
-                files.add(inputFilename);
-                if(outputFilename==null) {
-                    outputFilenameV = inputFilename.substring(0, inputFilename.lastIndexOf('.')) + ".vm";
-                    outputFilenameX = inputFilename.substring(0, inputFilename.lastIndexOf('.')) + ".xml";
-                    outputFilenameT = inputFilename.substring(0, inputFilename.lastIndexOf('.')) + "T.xml";
-                } else {
-                    outputFilenameV = outputFilename;
-                    outputFilenameX = outputFilename.replace(".vm",".xml");;
-                    outputFilenameT = outputFilename.replace(".vm","T.xml");
-                }
-            }
+			ArrayList<String> files = new ArrayList<String>();
 
-            for (String file : files) {
-                if(outputFilename==null) {
-                    outputFilenameV = file.replace(".jack",".vm");
-                    outputFilenameX = file.replace(".jack",".xml");
-                    outputFilenameT = file.replace(".jack","T.xml");
-                }                
-                //CompilationEngine code = new CompilationEngine(file,outputFilenameX,outputFilenameT);
-                CompilationEngine code = new CompilationEngine(file,outputFilenameV);
-                code.compileClass();
-                code.close();
-            }
-            
+			// Cria um arquivo de saída dependendo se diretório.
+			if(Files.isDirectory(path)) {  // caso diretório
 
-        } catch (IOException e) {
-            Error.error("uma excessao de i/o foi lancada");
-            System.exit(1);
-        }
-    }
+				// descobre o indice do último nome de diretório
+				int indexName = path.getNameCount()-1; 
+				if(path.getName(indexName).toString().equals(".")) {
+					indexName--;
+				}
+				
+				DirectoryStream<Path> directoryStream = Files.newDirectoryStream(path);
+				for (Path p : directoryStream) {
+
+					String extension = "";
+					int i = p.toString().lastIndexOf('.');
+					if (i > 0) {
+						extension = p.toString().substring(i+1);
+					}
+					if(extension.equals("jack")) {
+						files.add(p.toString());
+					}
+				}
+			} else {   // Não é diretório, então é um arquivo    
+				files.add(inputFilename);
+				if(outputFilename==null) {
+					outputFilenameV = inputFilename.substring(0, inputFilename.lastIndexOf('.')) + ".vm";
+					outputFilenameX = inputFilename.substring(0, inputFilename.lastIndexOf('.')) + ".xml";
+					outputFilenameT = inputFilename.substring(0, inputFilename.lastIndexOf('.')) + "T.xml";
+				} else {
+					outputFilenameV = outputFilename;
+					outputFilenameX = outputFilename.replace(".vm",".xml");;
+					outputFilenameT = outputFilename.replace(".vm","T.xml");
+				}
+			}
+
+			for (String file : files) {
+
+				if(outputFilename==null) {
+					outputFilenameV = file.replace(".jack",".vm");
+					outputFilenameX = file.replace(".jack",".xml");
+					outputFilenameT = file.replace(".jack","T.xml");
+				}
+
+				CompilationEngine codeVM = new CompilationEngine(file,outputFilenameV);
+				codeVM.compileClass();  // todo arquivo deve começar com uma declaração de classe.
+				codeVM.close();
+
+				if(createXML) {
+					CompilationEngine codeXML = new CompilationEngine(file,outputFilenameX,outputFilenameT);
+					codeXML.compileClass();  // todo arquivo deve começar com uma declaração de classe.
+					codeXML.close();
+				}            
+				
+			}
+			
+		} catch (IOException e) {
+			Error.error("uma excessao de i/o foi lancada");
+			System.exit(1);
+		}
+	}
 }
