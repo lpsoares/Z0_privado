@@ -698,7 +698,7 @@ public class CompilationEngine {
     }
 
     public void compileSymbol(Character symbol) {
-        isSymbol();
+        isSymbol(symbol);
         if(tokenizer.symbol(tokenizer.token())!=symbol) {
             Error.error("Não encontrado symbol"+Character.toString(symbol)+". Encontrado: "+tokenizer.token());
         }
@@ -753,7 +753,7 @@ public class CompilationEngine {
         return true;
     }
 
-    public boolean isSymbol() {
+    public boolean isSymbol(Character symbol) {
         if(tokenizer.tokenType(tokenizer.token())!=JackTokenizer.TokenType.SYMBOL) {
             Error.error("Não encontrado symbol"+Character.toString(symbol)+". Encontrado: "+tokenizer.token());
             return false;
