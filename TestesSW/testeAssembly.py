@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # Testador de emulação
-# Arquivo: testComp.nasm
+# Arquivo: testAssembly.py
 # Criado por: Luciano Soares <lpsoares@insper.edu.br>
 # Data: 16/03/2017
 

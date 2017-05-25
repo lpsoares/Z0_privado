@@ -16,9 +16,9 @@ import java.util.ArrayList;
  * Essa classe é responsável por ler os parametros da execução do programa pela linha de código, ou
  * seja, se o programa for invocado com parâmetros esses deverão ser carregados.
  * Opções:
- *   <arquivo jack>      primeiro parametro é o nome do arquivo jack a ser aberto 
- *   -o <arquivo vm>     parametro (opcional) que indica onde será salvo o arquivo gerado .vm
- *   -x                  gera arquivos de saída da análise sintática em XML
+ *   <arquivo/diretório jack>    primeiro parametro é o nome do arquivo jack a ser aberto 
+ *   -o <diretório jack>   parametro (opcional) que indica onde será salvo os arquivos gerados .vm
+ *   -x                          gera arquivos de saída da análise sintática em XML
  */
 class JackCompiler {
 
@@ -47,8 +47,8 @@ class JackCompiler {
 			case '-':
 				if (args[i].charAt(1) == 'h') {
 					System.out.println("Opções");
-					System.out.println("<arquivo> : programa em linguagem de alto nível (jack) a ser carregado");
-					System.out.println("-o <arquivo> : nome do arquivo para salvar no formato VM");
+					System.out.println("<arquivo/diretório> : programa em linguagem de alto nível (jack) a ser carregado");
+					System.out.println("-o <diretório> : nome do arquivo para salvar no formato VM");
 					System.out.println("-x : gera arquivos de saída da análise sintática em XML");
 				} else if (args[i].charAt(1) == 'o') {
 					outputFilename = args[i+1]; // nome genérico do arquivo de saída
@@ -94,15 +94,6 @@ class JackCompiler {
 				}
 			} else {   // Não é diretório, então é um arquivo    
 				files.add(inputFilename);
-				if(outputFilename==null) {
-					outputFilenameV = inputFilename.substring(0, inputFilename.lastIndexOf('.')) + ".vm";
-					outputFilenameX = inputFilename.substring(0, inputFilename.lastIndexOf('.')) + ".xml";
-					outputFilenameT = inputFilename.substring(0, inputFilename.lastIndexOf('.')) + "T.xml";
-				} else {
-					outputFilenameV = outputFilename;
-					outputFilenameX = outputFilename.replace(".vm",".xml");;
-					outputFilenameT = outputFilename.replace(".vm","T.xml");
-				}
 			}
 
 			for (String file : files) {
@@ -111,7 +102,13 @@ class JackCompiler {
 					outputFilenameV = file.replace(".jack",".vm");
 					outputFilenameX = file.replace(".jack",".xml");
 					outputFilenameT = file.replace(".jack","T.xml");
+				} else {
+					outputFilenameV = outputFilename+file.substring(file.lastIndexOf('/')).replace(".jack",".vm");
+					outputFilenameX = outputFilename+file.substring(file.lastIndexOf('/')).replace(".jack",".xml");
+					outputFilenameT = outputFilename+file.substring(file.lastIndexOf('/')).replace(".jack","T.xml");
 				}
+
+				System.out.println(outputFilenameV);
 
 				CompilationEngine codeVM = new CompilationEngine(file,outputFilenameV);
 				codeVM.compileClass();  // todo arquivo deve começar com uma declaração de classe.

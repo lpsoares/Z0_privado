@@ -866,7 +866,9 @@ public class CompilationEngine {
 
     // Salva o texto no arquivo de saída.
     public void print(String text) {
-        outputFileXML.print(text);      
+        if(this.outputFileXML!=null) {
+            this.outputFileXML.print(text);    
+        }
     }
 
     public void saveOpenTag(String tag, boolean linebreak) {    
