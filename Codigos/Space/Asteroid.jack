@@ -1,0 +1,114 @@
+
+
+
+class Asteroid {
+	
+    field int x;
+    field int y;
+
+    field int dirX;
+    field int dirY;
+
+    field int radius;
+
+    /** Constructs . */
+    constructor Asteroid new(int arg_x, int arg_y, int arg_DirX, int arg_DirY, int arg_Radius) {
+	    let x = arg_x;
+	    let y = arg_y;
+
+	    let dirX = arg_DirX;
+	    let dirY = arg_DirY;
+
+	    let radius = arg_Radius;
+
+        return this;
+    }
+
+    /** Deallocates the Shot's memory. */
+    method void dispose() {
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    /** Shows the ball. */
+    method void show() {
+        do Screen.setColor(true);
+        do draw();
+        return;
+    }
+
+        /** Hides the ball. */
+    method void hide() {
+        do Screen.setColor(false);
+	    do draw();
+        return;
+    }
+
+    /** Draws the ball. */
+    method void draw() {
+	    do Screen.drawCircle(x, y, radius);
+	    return;
+    }
+
+    method boolean hit(int arg_x, int arg_y) {
+    	//var int dif1;
+    	//var int dif2;
+    	var boolean resp;
+    	
+    	let resp = false;
+
+    	if ( (arg_x>(x-radius)) & (arg_x<(x+radius)) & (arg_y>(y-radius)) & (arg_y<(y+radius)) ) {
+			let resp = true;
+    	}
+
+    	// Not working
+    	//let dif1 = arg_x-x;
+    	//let dif2 = arg_y-y;
+    	//if ( Math.sqrt( (dif1)*(dif1) + (dif2)*(dif2) ) < radius ) {
+    	//	let resp = true;
+    	//}
+
+    	return resp;
+
+    }
+
+    method int move() {
+
+    	var int leftWall, rightWall, topWall, bottomWall;  // wall locations
+
+    	var int wall;
+
+    	let leftWall = 1;
+    	let rightWall = 510;
+    	let topWall = 1;
+    	let bottomWall = 254;
+
+	    do hide();
+
+        let x = x + (dirX * 1);
+        let y = y + (dirY * 1);
+
+	    if (~(x > leftWall)) {
+	        let wall = 1;    
+	        let x = leftWall;
+	    }
+        if (~(x < rightWall)) {
+	        let wall = 2;    
+	        let x = rightWall;
+	    }
+        if (~(y > topWall)) {
+            let wall = 3;    
+	        let y = topWall;
+        }
+        if (~(y < bottomWall)) {
+            let wall = 4;    
+	        let y = bottomWall;
+        }
+
+	    do show();
+
+	    return wall;
+    }
+
+
+}

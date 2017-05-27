@@ -1,0 +1,180 @@
+// Developed by: Luciano P. Soares
+
+/**
+ * The Space Ship.
+ * It is basicaly a triangle that we can control direction and aceleration. 
+ * It can shot bullets and destroy asteroids.
+ */
+
+class Ship {
+
+    field int x;
+    field int y;
+    field int angle;
+
+    // Constructor for the ship
+    constructor Ship new(int arg_x, int arg_y) {
+        let x = arg_x;
+        let y = arg_y;
+
+        let angle = 0;
+        do show();
+        return this;
+    }
+
+    // Deallocates memory of the ship object
+    method void dispose() {
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    method void show() {
+        do Screen.setColor(true);
+        do draw();
+        return;
+    }
+
+    method void hide() {
+        do Screen.setColor(false);
+        do draw();
+        return;
+    }
+
+    /** Draws the bat. */
+    method void draw() {
+        do drawShip(angle);
+        return;
+    }
+
+    method void rotClock() {
+        do Screen.setColor(false);
+        do drawShip(angle);
+        let angle = angle + 1;
+        if (angle > 7) {
+            let angle = 0;
+        }
+        return;
+    }
+
+    method void rotCounterClock() {
+        do Screen.setColor(false);
+        do drawShip(angle);
+        let angle = angle - 1;
+        if (angle < 0) {
+            let angle = 7;
+        }
+        return; 
+    }
+
+    /** Sets the bat's direction (0=stop, 1=left, 2=right). */
+    method void setAngle(int arg_angle) {
+        do Screen.setColor(false);
+        do drawShip(angle);
+        let angle = arg_angle;
+        return;
+    }
+
+    // Returns the bat's left edge.
+    method int getShotX() {
+        var int tmp;
+        let tmp = 0;
+        if( (angle>0) & (angle<4) ) {
+            let tmp = 1;
+        }
+        if( (angle>4) & (angle<8) ) {
+            let tmp = -1;
+        }
+        return tmp;
+    }
+
+    // Returns the bat's right edge. */
+    method int getShotY() {
+        //return x + width;
+        var int tmp;
+        let tmp = 0;
+        if( (angle<2) | (angle>6) ) {
+            let tmp = -1;
+        }
+        if( (angle>2) & (angle<6) ) {
+            let tmp = 1;
+        }
+        return tmp;
+    }
+
+
+    /** Moves the bat one step in the bat's direction. */
+    method void move() {
+        do Screen.setColor(true);
+        do drawShip(angle);
+        return;
+    }
+
+    method void drawShip(int angle) {
+        var int c;
+        var int d;
+        var int i;
+
+        var int x;
+        var int y;
+
+        let x = 256;
+        let y = 128;
+
+        if ( (~(angle=2)) & (~(angle=6)) ) {
+
+            if( (angle=0) | (angle=3) | (angle=5) ) {
+                let i = 1;
+            } else {
+                let i = -1;
+            }
+
+            let c = 16 * i;
+
+            let y = y - ( c / 2 );
+            while ( ~(c = 0) ) {
+                let d = c / 2;
+                while ( ~(d = 0) ) {
+                    do Screen.drawPixel(x-d,y+c);
+                    let d = d - i;
+                }
+                do Screen.drawPixel(x  ,y+c);
+                let d = c / 2;
+                while ( ~(d = 0) ) {
+                    do Screen.drawPixel(x+d,y+c);
+                    let d = d - i;
+                }
+                let c = c - i;
+            }
+
+        } else {
+
+            if( angle=2 ) {
+                let i = -1;
+            } else {
+                let i = 1;
+            }
+
+            let c = 16 * i;
+
+            let x = x - ( c / 2 );
+            while ( ~(c = 0) ) {
+                let d = c / 2;
+                while ( ~(d = 0) ) {
+                    do Screen.drawPixel(x+c,y+d);
+                    let d = d - i;
+                }
+                do Screen.drawPixel(x+c  ,y);
+                let d = c / 2;
+                while ( ~(d = 0) ) {
+                    do Screen.drawPixel(x+c,y-d);
+                    let d = d - i;
+                }
+                let c = c - i;
+            }
+
+        }
+
+        return;
+    }
+
+}
