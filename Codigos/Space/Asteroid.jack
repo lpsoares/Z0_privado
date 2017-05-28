@@ -1,6 +1,10 @@
+// Developed by: Luciano Soares
+// Date: 27 May 2017
+// File: Asteroid.jack
 
-
-
+/**
+ * Asteroid class holds each individual asteroid floating in space.
+ */
 class Asteroid {
 	
     field int x;
@@ -11,7 +15,12 @@ class Asteroid {
 
     field int radius;
 
-    /** Constructs . */
+    static int leftWall;
+    static int rightWall;
+    static int topWall;
+    static int bottomWall;
+
+    /** Constructor for the asteroid . */
     constructor Asteroid new(int arg_x, int arg_y, int arg_DirX, int arg_DirY, int arg_Radius) {
 	    let x = arg_x;
 	    let y = arg_y;
@@ -21,35 +30,56 @@ class Asteroid {
 
 	    let radius = arg_Radius;
 
+	    let leftWall = 1;
+    	let rightWall = 510;
+    	let topWall = 1;
+    	let bottomWall = 254;
+
         return this;
     }
 
-    /** Deallocates the Shot's memory. */
+    /** Deallocates the Asteroid's memory. */
     method void dispose() {
         do Memory.deAlloc(this);
         return;
     }
 
-    /** Shows the ball. */
+    /** Shows Asteroid. */
     method void show() {
         do Screen.setColor(true);
         do draw();
         return;
     }
 
-        /** Hides the ball. */
+    /** Hides Asteroid. */
     method void hide() {
         do Screen.setColor(false);
 	    do draw();
         return;
     }
 
-    /** Draws the ball. */
+    /** Draws Asteroid. */
     method void draw() {
 	    do Screen.drawCircle(x, y, radius);
 	    return;
     }
 
+    /** Returns the Asteroid's x position. */
+    method int getX() {
+        return x;
+    }
+
+    /** Returns the Asteroid's y position. */
+    method int getY() {
+        return y;
+    }
+
+    /** Returns the Asteroid's size. */
+	method int getSize() {
+		return radius;
+	}
+
+	/** Check if it was hitten. */
     method boolean hit(int arg_x, int arg_y) {
     	//var int dif1;
     	//var int dif2;
@@ -72,42 +102,37 @@ class Asteroid {
 
     }
 
-    method int move() {
+    /** Moves Asteroid ahead. */
+    method boolean move() {
 
-    	var int leftWall, rightWall, topWall, bottomWall;  // wall locations
-
-    	var int wall;
-
-    	let leftWall = 1;
-    	let rightWall = 510;
-    	let topWall = 1;
-    	let bottomWall = 254;
+    	var boolean leftScreen;
+    	
+    	let leftScreen = false;
 
 	    do hide();
 
-        let x = x + (dirX * 1);
-        let y = y + (dirY * 1);
+        let x = x + dirX;
+        let y = y + dirY;
 
-	    if (~(x > leftWall)) {
-	        let wall = 1;    
-	        let x = leftWall;
+        // Check if had finish the screen
+	    if ( ~( (x - radius) > leftWall ) ) {
+	        let leftScreen = true;
 	    }
-        if (~(x < rightWall)) {
-	        let wall = 2;    
-	        let x = rightWall;
+        if ( ~( (x + radius) < rightWall ) ) {
+	        let leftScreen = true;
 	    }
-        if (~(y > topWall)) {
-            let wall = 3;    
-	        let y = topWall;
+        if ( ~( (y - radius) > topWall ) ) {
+            let leftScreen = true;
         }
-        if (~(y < bottomWall)) {
-            let wall = 4;    
-	        let y = bottomWall;
+        if ( ~( (y + radius) < bottomWall ) ) {
+            let leftScreen = true;
         }
 
-	    do show();
-
-	    return wall;
+        if(~leftScreen) {
+        	do show();
+        }
+	    
+	    return leftScreen;
     }
 
 
