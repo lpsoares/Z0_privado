@@ -18,9 +18,15 @@ class Output {
 
     // Character map for displaying characters
     static Array charMaps; 
+    static int cursorColumn;
+    static int cursorRow;
 
     /** Initializes the screen, and locates the cursor at the screen's top-left. */
     function void init() {
+        do Output.initMap();
+        let cursorColumn = 0;
+        let cursorRow = 0;
+        return;
     }
 
     // Initializes the character map array
@@ -71,7 +77,8 @@ class Output {
         do Output.create(64,30,51,51,59,59,59,27,3,30,0,0);  // @
         do Output.create(63,30,51,51,24,12,12,0,12,12,0,0);  // ?
 
-        do Output.create(65,0,0,0,0,0,0,0,0,0,0,0);          // A ** TO BE FILLED **
+        //do Output.create(65,0,0,0,0,0,0,0,0,0,0,0);          // A ** TO BE FILLED **
+        do Output.create(65,12,30,51,51,63,51,51,51,51,0,0); // A
         do Output.create(66,31,51,51,51,31,51,51,51,31,0,0); // B
         do Output.create(67,28,54,35,3,3,3,35,54,28,0,0);    // C
         do Output.create(68,15,27,51,51,51,51,51,27,15,0,0); // D
@@ -176,28 +183,96 @@ class Output {
     /** Moves the cursor to the j-th column of the i-th row,
      *  and erases the character displayed there. */
     function void moveCursor(int i, int j) {
+        let cursorColumn = j;
+        let cursorRow = i;
+        return;
     }
 
     /** Displays the given character at the cursor location,
      *  and advances the cursor one column forward. */
     function void printChar(char c) {
+        var int count;
+        var int pos;
+        var int col;
+        var Array map;
+        var boolean secondPlace;
+        var int alreadyThere;
+        var int print;
+
+        let map = charMaps[c];
+        let col = cursorColumn/2;
+        let secondPlace = cursorColumn&1;
+
+        let pos = 16384 + (cursorRow*32*11) + col;
+
+        let count = 0;
+        while(count<11) {
+            let alreadyThere = Memory.peek(pos);
+            if(secondPlace) {
+                let print = ( alreadyThere & (255) ) | (map[count] * 256);
+            } else {
+                let print = ( alreadyThere & (-256) ) | map[count];
+            }
+            do Memory.poke(pos,print);
+            let pos = pos + 32;
+            let count = count + 1;
+        }
+
+        let cursorColumn = cursorColumn + 1;
+        if(cursorColumn>63) {
+            let cursorColumn = 0;
+            let cursorRow = cursorRow + 1;
+            if(cursorRow>22) {
+                let cursorRow = 0;
+            }
+        }
+
+        return;
+
     }
 
     /** displays the given string starting at the cursor location,
      *  and advances the cursor appropriately. */
     function void printString(String s) {
+        var int count;
+        var char c;
+
+        let count = 0;
+        while( count < (s.length()) ) {
+            let c = s.charAt(count);
+            do Output.printChar(c);
+            let count = count + 1;
+        }
+
+        return;
+
     }
 
     /** Displays the given integer starting at the cursor location,
      *  and advances the cursor appropriately. */
     function void printInt(int i) {
+        var String str;
+
+        let str = String.new(6);
+        do str.setInt(i);
+
+        do Output.printString(str);
+
+        return;
     }
 
     /** Advances the cursor to the beginning of the next line. */
     function void println() {
+        let cursorColumn = 0;
+        let cursorRow = cursorRow + 1;
+        return;
     }
 
     /** Moves the cursor one column back. */
     function void backSpace() {
+        let cursorColumn = cursorColumn - 1;
+        do Output.printChar(32);
+        let cursorColumn = cursorColumn - 1;
+        return;
     }
 }
