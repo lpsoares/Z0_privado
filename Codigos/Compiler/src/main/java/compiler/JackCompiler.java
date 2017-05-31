@@ -29,7 +29,7 @@ class JackCompiler {
 	public static void main(String[] args) {
 
 		if (args.length < 1)  // checa se arquivo foi passado
-			Error.error("informe o nome do arquivo vm");
+			Error.error("informe o nome do arquivo jack");
 
 		String inputFilename = null;    // Usado para armazenar argumento com nome do arquivo de entrada (.jack).
 		String outputFilename = null;   // Usado para armazenar argumento com nome do arquivo de saída (.vm).
