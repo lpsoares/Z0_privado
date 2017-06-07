@@ -1,65 +1,66 @@
-// This file is part of www.nand2tetris.org
-// and the book "The Elements of Computing Systems"
-// by Nisan and Schocken, MIT Press.
-// File name: projects/12/String.jack
+// Este arquivo é parte do www.nand2tetris.org
+// e o livro "The Elements of Computing Systems"
+// por Nisan e Schocken, MIT Press.
+// Nome do arquivo: String.jack
+// Traduzido por: Luciano Soares
 
 /**
- * Represents character strings. In addition for constructing and disposing
- * strings, the class features methods for getting and setting individual
- * characters of the string, for erasing the string's last character,
- * for appending a character to the string's end, and more typical
- * string-oriented operations.
+ * Representa uma string de caracteres. Além de construir e descartar
+ * Strings, a classe possui métodos para obter e definir caracteres
+ * individuais na string, para apagar o último caractere da string,
+ * para adicionar um caracter ao final da string e outras operações 
+ * típicas para strings.
  */
 class String {
 
     field Array characters;
     field int length;
 
-    /** constructs a new empty string with a maximum length of maxLength
-     *  and initial length of 0. */
+    /** Constrói uma nova string vazia com um comprimento máximo de maxLength
+      * e comprimento inicial de 0. */
     constructor String new(int maxLength) {
         let characters = Memory.alloc(maxLength+1);
         let length = 0;
         return this;
     }
 
-    /** Disposes this string. */
+    /** Libera a memória usada pela string. */
     method void dispose() {
         do Memory.deAlloc(characters);
         return;
     }
 
-    /** Returns the current length of this string. */
+    /** Retorna o comprimento atual da string. */
     method int length() {
         return length;
     }
 
-    /** Returns the character at the j-th location of this string. */
+    /** Retorna o caracter na posição j da string. */
     method char charAt(int j) {
         return characters[j];
     }
 
-    /** Sets the character at the j-th location of this string to c. */
+    /** Define um caracter para a posição j da string c. */
     method void setCharAt(int j, char c) {
         let characters[j]= c;
         return;
     }
 
-    /** Appends c to this string's end and returns this string. */
+    /** Inclui c no final da string e retorna a string. */
     method String appendChar(char c) {
         let characters[length]= c;
         let length = length + 1;
         return this;
     }
 
-    /** Erases the last character from this string. */
+    /** Apaga o último caracter da string. */
     method void eraseLastChar() {
         let length = length - 1;
         return;
     }
 
-    /** Returns the integer value of this string, 
-     *  until a non-digit character is detected. */
+    /** Retorna o valor como um inteiro da string, 
+     *  até encontrar um caracter que não seja um dígito numérico. */
     method int intValue() {
         var boolean negative;
         var int counter;
@@ -116,7 +117,7 @@ class String {
     
     }
 
-    /** Sets this string to hold a representation of the given value. */
+    /** Define a string como um texto representando o valor inteiro fornecido. */
     method void setInt(int val) {
         let length = 0;
         if(val<0) {
@@ -128,17 +129,17 @@ class String {
         return;
     }
 
-    /** Returns the new line character. */
+    /** Retorna o caracter de nova linha. */
     function char newLine() {
         return 128;
     }
 
-    /** Returns the backspace character. */
+    /** Retorna o caracter de backspace. */
     function char backSpace() {
         return 129;
     }
 
-    /** Returns the double quote (") character. */
+    /** Retorna o caracter de aspas dupla (") . */
     function char doubleQuote() {
         return 34;
     }

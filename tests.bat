@@ -87,3 +87,18 @@ if "%compiler%"=="T" (
 	python TestesSW/emulate.py -t TestesSW/testesCompiler.txt -in TestesSW/testesCompiler/ -out TestesSW/compiled_code/ -p 3 -b 32 -r 512,256
 	python -m pytest -v TestesSW/testeCompiler.py -rxs
 )
+
+rem Testes para o Sistema Operacional
+set os=F
+if "%1"=="" set os=T
+if "%~1"=="os" set os=T
+if "%os%"=="T" (
+	echo.
+	echo "Testes para o Sistema Operacional"
+	echo.
+	python TestesSW/compiler.py -j Codigos/Compiler/target/JackCompiler-1.0.jar -t TestesSW/testesOS.txt -in Codigos/SistemaOperacional/ -out TestesSW/os_code/ -p 3
+	python TestesSW/vmtranslator.py -j TestesSW/VMTranslator/VMTranslator.jar -t TestesSW/testesOS.txt -in TestesSW/os_code/ -out TestesSW/os_code/ -p 3
+	python TestesSW/assembler.py -j TestesSW/Assembler/AssemblerZ0.jar -t TestesSW/testesOS.txt -in TestesSW/os_code/ -out TestesSW/os_code/ -p 3 -b 32
+	python TestesSW/emulate.py -t TestesSW/testesOS.txt -in TestesSW/testesOS/ -out TestesSW/os_code/ -p 3 -b 32 -r 512,256
+	python -m pytest -v TestesSW/testeOS.py -rxs
+)

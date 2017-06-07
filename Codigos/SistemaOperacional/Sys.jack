@@ -1,14 +1,15 @@
-// This file is part of www.nand2tetris.org
-// and the book "The Elements of Computing Systems"
-// by Nisan and Schocken, MIT Press.
-// File name: projects/12/Sys.jack
+// Este arquivo é parte do www.nand2tetris.org
+// e o livro "The Elements of Computing Systems"
+// por Nisan e Schocken, MIT Press.
+// Nome do arquivo: Sys.jack
+// Traduzido por: Luciano Soares
 
 /**
- * A library that supports various program execution services.
+ * Biblioteca que oferece suporte a vários serviços de execução de programas.
  */
 class Sys {
 
-    /** Performs all the initializations required by the OS. */
+    /** Executa todas as inicializações requeridas pelo SO. */
     function void init() {
 
         do Memory.init();
@@ -23,13 +24,13 @@ class Sys {
         return;
     }
 
-    /** Halts the program execution. */
+    /** Interrompe a execução do programa. */
     function void halt() {
         while(true) { }
         return;
     }
 
-    /** Waits approximately duration milliseconds and returns.  */
+    /** Espera uma duração aproximada em milissegundos e retorna. */
     function void wait(int duration) {
         var int counter;
         let counter = -32767;
@@ -42,11 +43,12 @@ class Sys {
         return;
     }
 
-    /** Displays the given error code in the form "ERR<errorCode>",
-     *  and halts the program's execution. */
+    /** Exibe na tela um código de erro no formato "ERR<errorCode>",
+     *  e bloqueia a execução do programa. */
     function void error(int errorCode) {
         do Output.printString("ERR");
         do Output.printInt(errorCode);
+        do Sys.halt()
         return;
     }
 }

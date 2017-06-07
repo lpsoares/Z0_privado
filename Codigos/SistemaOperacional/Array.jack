@@ -1,24 +1,25 @@
-// This file is part of www.nand2tetris.org
-// and the book "The Elements of Computing Systems"
-// by Nisan and Schocken, MIT Press.
-// File name: projects/12/Array.jack
+// Este arquivo é parte do www.nand2tetris.org
+// e o livro "The Elements of Computing Systems"
+// por Nisan e Schocken, MIT Press.
+// Nome do arquivo: Array.jack
+// Traduzido por: Luciano Soares
 
 /**
- * Represents an array.
- * In the Jack language, arrays are instances of the Array class.
- * Once declared, the array entries can be accessed using the usual
- * syntax arr[i]. Each array entry can hold a primitive data type as 
- * well as any object type. Different array entries can have different 
- * data types.
+ * Representa um vetor.
+ * No idioma Jack, os vetores são instâncias da classe Array.
+ * Uma vez declarado, as entradas do vetor podem ser acessadas usando
+ * a sintaxe usual arr[i]. Cada entrada do vetor pode conter um tipo de
+ * dados primitivo, bem como qualquer tipo de objeto. As diversas posições
+ * dos vetores podem ter diferentes tipos de dados.
  */
 class Array {
 
-    /** Constructs a new Array of the given size. */
+    /** Constrói um novo vetor do tamanho fornecido. */
     function Array new(int size) {
     	return Memory.alloc(size);
     }
 
-    /** Disposes this array. */
+    /** Elimina esse vetor da memória. */
     method void dispose() {
     	do Memory.deAlloc(this);
     	return;

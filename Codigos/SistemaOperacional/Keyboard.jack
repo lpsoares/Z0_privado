@@ -1,46 +1,46 @@
-// This file is part of www.nand2tetris.org
-// and the book "The Elements of Computing Systems"
-// by Nisan and Schocken, MIT Press.
-// File name: projects/12/Keyboard.jack
+// Este arquivo é parte do www.nand2tetris.org
+// e o livro "The Elements of Computing Systems"
+// por Nisan e Schocken, MIT Press.
+// Nome do arquivo: Keyboard.jack
+// Traduzido por: Luciano Soares
 
 /**
- * A library for handling user input from the keyboard.
+ * Biblioteca para manipular a entrada do usuário a partir do teclado.
  */
 class Keyboard {
 
-    /** Initializes the keyboard. */
+    /** Inicializa suporte para o teclado. */
     function void init() {
         return;
     } 
 
     /**
-     * Returns the character of the currently pressed key on the keyboard;
-     * if no key is currently pressed, returns 0.
+     * Retorna o caractere da tecla atualmente pressionada no teclado;
+     * Se nenhuma tecla estiver pressionada, retorna 0.
      *
-     * Recognizes all ASCII characters, as well as the following keys:
-     * new line = 128 = String.newline()
+     * Reconhece todos os caracteres ASCII, bem como as seguintes teclas:
+     * nova linha = 128 = String.newline()
      * backspace = 129 = String.backspace()
-     * left arrow = 130
-     * up arrow = 131
-     * right arrow = 132
-     * down arrow = 133
-     * home = 134
-     * End = 135
-     * page up = 136
-     * page down = 137
-     * insert = 138
-     * delete = 139
-     * ESC = 140
-     * F1 - F12 = 141 - 152
+     * tecla para esquerda = 130
+     * tecla para cima = 131
+     * tecla para direita = 132
+     * tecla para baixo = 133
+     * tecla home = 134
+     * tecla end = 135
+     * tecla page up = 136
+     * tecla page down = 137
+     * tecla insert = 138
+     * tecla delete = 139
+     * tecla ESC = 140
+     * teclas F1 - F12 = 141 - 152
      */
     function char keyPressed() {
         return(Memory.peek(24576));
     }
 
     /**								
-     * Waits until a key is pressed on the keyboard and released,
-     * then echoes the key to the screen, and returns the character 
-     * of the pressed key.
+     * Espera até que uma tecla seja pressionada e solta no teclado,
+     * exibindo a tecla na tela e retorna o caracter da tecla pressionada.
      */
     function char readChar() {
         var char key;
@@ -76,9 +76,9 @@ class Keyboard {
     }
 
     /**								
-     * Displays the message on the screen, reads from the keyboard the entered
-     * text until a newline character is detected, echoes the text to the screen,
-     * and returns its value. Also handles user backspaces.
+     * Exibe a mensagem passada como argumento na tela, lê do teclado o texto digitado
+     * até que um caractere de nova linha seja detectado, exibe o texto digitado na tela,
+     * e retorna seu valor. Lida com os backspaces dos usuários.
      */
     function String readLine(String message) {
         var String str;
@@ -101,10 +101,10 @@ class Keyboard {
     }   
 
     /**								
-     * Displays the message on the screen, reads from the keyboard the entered
-     * text until a newline character is detected, echoes the text to the screen,
-     * and returns its integer value (until the first non-digit character in the
-     * entered text is detected). Also handles user backspaces. 
+     * Exibe a mensagem passada como argumento na tela, lê do teclado o texto digitado
+     * até que um caractere de nova linha seja detectado, exibe o texto digitado na tela,
+     * e retorna seu valor como número inteiro (até o primeiro caracter não numérico).
+     * Também lida com os backspaces dos usuários.
      */
     function int readInt(String message) {
         var String str;

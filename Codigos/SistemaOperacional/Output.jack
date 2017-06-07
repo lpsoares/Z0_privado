@@ -1,27 +1,32 @@
-// This file is part of www.nand2tetris.org
-// and the book "The Elements of Computing Systems"
-// by Nisan and Schocken, MIT Press.
-// File name: projects/12/Output.jack
+// Este arquivo é parte do www.nand2tetris.org
+// e o livro "The Elements of Computing Systems"
+// por Nisan e Schocken, MIT Press.
+// Nome do arquivo: Output.jack
+// Traduzido por: Luciano Soares
 
 /**
- * A library of functions for writing text on the screen.
- * The Hack physical screen consists of 512 rows of 256 pixels each.
- * The library uses a fixed font, in which each character is displayed 
- * within a frame which is 11 pixels high (including 1 pixel for inter-line 
- * spacing) and 8 pixels wide (including 2 pixels for inter-character spacing).
- * The resulting grid accommodates 23 rows (indexed 0..22, top to bottom)
- * of 64 characters each (indexed 0..63, left to right). The top left 
- * character position on the screen is indexed (0,0). A cursor, implemented
- * as a small filled square, indicates where the next character will be displayed.
+ * Uma biblioteca de funções para escrever textos na tela.
+ * A tela física computador consiste em 512 linhas de 256 pixels cada
+ * para o Hack e (dependendo se Z0) 240 linhas de 320 pixels para o Z0.
+ * A biblioteca usa uma fonte fixa, na qual cada caractere é exibido
+ * dentro de um quadro com 11 pixels de altura (incluindo 1 pixel para espaçamento
+ * abaixo) e 8 pixels de largura (incluindo 2 pixels para espaçamento entre caracteres).
+ * A grade resultante acomoda 23 linhas (indexado 0..22, de cima para baixo)
+ * De 64 caracteres cada (indexado 0..63, da esquerda para a direita). O caracter no 
+ * canto superior esquerdo da tela é indexado em (0,0). Um cursor, implementado
+ * como uma pequena linha, indica onde o próximo caractere será exibido.
  */
 class Output {
 
-    // Character map for displaying characters
+    // Mapas de caracteres para exibição na tela
     static Array charMaps; 
     static int cursorColumn;
     static int cursorRow;
 
-    /** Initializes the screen, and locates the cursor at the screen's top-left. */
+    /** 
+     * Inicializa suporte para a biblioteca para textos na tela, e posiciona cursor no
+     * canto superior esquerdo da tela.
+     */
     function void init() {
         do Output.initMap();
         let cursorColumn = 0;
@@ -29,7 +34,7 @@ class Output {
         return;
     }
 
-    // Initializes the character map array
+    // Inicializa o mapeamento do vetor de glifos de caracteres
     function void initMap() {
         var int i;
     
@@ -147,7 +152,7 @@ class Output {
 	return;
     }
 
-    // Creates the character map array of the given character index, using the given values.
+    // Cria no vetor de mapa de caracteres o índice do caracteres com os valores fornecidos.
     function void create(int index, int a, int b, int c, int d, int e,
                          int f, int g, int h, int i, int j, int k) {
 	var Array map;
@@ -170,9 +175,9 @@ class Output {
         return;
     }
     
-    // Returns the character map (array of size 11) of the given character.
-    // If the given character is invalid or non-printable, returns the
-    // character map of a black square.
+    // Retorna o mapa de caracter (matriz de tamanho 11) do caractere pedido.
+    // Se o caracter dado for inválido ou não imprimível, retorna o
+    // mapa de caracteres que representa um cursos preto.
     function Array getMap(char c) {
         if ((c < 32) | (c > 126)) {
             let c = 0;
@@ -180,16 +185,18 @@ class Output {
         return charMaps[c];
     }
 
-    /** Moves the cursor to the j-th column of the i-th row,
-     *  and erases the character displayed there. */
+    /** Move o cursos para a coluna j e linha i,
+     *  e apaga o caracter lá. */
     function void moveCursor(int i, int j) {
         let cursorColumn = j;
         let cursorRow = i;
+        do Output.printChar(32);
+        let cursorColumn = j;
         return;
     }
 
-    /** Displays the given character at the cursor location,
-     *  and advances the cursor one column forward. */
+    /** Exibe o caracter pedido na posição do cursos,
+     *  e avança o cursos uma coluna para frente. */
     function void printChar(char c) {
         var int count;
         var int pos;
@@ -231,8 +238,8 @@ class Output {
 
     }
 
-    /** displays the given string starting at the cursor location,
-     *  and advances the cursor appropriately. */
+    /** Exibe a string dada a partir da localização do cursor,
+     * e avança o cursor de forma apropriada. * /
     function void printString(String s) {
         var int count;
         var char c;
@@ -248,8 +255,8 @@ class Output {
 
     }
 
-    /** Displays the given integer starting at the cursor location,
-     *  and advances the cursor appropriately. */
+    /** Exibe o valor inteiro dado a partir da localização do cursor,
+     * e avança o cursor de forma apropriada. * /
     function void printInt(int i) {
         var String str;
 
@@ -261,14 +268,14 @@ class Output {
         return;
     }
 
-    /** Advances the cursor to the beginning of the next line. */
+    /** Avança o cursos para o início da próxima linha. */
     function void println() {
         let cursorColumn = 0;
         let cursorRow = cursorRow + 1;
         return;
     }
 
-    /** Moves the cursor one column back. */
+    /** Move o cursos uma coluna para traz. */
     function void backSpace() {
         let cursorColumn = cursorColumn - 1;
         do Output.printChar(32);

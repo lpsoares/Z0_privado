@@ -1,19 +1,20 @@
-// This file is part of www.nand2tetris.org
-// and the book "The Elements of Computing Systems"
-// by Nisan and Schocken, MIT Press.
-// File name: projects/12/Memory.jack
+// Este arquivo é parte do www.nand2tetris.org
+// e o livro "The Elements of Computing Systems"
+// por Nisan e Schocken, MIT Press.
+// Nome do arquivo: Memory.jack
+// Traduzido por: Luciano Soares
 
 /**
- * This library provides two services: direct access to the computer's main
- * memory (RAM), and allocation and recycling of memory blocks. The Hack RAM
- * consists of 32,768 words, each holding a 16-bit binary number.
+ * Esta biblioteca oferece dois serviços: acesso direto a memória principal (RAM) do computador,
+ * e alocação e reciclagem de blocos de memória. A RAM do computador
+ * consiste em 32.768 palavras, cada uma representando um valor binário de 16 bits.
  */ 
 class Memory {
 
     static Array ram;
     static Array free;
 
-    /** Initializes the class. */
+    /** Inicializa suporte para a biblioteca de memória. */
     function void init() {
         let ram = 0;
         let free = 2048;
@@ -22,19 +23,19 @@ class Memory {
         return;
     }
 
-    /** Returns the RAM value at the given address. */
+    /** Retorna o valor da RAM de um determinado endereço. */
     function int peek(int address) {
         return ram[address];
     }
 
-    /** Sets the RAM value at the given address to the given value. */
+    /** Define um valor para a memória RAM em um dado endereço. */
     function void poke(int address, int value) {
         let ram[address] = value;
         return;
     }
 
-    /** Finds an available RAM block of the given size and returns
-     *  a reference to its base address. */
+    /** Encontra a posição de um bloco de memória RAM disponível para o tamanho pedido
+     *  e retorna a referencia para o endereço da base da memória. */
     function int alloc(int size) {
         var Array block;
         var Array blockn;
@@ -86,8 +87,8 @@ class Memory {
 
     }
 
-    /** De-allocates the given object (cast as an array) by making
-     *  it available for future allocations. */
+    /** Desaloca a memória de um objeto (ou vetor) tornando ele disponível
+     *  para futuras alocações de memória. */
     function void deAlloc(Array o) {
         let o[0] = free;
         let free = o;

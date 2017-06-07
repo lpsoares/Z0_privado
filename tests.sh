@@ -131,11 +131,11 @@ fi
 
 # Testes para o Compiler
 if [ -z "$1" ] || [ $1 == "compiler" ] ; then
-	#echo -e "\n\n"
-	#echo -e ${TEXT_MAGENTA}${BACKGROUND_CYAN}"\t\t\t                      \t\t\t"${RESET_FORMATTING}
-	#echo -e ${TEXT_MAGENTA}${BACKGROUND_CYAN}"\t\t\tTestes para o Compiler\t\t\t"${RESET_FORMATTING}
-	#echo -e ${TEXT_MAGENTA}${BACKGROUND_CYAN}"\t\t\t                      \t\t\t"${RESET_FORMATTING}
-	#echo -e "\n"
+	echo -e "\n\n"
+	echo -e ${TEXT_MAGENTA}${BACKGROUND_CYAN}"\t\t\t                      \t\t\t"${RESET_FORMATTING}
+	echo -e ${TEXT_MAGENTA}${BACKGROUND_CYAN}"\t\t\tTestes para o Compiler\t\t\t"${RESET_FORMATTING}
+	echo -e ${TEXT_MAGENTA}${BACKGROUND_CYAN}"\t\t\t                      \t\t\t"${RESET_FORMATTING}
+	echo -e "\n"
 	mvn-color -f Codigos/Compiler package
 	let "n_error+=$?"
 	python TestesSW/compiler.py -j Codigos/Compiler/target/JackCompiler-1.0.jar -t TestesSW/testesCompiler.txt -in Codigos/Compiler/src/test/resources/ -out TestesSW/compiled_code/ -p 3
@@ -147,6 +147,25 @@ if [ -z "$1" ] || [ $1 == "compiler" ] ; then
 	python TestesSW/emulate.py -t TestesSW/testesCompiler.txt -in TestesSW/testesCompiler/ -out TestesSW/compiled_code/ -p 3 -b 32 -r 512,256
 	let "n_error+=$?"
 	python -m pytest -v TestesSW/testeCompiler.py -rxs
+	let "n_error+=$?"
+fi
+
+# Testes para o Sistema Operacional
+if [ -z "$1" ] || [ $1 == "os" ] ; then
+	echo -e "\n\n"
+	echo -e ${TEXT_MAGENTA}${BACKGROUND_CYAN}"\t\t\t                                 \t\t\t"${RESET_FORMATTING}
+	echo -e ${TEXT_MAGENTA}${BACKGROUND_CYAN}"\t\t\tTestes para o Sistema Operacional\t\t\t"${RESET_FORMATTING}
+	echo -e ${TEXT_MAGENTA}${BACKGROUND_CYAN}"\t\t\t                                 \t\t\t"${RESET_FORMATTING}
+	echo -e "\n"
+	python TestesSW/compiler.py -j Codigos/Compiler/target/JackCompiler-1.0.jar -t TestesSW/testesOS.txt -in Codigos/SistemaOperacional/ -out TestesSW/os_code/ -p 3
+	let "n_error+=$?"
+	python TestesSW/vmtranslator.py -j TestesSW/VMTranslator/VMTranslator.jar -t TestesSW/testesOS.txt -in TestesSW/os_code/ -out TestesSW/os_code/ -p 3
+	let "n_error+=$?"
+	python TestesSW/assembler.py -j TestesSW/Assembler/AssemblerZ0.jar -t TestesSW/testesOS.txt -in TestesSW/os_code/ -out TestesSW/os_code/ -p 3 -b 32
+	let "n_error+=$?"	
+	python TestesSW/emulate.py -t TestesSW/testesOS.txt -in TestesSW/testesOS/ -out TestesSW/os_code/ -p 3 -b 32 -r 512,256
+	let "n_error+=$?"
+	python -m pytest -v TestesSW/testeOS.py -rxs
 	let "n_error+=$?"
 fi
 

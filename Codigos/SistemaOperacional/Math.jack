@@ -1,17 +1,18 @@
-// This file is part of www.nand2tetris.org
-// and the book "The Elements of Computing Systems"
-// by Nisan and Schocken, MIT Press.
-// File name: projects/12/Math.jack
+// Este arquivo é parte do www.nand2tetris.org
+// e o livro "The Elements of Computing Systems"
+// por Nisan e Schocken, MIT Press.
+// Nome do arquivo: Math.jack
+// Traduzido por: Luciano Soares
 
 /**
- * A library of commonly used mathematical functions.
- * Note: Jack compilers implement multiplication and division using OS method calls.
+ * Biblioteca usada para funções matemáticas comuns.
+ * Observação: Compiladores Jack implementam multiplicação e divisão usando essas chamadas de SO.
  */
 class Math {
 
     static Array twoToThe;
 
-    /** Initializes the library. */
+    /** Inicializa suporte para a biblioteca de matemática. */
     function void init() {
         
         let twoToThe = Array.new(16);
@@ -34,16 +35,16 @@ class Math {
         return;
     }
 
-    /** Returns the absolute value of x. */
+    /** Retorna o módulo (valor absoluto) de um valor x. */
     function int abs(int x) {
         if(x<0) {return -x;}
         return x;
     }
 
-    /** Returns the product of x and y. 
-     *  When a Jack compiler detects the multiplication operator '*' in the 
-     *  program's code, it handles it by invoking this method. In other words,
-     *  the Jack expressions x*y and multiply(x,y) return the same value.
+    /** Retorna o produto de x e y.
+     * Quando um compilador Jack detecta o operador de multiplicação '*' no
+     * código do programa, ele invoca esse método para tratar do cálculo. 
+     * Em outras palavras, as expressões x*y e multiply(x, y) retornam o mesmo valor.
      */
     function int multiply(int x, int y) {
         var int sum;
@@ -63,21 +64,15 @@ class Math {
             let i = i + 1;
         }
 
-        //if( (Math.bit(x,15) & (~Math.bit(y,15)) ) | (~Math.bit(x,15) & (Math.bit(y,15)) ) ) {
-        //    let sum = sum & ( ~(-16383 - 1));
-        //}
-
         return sum;
 
     }
 
-    /** Returns the integer part of x/y.
-     *  When a Jack compiler detects the multiplication operator '/' in the 
-     *  program's code, it handles it by invoking this method. In other words,
-     *  the Jack expressions x/y and divide(x,y) return the same value.
+    /** Retorna a parte inteira da divisão de x por y.
+     * Quando um compilador Jack detecta o operador de divisão '/' no
+     * código do programa, ele invoca esse método para tratar do cálculo. 
+     * Em outras palavras, as expressões x/y e divide(x, y) retornam o mesmo valor.
      */
-
-     // -18000  6
     function int divide(int x, int y) {
         var int q;
         var int tmp;
@@ -115,7 +110,7 @@ class Math {
         
     }
 
-    /** Returns the integer part of the square root of x. */
+    /** Retorna a parte inteira da raiz quadrada de x. */
     function int sqrt(int x) {
         var int y;
         var int j;
@@ -138,13 +133,13 @@ class Math {
 
     }
 
-    /** Returns the greater number. */
+    /** Retorna o maior número. */
     function int max(int a, int b) {
         if(a>b) { return a; }
         return b;
     }
 
-    /** Returns the smaller number. */
+    /** Retorna o menor número. */
     function int min(int a, int b) {
         if(a<b) { return a; }
         return b;

@@ -1,20 +1,23 @@
-// This file is part of www.nand2tetris.org
-// and the book "The Elements of Computing Systems"
-// by Nisan and Schocken, MIT Press.
-// File name: projects/12/Screen.jack
+// Este arquivo é parte do www.nand2tetris.org
+// e o livro "The Elements of Computing Systems"
+// por Nisan e Schocken, MIT Press.
+// Nome do arquivo: Screen.jack
+// Traduzido por: Luciano Soares
 
 /**
- * A library of functions for displaying graphics on the screen.
- * The Hack physical screen consists of 512 rows (indexed 0..511, top to bottom)
- * of 256 pixels each (indexed 0..255, left to right). The top left pixel on 
- * the screen is indexed (0,0).
+ * Biblioteca de funções para exibir gráficos na tela.
+ * A tela física Z0 consiste em 320 linhas (indexado 0..319, de cima para baixo)
+ * De 180 pixels cada (indexado 0..179, da esquerda para a direita).
+ * A tela física Hack consiste em 512 linhas (indexado 0..511, de cima para baixo)
+ * De 256 pixels cada (indexado 0..255, da esquerda para a direita).
+ * O pixel superior esquerdo da tela é indexado em (0,0).
  */
 class Screen {
 
     static Array twoToThe;
     static boolean color;
 
-    /** Initializes the Screen. */
+    /** Inicializa suporte para a biblioteca para gráficos na tela. */
     function void init() {
         let color = true;
 
@@ -38,7 +41,7 @@ class Screen {
         return;
     }
 
-    /** Erases the entire screen. */
+    /** Apaga a tela inteira. */
     function void clearScreen() {
         var int pos;
         let pos = 16384;   
@@ -49,14 +52,14 @@ class Screen {
         return;
     }
 
-    /** Sets the current color, to be used for all subsequent drawXXX commands.
-     *  Black is represented by true, white by false. */
+    /** Define a cor atual, para ser usada em todos os comandos DrawXXX subseqüentes.
+      * O preto é representado por verdadeiro e branco por falso. */
     function void setColor(boolean b) {
         let color = b;
         return;
     }
 
-    /** Draws the (x,y) pixel, using the current color. */
+    /** Desenha um pixel na posição (x,y), usando a cor atual. */
     function void drawPixel(int x, int y) {
         var int alreadyThere;
         var int print;
@@ -79,7 +82,7 @@ class Screen {
         return;
     }
 
-    /** Draws a line from pixel (x1,y1) to pixel (x2,y2), using the current color. */
+    /** Desenha uma linha do pixel (x1,y1) até o pixel (x2,y2), usando a cor atual. */
     function void drawLine(int x1, int y1, int x2, int y2) {
         var int a;
         var int b;
@@ -171,8 +174,8 @@ class Screen {
         return;
     }
 
-    /** Draws a filled rectangle whose top left corner is (x1, y1)
-     * and bottom right corner is (x2,y2), using the current color. */
+    /** Desenha um retanglo preenchido com o canto superior esquerdo em (x1, y1)
+     *  e o canto inferior direito em (x2,y2), usando a cor atual. */
     function void drawRectangle(int x1, int y1, int x2, int y2) {
         var int countLine;
         var int maxX;
@@ -190,7 +193,7 @@ class Screen {
         return;
     }
 
-    /** Draws a filled circle of radius r<=181 around (x,y), using the current color. */
+    /** Desenha um círculo preenchido de raio r<=181 com centro em (x,y), usando a cor atual. */
     function void drawCircle(int x, int y, int r) {
         var int dy;
         var int tmp;
